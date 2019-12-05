@@ -15,6 +15,6 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'http://uauapi01.fwc.cloud:22900/uauapi/api/v1.0',
-    timeout: 50000,
-})
+  baseURL: 'http://uauapi01.fwc.cloud:22900/uauapi/api/v1.0',
+  timeout: 50000,
+});

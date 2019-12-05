@@ -1,16 +1,17 @@
 import React from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, Modal, Alert,
-  SafeAreaView, FlatList,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  Alert,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
 import Constants from 'expo-constants';
 
-import {
-  Feather,
-} from '@expo/vector-icons';
-
-
-
+import { Feather } from '@expo/vector-icons';
 
 function Item(props) {
   return (
@@ -18,21 +19,20 @@ function Item(props) {
       style={{
         flexDirection: 'row',
         paddingVertical: 5,
-        borderTopWidth: .5,
-        borderColor: '#bcbcbc'
+        borderTopWidth: 0.5,
+        borderColor: '#bcbcbc',
       }}
     >
-      <View
-        style={{ flex: 1, }}
-      >
-        <Text style={{ fontWeight: '600', fontSize: 16 }}>{props.item.unidade}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>
+          {props.item.unidade}
+        </Text>
       </View>
       <TouchableOpacity
-        style={{ flex: 6, }}
+        style={{ flex: 6 }}
         onPress={() => props.onPress(props.item)}
       >
-        <Text
-          style={{ fontWeight: '600', fontSize: 16 }}>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>
           {props.item.description}
         </Text>
       </TouchableOpacity>
@@ -40,19 +40,18 @@ function Item(props) {
   );
 }
 
-
 function ModalListItem(props) {
   const [textinputvalue, setTextinput] = React.useState('');
   const [filteredlist, setfilteredlist] = React.useState(props.data);
 
-  searchList = (text) => {
+  searchList = text => {
     setTextinput(text);
-    let reg = new RegExp(text, 'ig');
-    let list = props.data.filter((item) => {
+    const reg = new RegExp(text, 'ig');
+    const list = props.data.filter(item => {
       return reg.test(item.description);
     });
     setfilteredlist(list);
-  }
+  };
 
   return (
     <Modal
@@ -61,15 +60,20 @@ function ModalListItem(props) {
       visible={props.visible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
-      }}>
-      <SafeAreaView style={{
-        backgroundColor: '#f48024',
-        flex: 1
-      }}>
-        <View style={{
+      }}
+    >
+      <SafeAreaView
+        style={{
+          backgroundColor: '#f48024',
           flex: 1,
-          backgroundColor: '#fff'
-        }}>
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+          }}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -94,7 +98,7 @@ function ModalListItem(props) {
                 flex: 1,
                 fontSize: 18,
                 fontWeight: '400',
-                color: '#222426'
+                color: '#222426',
               }}
               onChangeText={text => searchList(text)}
               value={textinputvalue}
@@ -102,7 +106,9 @@ function ModalListItem(props) {
           </View>
           <FlatList
             data={filteredlist}
-            renderItem={({ item }) => <Item item={item} onPress={props.onSelect} />}
+            renderItem={({ item }) => (
+              <Item item={item} onPress={props.onSelect} />
+            )}
             keyExtractor={item => item.id}
           />
         </View>
@@ -127,9 +133,8 @@ function BtnInsertList(props) {
     >
       <Text style={{ color: '#fff' }}>+ Add Item</Text>
     </TouchableOpacity>
-  )
+  );
 }
-
 
 export default function InsertTable(props) {
   return (
@@ -139,7 +144,7 @@ export default function InsertTable(props) {
           marginTop: 10,
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <View
@@ -154,14 +159,16 @@ export default function InsertTable(props) {
           }}
         >
           <TextInput
-            placeholder='Qtde'
-            placeholderTextColor='#bcbcbc'
-            keyboardType='numeric'
-            returnKeyType='done'
+            placeholder="Qtde"
+            placeholderTextColor="#bcbcbc"
+            keyboardType="numeric"
+            returnKeyType="done"
             style={{
-              height: 40, fontSize: 18, color: '#222426',
+              height: 40,
+              fontSize: 18,
+              color: '#222426',
               flex: 1,
-              marginLeft: 10
+              marginLeft: 10,
             }}
             onChangeText={props.onChangeText}
             value={props.qtde}
@@ -189,9 +196,14 @@ export default function InsertTable(props) {
                 color: props.choiceItem ? '#222426' : '#bcbcbc',
                 flex: 1,
               }}
-            >{props.choiceItem ? props.choiceItem : 'Selecionar Item'}</Text>
-            <Feather name="chevron-down" size={20} color="#f48024"
-              style={{ marginRight: 10, }}
+            >
+              {props.choiceItem ? props.choiceItem : 'Selecionar Item'}
+            </Text>
+            <Feather
+              name="chevron-down"
+              size={20}
+              color="#f48024"
+              style={{ marginRight: 10 }}
             />
           </TouchableOpacity>
         </View>
@@ -203,10 +215,7 @@ export default function InsertTable(props) {
         data={props.data}
       />
 
-      <BtnInsertList
-        onPress={props.onInsert}
-      />
-
+      <BtnInsertList onPress={props.onInsert} />
     </View>
   );
 }

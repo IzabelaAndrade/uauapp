@@ -9,7 +9,6 @@ import Signin from './pages/Signin';
 
 const AppStack = createStackNavigator(
   {
-
     Main,
     CreateOrder,
     Order,
@@ -20,34 +19,35 @@ const AppStack = createStackNavigator(
     headerBackTitleVisible: false,
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#f48024'
+        backgroundColor: '#f48024',
         // backgroundColor: '#222426'
         // backgroundColor: '#bcbbbb'
       },
-      headerTintColor: '#fff'
+      headerTintColor: '#fff',
     },
   }
-)
+);
 const AuthStack = createStackNavigator({
   Signin: {
     screen: Signin,
     navigationOptions: () => ({
       headerShown: false,
-    })
+    }),
   },
 });
 
-const Routes = createAppContainer(createSwitchNavigator(
-  {
-    // AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack,
-  },
-  {
-    initialRouteName: 'Auth',
-  }
-));
-
+const Routes = createAppContainer(
+  createSwitchNavigator(
+    {
+      // AuthLoading: AuthLoadingScreen,
+      App: AppStack,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'Auth',
+    }
+  )
+);
 
 // createSwitchNavigator({
 //   // Signin: {
@@ -58,6 +58,5 @@ const Routes = createAppContainer(createSwitchNavigator(
 //   // },
 //   Signin
 // }),
-
 
 export default Routes;
