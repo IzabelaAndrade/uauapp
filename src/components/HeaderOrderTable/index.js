@@ -1,13 +1,15 @@
 import React from 'react';
 import {
-  View, TextInput, TouchableOpacity,
-  Text, Modal, SafeAreaView,
-  FlatList
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Modal,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
 
-import {
-  Feather,
-} from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 function Item(props) {
   return (
@@ -15,16 +17,15 @@ function Item(props) {
       style={{
         flexDirection: 'row',
         padding: 10,
-        borderBottomWidth: .5,
-        borderColor: '#bcbcbc'
+        borderBottomWidth: 0.5,
+        borderColor: '#bcbcbc',
       }}
     >
       <TouchableOpacity
-        style={{ flex: 1, }}
+        style={{ flex: 1 }}
         onPress={() => props.onPress(props.place)}
       >
-        <Text
-          style={{ fontWeight: '600', fontSize: 16 }}>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>
           {props.place.name}
         </Text>
       </TouchableOpacity>
@@ -36,14 +37,14 @@ function ModalListItem(props) {
   const [textinputvaluePlace, setTextinputPlace] = React.useState('');
   const [filteredlistPlace, setfilteredlistPlace] = React.useState(props.data);
 
-  searchListPlace = (text) => {
+  searchListPlace = text => {
     setTextinputPlace(text);
-    let reg = new RegExp(text, 'ig');
-    let list = props.data.filter((item) => {
+    const reg = new RegExp(text, 'ig');
+    const list = props.data.filter(item => {
       return reg.test(item.name);
     });
     setfilteredlistPlace(list);
-  }
+  };
 
   return (
     <Modal
@@ -52,15 +53,20 @@ function ModalListItem(props) {
       visible={props.visible}
       onRequestClose={() => {
         Alert.alert('Modal has been closed.');
-      }}>
-      <SafeAreaView style={{
-        backgroundColor: '#f48024',
-        flex: 1
-      }}>
-        <View style={{
+      }}
+    >
+      <SafeAreaView
+        style={{
+          backgroundColor: '#f48024',
           flex: 1,
-          backgroundColor: '#fff',
-        }}>
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+          }}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -75,7 +81,7 @@ function ModalListItem(props) {
                 alignItems: 'center',
               }}
             >
-              <Feather name="search" size={32} color="#bcbbbb"/>
+              <Feather name="search" size={32} color="#bcbbbb" />
             </View>
             <TextInput
               style={{
@@ -84,16 +90,17 @@ function ModalListItem(props) {
                 flex: 1,
                 fontSize: 18,
                 fontWeight: '400',
-                color: '#222426'
+                color: '#222426',
               }}
               onChangeText={text => searchListPlace(text)}
               value={textinputvaluePlace}
             />
-
           </View>
           <FlatList
             data={filteredlistPlace}
-            renderItem={({ item }) => <Item place={item} onPress={props.onSelectPlace} />}
+            renderItem={({ item }) => (
+              <Item place={item} onPress={props.onSelectPlace} />
+            )}
             keyExtractor={item => item.id}
           />
         </View>
@@ -103,11 +110,9 @@ function ModalListItem(props) {
 }
 
 export default function HeaderOrderTable(props) {
-  var moment = require('moment');
+  let moment = require('moment');
   return (
-    <View
-      style={{ paddingHorizontal: 20, }}
-    >
+    <View style={{ paddingHorizontal: 20 }}>
       <TouchableOpacity
         style={{
           height: 50,
@@ -125,11 +130,16 @@ export default function HeaderOrderTable(props) {
             flex: 1,
             fontWeight: props.choicePlace ? '500' : 'normal',
             fontSize: props.choicePlace ? 20 : 18,
-            color: props.choicePlace ? '#222426' : '#bcbcbc'
+            color: props.choicePlace ? '#222426' : '#bcbcbc',
           }}
-        >{props.choicePlace ? props.choicePlace : 'Escolha uma Obra'}</Text>
-        <Feather name="chevron-down" size={20} color="#f48024"
-          style={{ marginLeft: 10, }}
+        >
+          {props.choicePlace ? props.choicePlace : 'Escolha uma Obra'}
+        </Text>
+        <Feather
+          name="chevron-down"
+          size={20}
+          color="#f48024"
+          style={{ marginLeft: 10 }}
         />
       </TouchableOpacity>
 
@@ -138,7 +148,6 @@ export default function HeaderOrderTable(props) {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-
         }}
       >
         <Text
@@ -148,7 +157,9 @@ export default function HeaderOrderTable(props) {
             color: '#7f7f7f',
             paddingLeft: 15,
           }}
-        >Previsão de Etrega:</Text>
+        >
+          Previsão de Etrega:
+        </Text>
         <View
           style={{
             flex: 2,
@@ -158,7 +169,7 @@ export default function HeaderOrderTable(props) {
             paddingRight: 15,
             color: '#bcbcbc',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           <TextInput
@@ -167,16 +178,15 @@ export default function HeaderOrderTable(props) {
               fontSize: 18,
               color: '#222426',
             }}
-            keyboardType='numeric'
-            returnKeyType='done'
+            keyboardType="numeric"
+            returnKeyType="done"
             maxLength={10}
             placeholder={moment().format('DD/MM/YYYY')}
-            placeholderTextColor='#bcbcbc'
+            placeholderTextColor="#bcbcbc"
             onChangeText={props.onChangeText}
             onEndEditing={props.onEndEditing}
             value={props.value}
           />
-
         </View>
       </View>
       <ModalListItem

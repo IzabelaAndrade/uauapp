@@ -5,18 +5,13 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
-import {
-  AntDesign,
-  Feather,
-} from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
-import api from './api'
-
-import OrderCard from '../../components/OrderCard'
+import OrderCard from '../../components/OrderCard';
 // import { Container } from './styles';
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 
 const orderList = [
   {
@@ -29,13 +24,15 @@ const orderList = [
     tags: 'Elétrica, Alvenaria',
     itens: [
       {
-        id: '1', description: 'Luminária Redonda Ônix 127V 35cm x 100cm', unidade:
-          'Un', qtde: '03'
+        id: '1',
+        description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
+        unidade: 'Un',
+        qtde: '03',
       },
       { id: '2', description: 'Interruptor', unidade: 'Un', qtde: '06' },
       { id: '3', description: 'Tomada', unidade: 'Un', qtde: '08' },
       { id: '4', description: 'Cabo Flex', unidade: 'M', qtde: '200' },
-    ]
+    ],
   },
   {
     id: '2',
@@ -47,20 +44,20 @@ const orderList = [
     tags: 'Elétrica, Alvenaria',
     itens: [
       {
-        id: '1', description: 'Luminária Redonda Ônix 127V 35cm x 100cm', unidade:
-          'Un', qtde: '03'
+        id: '1',
+        description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
+        unidade: 'Un',
+        qtde: '03',
       },
       { id: '2', description: 'Interruptor', unidade: 'Un', qtde: '06' },
       { id: '3', description: 'Tomada', unidade: 'Un', qtde: '08' },
       { id: '4', description: 'Cabo Flex', unidade: 'M', qtde: '200' },
-    ]
-  }
-]
+    ],
+  },
+];
 
 export default function Main() {
-
   // const [orderData, setOrderData] = React.useState(orderList);
-  api();
 
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
@@ -161,7 +158,6 @@ export default function Main() {
         </View>
       </View> */}
 
-
       {/* <View style={{
         padding: 5,
         // backgroundColor: '#bcbcbc',
@@ -247,29 +243,30 @@ export default function Main() {
 
       <TouchableOpacity
         style={{
-          height: 60, width: 60, backgroundColor: '#f48024', borderRadius: 30,
-          position: 'absolute', top: (height - 150), left: (width - 85),
+          height: 60,
+          width: 60,
+          backgroundColor: '#f48024',
+          borderRadius: 30,
+          position: 'absolute',
+          top: height - 150,
+          left: width - 85,
           shadowColor: '#000',
-          shadowOpacity: .3,
+          shadowOpacity: 0.3,
           shadowRadius: 4,
           shadowOffset: { width: 0, height: 3 },
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
         onPress={() => {
           // this.props.navigation.navigate('Input');
         }}
       >
-        <AntDesign name="plus" size={32} color="#fff"
-          style={{}}
-        />
+        <AntDesign name="plus" size={32} color="#fff" style={{}} />
       </TouchableOpacity>
-
-
-    </View >
+    </View>
   );
 }
 
 Main.navigationOptions = {
-  title: 'Pedidos'
-}
+  title: 'Pedidos',
+};

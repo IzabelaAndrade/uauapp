@@ -1,24 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  View, StatusBar, TextInput,
+  View,
+  StatusBar,
+  TextInput,
   KeyboardAvoidingView,
   Image,
   Dimensions,
   TouchableOpacity,
   Text,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Constants from 'expo-constants';
 
+import { Feather } from '@expo/vector-icons';
 import axios from '../../utils/axios';
 
-import {
-  Feather,
-} from '@expo/vector-icons';
-
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 // import { Container } from './styles';
 
 updateUser = (props, user) => {
@@ -26,10 +25,9 @@ updateUser = (props, user) => {
 
   dispatch({
     type: 'UPDATE_USER',
-    user
-  })
-
-}
+    user,
+  });
+};
 
 function Signin(props) {
   const [user, setUser] = React.useState('');
@@ -47,71 +45,70 @@ function Signin(props) {
     if (!user || !password) return;
     steLoading(true);
     try {
-      response = await axios.post('/Autenticador/AutenticarUsuarioApp',
+      response = await axios.post(
+        '/Autenticador/AutenticarUsuarioApp',
         // response = await axios.post('/sessions',
         {
           login: user,
           // password: password
-          senha: password
+          senha: password,
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            'X-INTEGRATION-Authorization': 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..xaeDRaGWla0yPQOpQprQZw.HoH5ZvVk9TsYsPvztOvy8tmxdv4knYIUlNDpfQcgk2SihHc37tivf6gOyMTEyBnQ4ecSmD3WuVVP7RDsY3yijIEZJR_2Z9T7IqY_LeAMCm_WGJNZRHH0tz6ROEQxWusNp9LcO8J9VxdDw4kC0b7EdcPlBOL_6LWRPPILwkDoXOk.OPMAYw5707zX96zCtIlQKQ',
-          }
+            'X-INTEGRATION-Authorization':
+              'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..xaeDRaGWla0yPQOpQprQZw.HoH5ZvVk9TsYsPvztOvy8tmxdv4knYIUlNDpfQcgk2SihHc37tivf6gOyMTEyBnQ4ecSmD3WuVVP7RDsY3yijIEZJR_2Z9T7IqY_LeAMCm_WGJNZRHH0tz6ROEQxWusNp9LcO8J9VxdDw4kC0b7EdcPlBOL_6LWRPPILwkDoXOk.OPMAYw5707zX96zCtIlQKQ',
+          },
         }
       );
     } catch (error) {
-      console.log(error)
+      console.log(error);
       steLoading(false);
       Alert.alert(
         'Ops!',
         'Houve um erro ao tentar acessar. Verifique se o Usuário e Senha informados estão corretos e tente novamente.',
-        [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
-        ],
-        { cancelable: false },
+        [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+        { cancelable: false }
       );
-      return
+      return;
     }
 
     // console.log(response.data)
     // updateUser(props, response.data);
     steLoading(false);
-    console.log(response.data[0].Usuario[1])
+    console.log(response.data[0].Usuario[1]);
     // console.log(password)
   }
 
   function showPassword() {
-    setSecureTextEntry(!secureTextEntry)
+    setSecureTextEntry(!secureTextEntry);
     if (iconShowPassword === 'eye') {
-      setIconShowPassword('eye-off')
+      setIconShowPassword('eye-off');
     } else {
-      setIconShowPassword('eye')
+      setIconShowPassword('eye');
     }
-
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' backgroundColor="#f48024" />
+      <StatusBar barStyle="light-content" backgroundColor="#f48024" />
       <View
         style={{
           height: Constants.statusBarHeight,
-          backgroundColor: '#f48024'
+          backgroundColor: '#f48024',
         }}
-      >
-
-      </View>
+      />
       <Text
         style={{
           color: '#222426',
           marginLeft: 30,
           marginTop: 30,
           fontSize: 19,
-          fontWeight: '400'
+          fontWeight: '400',
         }}
-      >Login</Text>
+      >
+        Login
+      </Text>
       {/* <View
         style={{
           marginTop: Constants.statusBarHeight,
@@ -128,16 +125,16 @@ function Signin(props) {
       <KeyboardAvoidingView
         style={{
           flex: 1,
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
-        behavior="padding" enabled
+        behavior="padding"
+        enabled
       >
-
         <View
           style={{
             padding: 20,
             alignItems: 'center',
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
           }}
         >
           <Image
@@ -147,13 +144,15 @@ function Signin(props) {
           <TextInput
             style={{
               marginTop: 30,
-              height: 40, borderColor: '#f48024', borderBottomWidth: 1,
+              height: 40,
+              borderColor: '#f48024',
+              borderBottomWidth: 1,
               width: width - 40,
-              fontSize: 20
+              fontSize: 20,
             }}
             maxLength={40}
-            placeholder='Usuário'
-            placeholderTextColor='#bcbcbc'
+            placeholder="Usuário"
+            placeholderTextColor="#bcbcbc"
             onChangeText={text => setUser(text)}
             value={user}
           />
@@ -161,9 +160,10 @@ function Signin(props) {
           <View
             style={{
               marginTop: 15,
-              borderColor: '#f48024', borderBottomWidth: 1,
+              borderColor: '#f48024',
+              borderBottomWidth: 1,
               width: width - 40,
-              flexDirection: 'row'
+              flexDirection: 'row',
             }}
           >
             <TextInput
@@ -171,26 +171,28 @@ function Signin(props) {
                 height: 40,
                 // width: width - 40,
                 flex: 1,
-                fontSize: 20
+                fontSize: 20,
               }}
               maxLength={20}
               secureTextEntry={secureTextEntry}
-              placeholder='Senha'
-              placeholderTextColor='#bcbcbc'
+              placeholder="Senha"
+              placeholderTextColor="#bcbcbc"
               onChangeText={text => setPassword(text)}
               value={password}
             />
             <TouchableOpacity
               style={{
-
                 width: 50,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
               onPress={() => showPassword()}
             >
-              <Feather name={iconShowPassword} size={20} color="#f48024"
-                style={{ marginRight: 10, }}
+              <Feather
+                name={iconShowPassword}
+                size={20}
+                color="#f48024"
+                style={{ marginRight: 10 }}
               />
             </TouchableOpacity>
           </View>
@@ -202,17 +204,18 @@ function Signin(props) {
               backgroundColor: '#f48024',
               justifyContent: 'center',
               alignItems: 'center',
-              borderRadius: 50
+              borderRadius: 50,
             }}
             onPress={() => makeLogin(user, password)}
           >
-            {loading ?
-              <ActivityIndicator size="small" color="#fff" /> :
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
               <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>
                 Entrar
-            </Text>}
+              </Text>
+            )}
           </TouchableOpacity>
-
         </View>
       </KeyboardAvoidingView>
     </View>

@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions
-} from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import moment from 'moment';
-import {
-  AntDesign,
-  Feather,
-} from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
-import OrderTable from '../../components/OrderTable'
+import OrderTable from '../../components/OrderTable';
 
 const data = {
   id: '1',
@@ -21,21 +13,22 @@ const data = {
   place: 'Tribunal de Justiça',
   itens: [
     {
-      id: '1', description: 'Luminária Redonda Ônix 127V 35cm x 100cm', unidade:
-        'Un', qtde: '03'
+      id: '1',
+      description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
+      unidade: 'Un',
+      qtde: '03',
     },
     { id: '2', description: 'Interruptor', unidade: 'Un', qtde: '06' },
     { id: '3', description: 'Tomada', unidade: 'Un', qtde: '08' },
     { id: '4', description: 'Cabo Flex', unidade: 'M', qtde: '200' },
-  ]
-}
+  ],
+};
 
 export default function Order() {
-
   // const [orderList, setOrderList] = React.useState(tst);
-  const serverOrder = data
-  console.log(serverOrder.itens)
-  const date = moment(serverOrder.createat).format('DD MMM')
+  const serverOrder = data;
+  console.log(serverOrder.itens);
+  const date = moment(serverOrder.createat).format('DD MMM');
 
   function Header(props) {
     return (
@@ -43,8 +36,10 @@ export default function Order() {
         <View
           style={{
             padding: 10,
-            flexDirection: 'row', justifyContent: 'space-between'
-          }}>
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
           <Text style={{ fontSize: 28, fontWeight: '400' }}>
             Pedido Nº {props.serverOrder.number}
           </Text>
@@ -55,8 +50,9 @@ export default function Order() {
 
         <View
           style={{
-            flexDirection: 'row'
-          }}>
+            flexDirection: 'row',
+          }}
+        >
           <View
             style={{
               backgroundColor: '#f48024',
@@ -65,52 +61,49 @@ export default function Order() {
               borderRadius: 22.5,
               marginHorizontal: 10,
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
                 color: '#fff',
-                fontSize: 22, fontWeight: '400'
-              }}>{(props.serverOrder.author).charAt(0)}</Text>
+                fontSize: 22,
+                fontWeight: '400',
+              }}
+            >
+              {props.serverOrder.author.charAt(0)}
+            </Text>
           </View>
           <View
             style={{
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
           >
-
             <Text
               style={{
                 color: '#222426',
                 fontSize: 18,
-              }}>
+              }}
+            >
               {props.serverOrder.place}
             </Text>
             <Text
               style={{
                 color: '#bcbbbb',
-              }}>
+              }}
+            >
               {props.serverOrder.author}
             </Text>
           </View>
         </View>
       </>
-    )
+    );
   }
 
   return (
     <View style={{ flex: 1 }}>
-
-      < Header
-        date={date}
-        serverOrder={serverOrder}
-      />
-      <OrderTable
-        data={data.itens}
-        enabled={false}
-      />
-
+      <Header date={date} serverOrder={serverOrder} />
+      <OrderTable data={data.itens} enabled={false} />
     </View>
   );
 }
