@@ -12,8 +12,6 @@ import {
   Feather,
 } from '@expo/vector-icons';
 
-import api from './api'
-
 import OrderCard from '../../components/OrderCard'
 // import { Container } from './styles';
 const { width, height } = Dimensions.get('window')
@@ -57,17 +55,27 @@ const orderList = [
   }
 ]
 
-export default function Main() {
+export default function Main({ navigation }) {
 
   // const [orderData, setOrderData] = React.useState(orderList);
-  api();
+
+  function seeOrder(item) {
+    console.log(item)
+    navigation.navigate('Order')
+    // ,
+    // params: {
+
+    // });
+  }
 
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
         <FlatList
           data={orderList}
-          renderItem={({ item }) => <OrderCard data={item} />}
+          renderItem={({ item }) => <OrderCard
+            data={item}
+            onPress={(pressItem) => seeOrder(pressItem)} />}
           keyExtractor={item => item.id}
         />
       </SafeAreaView>

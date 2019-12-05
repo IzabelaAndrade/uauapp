@@ -129,7 +129,9 @@ export default function OrderCard(props) {
 
         <Status status={props.data.status} />
 
-        <View style={{ flexDirection: 'row', }}>
+        <TouchableOpacity style={{ flexDirection: 'row', }}
+          onPress={() => props.onPress(props.data)}
+        >
           <Text style={{
             fontSize: 14, fontWeight: '600',
             color: '#f48024'
@@ -137,7 +139,7 @@ export default function OrderCard(props) {
           <Feather name="chevron-down" size={20} color="#f48024"
             style={{ marginLeft: 10, }}
           />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
