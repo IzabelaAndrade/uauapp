@@ -78,6 +78,7 @@ function Signin(props) {
     steLoading(false);
     console.log(response.data[0].Usuario[1]);
     // console.log(password)
+    props.navigation.navigate('Main');
   }
 
   function showPassword() {
