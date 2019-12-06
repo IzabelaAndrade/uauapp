@@ -36,27 +36,17 @@ const AuthStack = createStackNavigator({
   },
 });
 
-const Routes = createAppContainer(
-  createSwitchNavigator(
-    {
-      // AuthLoading: AuthLoadingScreen,
-      App: AppStack,
-      Auth: AuthStack,
-    },
-    {
-      initialRouteName: 'Auth',
-    }
-  )
-);
-
-// createSwitchNavigator({
-//   // Signin: {
-//   //   screen: Signin,
-//   //   navigationOptions: () => ({
-//   //     headerShown: false,
-//   //   })
-//   // },
-//   Signin
-// }),
+const Routes = (signedIn = false) =>
+  createAppContainer(
+    createSwitchNavigator(
+      {
+        Sign: AuthStack,
+        App: AppStack,
+      },
+      {
+        initialRouteName: signedIn ? 'App' : 'Sign',
+      }
+    )
+  );
 
 export default Routes;

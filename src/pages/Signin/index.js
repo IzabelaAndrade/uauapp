@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   View,
   StatusBar,
@@ -15,70 +15,23 @@ import {
 import Constants from 'expo-constants';
 
 import { Feather } from '@expo/vector-icons';
-import axios from '../../utils/axios';
+import { signInRequest } from '../../store/modules/auth/actions';
 
 const { width, height } = Dimensions.get('window');
 // import { Container } from './styles';
 
-updateUser = (props, user) => {
-  const { dispatch } = props;
-
-  dispatch({
-    type: 'UPDATE_USER',
-    user,
-  });
-};
-
 function Signin(props) {
+  const loading = useSelector(state => state.auth.loading);
+  const dispatch = useDispatch();
   const [user, setUser] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
-  const [loading, steLoading] = React.useState(false);
   const [iconShowPassword, setIconShowPassword] = React.useState('eye-off');
 
-  function makeLogin(user, password) {
-    props.navigation.navigate('Main');
-  }
 
-  async function makeLogin1(user, password) {
-    let response = null;
-    if (!user || !password) return;
-    steLoading(true);
-    try {
-      response = await axios.post(
-        '/Autenticador/AutenticarUsuarioApp',
-        // response = await axios.post('/sessions',
-        {
-          login: user,
-          // password: password
-          senha: password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-INTEGRATION-Authorization':
-              'eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..xaeDRaGWla0yPQOpQprQZw.HoH5ZvVk9TsYsPvztOvy8tmxdv4knYIUlNDpfQcgk2SihHc37tivf6gOyMTEyBnQ4ecSmD3WuVVP7RDsY3yijIEZJR_2Z9T7IqY_LeAMCm_WGJNZRHH0tz6ROEQxWusNp9LcO8J9VxdDw4kC0b7EdcPlBOL_6LWRPPILwkDoXOk.OPMAYw5707zX96zCtIlQKQ',
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      steLoading(false);
-      Alert.alert(
-        'Ops!',
-        'Houve um erro ao tentar acessar. Verifique se o Usuário e Senha informados estão corretos e tente novamente.',
-        [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-        { cancelable: false }
-      );
-      return;
-    }
-
-    // console.log(response.data)
-    // updateUser(props, response.data);
-    steLoading(false);
-    console.log(response.data[0].Usuario[1]);
-    // console.log(password)
-    props.navigation.navigate('Main');
+  function handleSubmit() {
+    dispatch(signInRequest(user, password));
+    // props.navigation.navigate('Main');
   }
 
   function showPassword() {
@@ -110,19 +63,6 @@ function Signin(props) {
       >
         Login
       </Text>
-      {/* <View
-        style={{
-          marginTop: Constants.statusBarHeight,
-          height: 70 + Constants.statusBarHeight
-        }}
-      >
-        <View style={{ backgroundColor: '#fff'}}>
-
-
-        </View>
-
-      </View> */}
-
       <KeyboardAvoidingView
         style={{
           flex: 1,
@@ -154,7 +94,7 @@ function Signin(props) {
             maxLength={40}
             placeholder="Usuário"
             placeholderTextColor="#bcbcbc"
-            onChangeText={text => setUser(text)}
+            onChangeText={setUser}
             value={user}
           />
 
@@ -178,7 +118,7 @@ function Signin(props) {
               secureTextEntry={secureTextEntry}
               placeholder="Senha"
               placeholderTextColor="#bcbcbc"
-              onChangeText={text => setPassword(text)}
+              onChangeText={setPassword}
               value={password}
             />
             <TouchableOpacity
@@ -207,7 +147,7 @@ function Signin(props) {
               alignItems: 'center',
               borderRadius: 50,
             }}
-            onPress={() => makeLogin(user, password)}
+            onPress={() => handleSubmit()}
           >
             {loading ? (
               <ActivityIndicator size="small" color="#fff" />
@@ -223,4 +163,4 @@ function Signin(props) {
   );
 }
 
-export default connect()(Signin);
+export default Signin;
