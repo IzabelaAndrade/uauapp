@@ -61,7 +61,6 @@ const orderList = [
 
 export default function Main({ navigation }) {
   // const [orderData, setOrderData] = React.useState(orderList);
-<<<<<<< HEAD
   const [orders, setOrders] = React.useState([]);
   useEffect(() => {
     const places = ['ALMOX'];
@@ -76,15 +75,6 @@ export default function Main({ navigation }) {
     }
     loadPurchaseOrder();
   }, []);
-=======
-
-  function seeOrder(item) {
-    navigation.navigate('Order', {
-      data: item,
-    });
-  }
-
->>>>>>> 27915cb59c496b5467b5cc273d7cff033c69b0c8
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
