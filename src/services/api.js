@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { APIKEY } from '../api/constants';
+import { APIKEY } from '../controller/constants';
 
 const api = axios.create({
   baseURL: 'http://uauapi01.fwc.cloud:22900/uauapi/api/v1.0',

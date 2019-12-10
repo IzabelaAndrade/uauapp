@@ -1,7 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import moment from 'moment';
-import { AntDesign, Feather } from '@expo/vector-icons';
 
 import OrderTable from '../../components/OrderTable';
 

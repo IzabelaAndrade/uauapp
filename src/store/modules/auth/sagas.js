@@ -14,12 +14,12 @@ export function* signIn({ payload }) {
       senha: password,
     });
 
-    const user = response.data[0].Usuario[1].Nome_usr;
+    const name = response.data[0].Usuario[1].Nome_usr;
     const { token } = response.data[0].Usuario[1];
 
     api.defaults.headers.Authorization = token;
 
-    yield put(signInSuccess(token, user, login));
+    yield put(signInSuccess(token, name, login));
   } catch (err) {
     Alert.alert('Falha na autenticação, verifique seus dados');
     yield put(signFailure());
