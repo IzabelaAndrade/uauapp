@@ -1,57 +1,75 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, FlatList } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
-// import { Container } from './styles';
+const stylesOrderTable = StyleSheet.create({
+  table: {
+    margin: 6,
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: '#f48024',
+    borderRadius: 4,
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+  },
+  headertextQtd: { color: '#f48024', flex: 1 },
+  headertextDescrition: { color: '#f48024', flex: 4 },
+  content: {
+    flexDirection: 'row',
+    paddingVertical: 5,
+    borderTopWidth: 0.5,
+    borderColor: '#bcbcbc',
+  },
+  colun1: { flex: 2 },
+  colun2: { flex: 9 },
+  contentText: {
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  contentTextMeta: { color: '#f48024', fontSize: 12 },
+  btnDelete: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  footer: { padding: 10 },
+});
 
 function Header() {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        paddingVertical: 8,
-      }}
-    >
-      <View style={{ flex: 1 }}>
-        <Text style={{ color: '#f48024' }}>Qtde</Text>
-      </View>
-      <View style={{ flex: 4 }}>
-        <Text style={{ color: '#f48024' }}>Descrição</Text>
-      </View>
+    <View style={stylesOrderTable.header}>
+      <Text style={stylesOrderTable.headertextQtd}>Qtde</Text>
+      <Text style={stylesOrderTable.headertextDescrition}>Descrição</Text>
     </View>
   );
 }
 
 function Item(props) {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        paddingVertical: 5,
-        borderTopWidth: 0.5,
-        borderColor: '#bcbcbc',
-      }}
-    >
-      <View style={{ flex: 2 }}>
-        <Text style={{ fontWeight: '600', fontSize: 16 }}>
-          {props.item.qtde}
-        </Text>
-        <Text style={{ color: '#f48024', fontSize: 12 }}>
+    <View style={stylesOrderTable.content}>
+      <View style={stylesOrderTable.colun1}>
+        <Text style={stylesOrderTable.contentText}>{props.item.qtde}</Text>
+        <Text style={stylesOrderTable.contentTextMeta}>
           {props.item.unidade}
         </Text>
       </View>
-      <View style={{ flex: 9 }}>
-        <Text style={{ fontWeight: '600', fontSize: 16 }}>
+      <View style={stylesOrderTable.colun2}>
+        <Text style={stylesOrderTable.contentText}>
           {props.item.description}
         </Text>
       </View>
       {props.enabled ? (
         <TouchableOpacity
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          style={stylesOrderTable.btnDelete}
           onPress={() => props.onPress(props.item)}
         >
-          <AntDesign name="closecircle" size={20} color="#bcbcbc" style={{}} />
+          <AntDesign name="closecircle" size={20} color="#bcbcbc" />
         </TouchableOpacity>
       ) : null}
     </View>
@@ -61,21 +79,14 @@ function Item(props) {
 export default function OrderTable(props) {
   return (
     <FlatList
-      style={{
-        margin: 6,
-        padding: 10,
-        borderWidth: 0.5,
-        borderColor: '#f48024',
-        borderRadius: 4,
-        flex: 1,
-      }}
+      style={stylesOrderTable.table}
       ListHeaderComponent={() => <Header />}
       data={props.data}
       renderItem={({ item }) => (
         <Item item={item} onPress={props.onDelete} enabled={props.enabled} />
       )}
       keyExtractor={item => item.id}
-      ListFooterComponent={<View style={{ padding: 10 }} />}
+      ListFooterComponent={<View style={stylesOrderTable.footer} />}
     />
   );
 }

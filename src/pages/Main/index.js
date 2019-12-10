@@ -1,15 +1,15 @@
 import React from 'react';
 import {
-  View,
   TouchableOpacity,
   Dimensions,
   FlatList,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 import OrderCard from '../../components/OrderCard';
-// import { Container } from './styles';
+
 const { width, height } = Dimensions.get('window');
 
 const orderList = [
@@ -57,9 +57,29 @@ const orderList = [
   },
 ];
 
-export default function Main({ navigation }) {
-  // const [orderData, setOrderData] = React.useState(orderList);
+const stylesMain = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  btn: {
+    height: 60,
+    width: 60,
+    backgroundColor: '#f48024',
+    borderRadius: 30,
+    position: 'absolute',
+    top: height - 150,
+    left: width - 85,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 3 },
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
+export default function Main({ navigation }) {
   function seeOrder(item) {
     navigation.navigate('Order', {
       data: item,
@@ -67,43 +87,38 @@ export default function Main({ navigation }) {
   }
 
   return (
-    <View style={{ backgroundColor: '#fff', flex: 1 }}>
-      <SafeAreaView style={{ backgroundColor: '#fff', flex: 1 }}>
+    <>
+      <SafeAreaView style={stylesMain.container}>
         <FlatList
           data={orderList}
-          renderItem={({ item }) => (
-            <OrderCard data={item} onPress={pressItem => seeOrder(pressItem)} />
-          )}
+          renderItem={({ item }) => {
+            return (
+              <OrderCard
+                id={item.id}
+                number={item.number}
+                createat={item.createat}
+                place={item.place}
+                author={item.author}
+                finalDate={item.finalDate}
+                tags={item.tags}
+                status={item.status}
+                itens={item.itens}
+                onPressCard={() => seeOrder(item)}
+              />
+            );
+          }}
           keyExtractor={item => item.id}
         />
       </SafeAreaView>
 
       <TouchableOpacity
-        style={{
-          height: 60,
-          width: 60,
-          backgroundColor: '#f48024',
-          borderRadius: 30,
-          position: 'absolute',
-          top: height - 150,
-          left: width - 85,
-          shadowColor: '#000',
-          shadowOpacity: 0.3,
-          shadowRadius: 4,
-          shadowOffset: { width: 0, height: 3 },
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        style={stylesMain.btn}
         onPress={() => {
           navigation.navigate('CreateOrder');
         }}
       >
-        <AntDesign name="plus" size={32} color="#fff" style={{}} />
+        <AntDesign name="plus" size={32} color="#fff" />
       </TouchableOpacity>
-    </View>
+    </>
   );
 }
-
-Main.navigationOptions = {
-  title: 'Pedidos',
-};

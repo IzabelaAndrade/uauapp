@@ -1,14 +1,24 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
-
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
 
 import Date from '../../utils/Date';
 
 import HeaderOrderTable from '../../components/HeaderOrderTable';
 import InsertTable from '../../components/InsertTable';
 import OrderTable from '../../components/OrderTable';
-// import { Container } from './styles';
+
+const stylesCreateOrder = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  boxTable: {
+    marginTop: 10,
+    borderTopWidth: 0.5,
+    flex: 1,
+    borderColor: '#bcbcbc',
+  },
+});
 
 const testorderList = [
   {
@@ -49,7 +59,7 @@ export default function CreateOrder() {
   const [choicePlace, setChoicePlace] = React.useState('');
 
   const [orderList, setOrderList] = React.useState(testorderList);
-  let moment = require('moment');
+  const moment = require('moment');
 
   getItem = item => {
     if (item) {
@@ -95,10 +105,10 @@ export default function CreateOrder() {
     if (!choiceItem || !qtde) return;
     setOrderList([
       {
-        id: `${Math.random()  }`,
+        id: `${Math.random()}`,
         description: choiceItem,
         unidade: 'Un',
-        qtde: qtde < 10 ? `0${  qtde.toString()}` : qtde.toString(),
+        qtde: qtde < 10 ? `0${qtde.toString()}` : qtde.toString(),
       },
       ...orderList,
     ]);
@@ -116,7 +126,7 @@ export default function CreateOrder() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={stylesCreateOrder.container}>
       <HeaderOrderTable
         value={finalDate}
         onChangeText={text => getFinalDate(text)}
@@ -128,14 +138,7 @@ export default function CreateOrder() {
         choicePlace={choicePlace}
       />
 
-      <View
-        style={{
-          marginTop: 10,
-          borderTopWidth: 0.5,
-          flex: 1,
-          borderColor: '#bcbcbc',
-        }}
-      >
+      <View style={stylesCreateOrder.boxTable}>
         <InsertTable
           onPress={() => getItem('')}
           visible={visible}

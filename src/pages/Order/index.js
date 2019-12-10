@@ -1,101 +1,70 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import moment from 'moment';
-import { AntDesign, Feather } from '@expo/vector-icons';
 
 import OrderTable from '../../components/OrderTable';
 
-const data = {
-  id: '1',
-  number: '255',
-  createat: '2019-12-03',
-  author: 'Autor',
-  place: 'Tribunal de Justiça',
-  itens: [
-    {
-      id: '1',
-      description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
-      unidade: 'Un',
-      qtde: '03',
-    },
-    { id: '2', description: 'Interruptor', unidade: 'Un', qtde: '06' },
-    { id: '3', description: 'Tomada', unidade: 'Un', qtde: '08' },
-    { id: '4', description: 'Cabo Flex', unidade: 'M', qtde: '200' },
-  ],
-};
+const stylesOrder = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  header: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerTitle: { fontSize: 28, fontWeight: '400' },
+  meta: { flexDirection: 'row' },
+  metaDate: { fontWeight: '400', alignSelf: 'center' },
+  metaIcon: {
+    backgroundColor: '#f48024',
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  metaIconText: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: '400',
+  },
+  metaPlace: {
+    color: '#222426',
+    fontSize: 18,
+  },
+  metaAuthor: {
+    color: '#bcbbbb',
+  },
+});
 
 export default function Order(props) {
   // const [orderList, setOrderList] = React.useState(tst);
   const orderData = props.navigation.state.params.data;
-  console.log(orderData);
-
-  const serverOrder = data;
-  // console.log(serverOrder.itens);
 
   const date = moment(orderData.createat).format('DD MMM');
 
   function Header() {
     return (
       <>
-        <View
-          style={{
-            padding: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text style={{ fontSize: 28, fontWeight: '400' }}>
+        <View style={stylesOrder.header}>
+          <Text style={stylesOrder.headerTitle}>
             Pedido Nº {orderData.number}
           </Text>
-          <Text style={{ fontWeight: '400', alignSelf: 'center' }}>{date}</Text>
+          <Text style={stylesOrder.metaDate}>{date}</Text>
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: '#f48024',
-              width: 45,
-              height: 45,
-              borderRadius: 22.5,
-              marginHorizontal: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 22,
-                fontWeight: '400',
-              }}
-            >
+        <View style={stylesOrder.meta}>
+          <View style={stylesOrder.metaIcon}>
+            <Text style={stylesOrder.metaIconText}>
               {orderData.author.charAt(0)}
             </Text>
           </View>
-          <View
-            style={{
-              justifyContent: 'center',
-            }}
-          >
-            <Text
-              style={{
-                color: '#222426',
-                fontSize: 18,
-              }}
-            >
-              {orderData.place}
-            </Text>
-            <Text
-              style={{
-                color: '#bcbbbb',
-              }}
-            >
-              {orderData.author}
-            </Text>
+          <View>
+            <Text style={stylesOrder.metaPlace}>{orderData.place}</Text>
+            <Text style={stylesOrder.metaAuthor}>{orderData.author}</Text>
           </View>
         </View>
       </>
@@ -103,7 +72,7 @@ export default function Order(props) {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={stylesOrder.container}>
       <Header />
       <OrderTable data={orderData.itens} enabled={false} />
     </View>
