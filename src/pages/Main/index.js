@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   Dimensions,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+
+import { getPurchaseOrder } from '../../controller/PurchaseOrderController';
 
 import OrderCard from '../../components/OrderCard';
 
@@ -80,12 +82,26 @@ const stylesMain = StyleSheet.create({
 });
 
 export default function Main({ navigation }) {
+  // const [orderData, setOrderData] = React.useState(orderList);
+  const [orders, setOrders] = React.useState([]);
   function seeOrder(item) {
     navigation.navigate('Order', {
       data: item,
     });
   }
-
+  useEffect(() => {
+    const places = ['ALMOX'];
+    async function loadPurchaseOrder() {
+      let response = null;
+      try {
+        response = await getPurchaseOrder(places);
+      } catch (error) {
+        console.log(error);
+      }
+      setOrders(response);
+    }
+    loadPurchaseOrder();
+  }, []);
   return (
     <>
       <SafeAreaView style={stylesMain.container}>
