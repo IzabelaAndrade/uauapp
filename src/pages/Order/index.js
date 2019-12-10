@@ -1,7 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
 import moment from 'moment';
-import { AntDesign, Feather } from '@expo/vector-icons';
 
 import OrderTable from '../../components/OrderTable';
 
@@ -25,7 +24,6 @@ const data = {
 };
 
 export default function Order() {
-  // const [orderList, setOrderList] = React.useState(tst);
   const serverOrder = data;
   console.log(serverOrder.itens);
   const date = moment(serverOrder.createat).format('DD MMM');
