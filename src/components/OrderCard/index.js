@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import moment from 'moment';
 
 // import { Container } from './styles';
-const { width, height } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
 
 function Status(props) {
   let statusColor = '#fff';
 
-  console.log(props.status);
+  // console.log(props.status);
   switch (props.status) {
     case 'Aguardando Cotação':
       statusColor = '#F44336';
@@ -75,7 +76,7 @@ export default function OrderCard(props) {
         </View>
         <View style={{}}>
           <Text style={{ fontWeight: '400', alignSelf: 'center' }}>
-            {props.data.createat}
+            {moment(props.data.createat).format('DD MMM')}
           </Text>
           {/* <Text style={{ color: '#bcbcbc', fontSize: 12 }}>
             Criado em:
@@ -102,7 +103,7 @@ export default function OrderCard(props) {
       <Text style={{ color: '#bcbcbc', marginTop: 10 }}>
         Previsão de Entrega:{'\t'}
         <Text style={{ fontWeight: '400', color: '#000', fontSize: 16 }}>
-          30/11/2019
+          {moment(props.data.finalDate).format('DD/MM/YYYY')}
         </Text>
       </Text>
 
@@ -121,7 +122,10 @@ export default function OrderCard(props) {
       >
         <Status status={props.data.status} />
 
-        <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row' }}
+          onPress={() => props.onPress(props.data)}
+        >
           <Text
             style={{
               fontSize: 14,
@@ -137,7 +141,7 @@ export default function OrderCard(props) {
             color="#f48024"
             style={{ marginLeft: 10 }}
           />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

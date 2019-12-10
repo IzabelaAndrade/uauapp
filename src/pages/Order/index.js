@@ -23,12 +23,21 @@ const data = {
   ],
 };
 
+<<<<<<< HEAD
 export default function Order() {
-  const serverOrder = data;
-  console.log(serverOrder.itens);
-  const date = moment(serverOrder.createat).format('DD MMM');
+=======
+export default function Order(props) {
+  // const [orderList, setOrderList] = React.useState(tst);
+  const orderData = props.navigation.state.params.data;
+  console.log(orderData);
 
-  function Header(props) {
+>>>>>>> 27915cb59c496b5467b5cc273d7cff033c69b0c8
+  const serverOrder = data;
+  // console.log(serverOrder.itens);
+
+  const date = moment(orderData.createat).format('DD MMM');
+
+  function Header() {
     return (
       <>
         <View
@@ -39,11 +48,9 @@ export default function Order() {
           }}
         >
           <Text style={{ fontSize: 28, fontWeight: '400' }}>
-            Pedido Nº {props.serverOrder.number}
+            Pedido Nº {orderData.number}
           </Text>
-          <Text style={{ fontWeight: '400', alignSelf: 'center' }}>
-            {props.date}
-          </Text>
+          <Text style={{ fontWeight: '400', alignSelf: 'center' }}>{date}</Text>
         </View>
 
         <View
@@ -69,7 +76,7 @@ export default function Order() {
                 fontWeight: '400',
               }}
             >
-              {props.serverOrder.author.charAt(0)}
+              {orderData.author.charAt(0)}
             </Text>
           </View>
           <View
@@ -83,14 +90,14 @@ export default function Order() {
                 fontSize: 18,
               }}
             >
-              {props.serverOrder.place}
+              {orderData.place}
             </Text>
             <Text
               style={{
                 color: '#bcbbbb',
               }}
             >
-              {props.serverOrder.author}
+              {orderData.author}
             </Text>
           </View>
         </View>
@@ -100,8 +107,8 @@ export default function Order() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header date={date} serverOrder={serverOrder} />
-      <OrderTable data={data.itens} enabled={false} />
+      <Header />
+      <OrderTable data={orderData.itens} enabled={false} />
     </View>
   );
 }
