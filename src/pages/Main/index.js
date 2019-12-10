@@ -7,11 +7,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-<<<<<<< HEAD
 
 import { getPurchaseOrder } from '../../controller/PurchaseOrderController';
-=======
->>>>>>> 27915cb59c496b5467b5cc273d7cff033c69b0c8
 
 import OrderCard from '../../components/OrderCard';
 // import { Container } from './styles';

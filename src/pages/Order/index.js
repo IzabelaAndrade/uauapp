@@ -23,15 +23,11 @@ const data = {
   ],
 };
 
-<<<<<<< HEAD
-export default function Order() {
-=======
 export default function Order(props) {
   // const [orderList, setOrderList] = React.useState(tst);
   const orderData = props.navigation.state.params.data;
   console.log(orderData);
 
->>>>>>> 27915cb59c496b5467b5cc273d7cff033c69b0c8
   const serverOrder = data;
   // console.log(serverOrder.itens);
 
