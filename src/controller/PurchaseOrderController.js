@@ -45,12 +45,12 @@ function formatOrder(purchase, owners) {
       order: element.Pedido,
       quote: element['Cotação'],
       productCode: element.CodIns,
-      product: element.Insumo,
       amount: element.QtdPedido,
       orderConfirmation: element['Data Confirmacao do Pedido'],
       deliveryDate: element.DataEntrega,
       stage: element.Estagio,
       requestDate: element.DataPedido,
+      product: element.Insumo,
     });
     return 0;
   });
@@ -63,6 +63,7 @@ function formatOrder(purchase, owners) {
         id: indexPlace.toString().concat(indexOrder.toString()),
         number: orders[keyPlace][keyOrder][0].order,
         createat: orders[keyPlace][keyOrder][0].requestDate,
+        deliveryDate: orders[keyPlace][keyOrder][0].deliveryDate,
         author:
           ownersFormated[orders[keyPlace][keyOrder][0].placeCode][
             orders[keyPlace][keyOrder][0].order
