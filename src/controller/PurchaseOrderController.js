@@ -46,6 +46,8 @@ function formatOrder(purchase, owners) {
       quote: element['Cotação'],
       productCode: element.CodIns,
       amount: element.QtdPedido,
+      unit: element.Unidade,
+      category: element.Categoria,
       orderConfirmation: element['Data Confirmacao do Pedido'],
       deliveryDate: element.DataEntrega,
       stage: element.Estagio,
@@ -108,3 +110,7 @@ export const getPurchaseOrder = async places => {
 
   return formatOrder(orderInquiry.data, responsibleConsultation.data);
 };
+
+// export function name(params) {
+
+// }
