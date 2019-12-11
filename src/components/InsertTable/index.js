@@ -6,35 +6,99 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  SafeAreaView,
   FlatList,
+  StyleSheet,
 } from 'react-native';
 import Constants from 'expo-constants';
-
 import { Feather } from '@expo/vector-icons';
+
+const stylesInserTable = StyleSheet.create({
+  containerInput: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  inputQtd: {
+    height: 40,
+    borderBottomWidth: 1,
+    borderColor: '#f48024',
+    marginHorizontal: 15,
+    justifyContent: 'center',
+    flex: 1,
+  },
+  inputQtdText: {
+    height: 40,
+    fontSize: 18,
+    color: '#222426',
+    flex: 1,
+    marginLeft: 10,
+  },
+  inputItem: {
+    flex: 4,
+    borderBottomWidth: 1,
+    borderColor: '#f48024',
+    height: 40,
+    flexDirection: 'row',
+    marginHorizontal: 15,
+    alignItems: 'center',
+  },
+  inputItemText: { fontSize: 18, flex: 1 },
+  inputItemIcon: { marginRight: 10 },
+
+  containerModal: {
+    backgroundColor: '#fff',
+    flex: 1,
+  },
+  satatusBarModal: {
+    backgroundColor: '#f48024',
+    height: Constants.statusBarHeight,
+  },
+  inputModal: {
+    flexDirection: 'row',
+    borderColor: '#f48024',
+    borderBottomWidth: 1,
+  },
+  inputModalIcon: {
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputModalText: {
+    paddingHorizontal: 10,
+    height: 50,
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '400',
+    color: '#222426',
+  },
+  itemModal: {
+    flexDirection: 'row',
+    paddingVertical: 5,
+    borderTopWidth: 0.5,
+    borderColor: '#bcbcbc',
+  },
+  itemModalUn: {
+    fontWeight: '600',
+    fontSize: 16,
+    flex: 1,
+  },
+  btnModal: {
+    flex: 6,
+  },
+  btnTextModal: { fontWeight: '600', fontSize: 16 },
+});
 
 function Item(props) {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        paddingVertical: 5,
-        borderTopWidth: 0.5,
-        borderColor: '#bcbcbc',
-      }}
-    >
-      <View style={{ flex: 1 }}>
-        <Text style={{ fontWeight: '600', fontSize: 16 }}>
-          {props.item.unidade}
-        </Text>
-      </View>
+    <View style={stylesInserTable.itemModal}>
+      <Text style={stylesInserTable.itemModalUn}>{props.item.unidade}</Text>
+      {/* <View style={{ flex: 1 }} /> */}
       <TouchableOpacity
-        style={{ flex: 6 }}
+        style={stylesInserTable.btnModal}
         onPress={() => props.onPress(props.item)}
       >
-        <Text style={{ fontWeight: '600', fontSize: 16 }}>
-          {props.item.description}
-        </Text>
+        <Text style={stylesInserTable.btnTextModal}>{props.item.product}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,7 +112,7 @@ function ModalListItem(props) {
     setTextinput(text);
     const reg = new RegExp(text, 'ig');
     const list = props.data.filter(item => {
-      return reg.test(item.description);
+      return reg.test(item.product);
     });
     setfilteredlist(list);
   };
@@ -62,57 +126,26 @@ function ModalListItem(props) {
         Alert.alert('Modal has been closed.');
       }}
     >
-      <SafeAreaView
-        style={{
-          backgroundColor: '#f48024',
-          flex: 1,
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#fff',
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              borderColor: '#f48024',
-              borderBottomWidth: 1,
-            }}
-          >
-            <View
-              style={{
-                width: 60,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Feather name="search" size={32} color="#bcbbbb" />
-            </View>
-            <TextInput
-              // style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-              style={{
-                paddingHorizontal: 10,
-                height: 50,
-                flex: 1,
-                fontSize: 18,
-                fontWeight: '400',
-                color: '#222426',
-              }}
-              onChangeText={text => searchList(text)}
-              value={textinputvalue}
-            />
+      <View style={stylesInserTable.containerModal}>
+        <View style={stylesInserTable.satatusBarModal} />
+        <View style={stylesInserTable.inputModal}>
+          <View style={stylesInserTable.inputModalIcon}>
+            <Feather name="search" size={32} color="#bcbbbb" />
           </View>
-          <FlatList
-            data={filteredlist}
-            renderItem={({ item }) => (
-              <Item item={item} onPress={props.onSelect} />
-            )}
-            keyExtractor={item => item.id}
+          <TextInput
+            style={stylesInserTable.inputModalText}
+            onChangeText={text => searchList(text)}
+            value={textinputvalue}
           />
         </View>
-      </SafeAreaView>
+        <FlatList
+          data={filteredlist}
+          renderItem={({ item }) => (
+            <Item item={item} onPress={props.onSelect} />
+          )}
+          keyExtractor={item => item.productCode}
+        />
+      </View>
     </Modal>
   );
 }
@@ -138,75 +171,49 @@ function BtnInsertList(props) {
 
 export default function InsertTable(props) {
   return (
-    <View>
-      <View
-        style={{
-          marginTop: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <View
-          style={{
-            height: 40,
-            borderBottomWidth: 1,
-            borderColor: '#f48024',
-            marginHorizontal: 15,
-            justifyContent: 'center',
-            // alignItems: 'center',
-            flex: 1,
-          }}
-        >
+    <>
+      <View style={stylesInserTable.containerInput}>
+        <View style={stylesInserTable.inputQtd}>
           <TextInput
             placeholder="Qtde"
             placeholderTextColor="#bcbcbc"
             keyboardType="numeric"
             returnKeyType="done"
-            style={{
-              height: 40,
-              fontSize: 18,
-              color: '#222426',
-              flex: 1,
-              marginLeft: 10,
-            }}
+            style={stylesInserTable.inputQtdText}
             onChangeText={props.onChangeText}
-            value={props.qtde}
+            value={props.amount}
           />
         </View>
-        <View
+        {/* <View
           style={{
             flex: 4,
             borderBottomWidth: 1,
             borderColor: '#f48024',
+            backgroundColor: 'yellow',
           }}
+        > */}
+        <TouchableOpacity
+          style={stylesInserTable.inputItem}
+          onPress={props.onPress}
         >
-          <TouchableOpacity
-            style={{
-              height: 40,
-              flexDirection: 'row',
-              marginHorizontal: 15,
-              alignItems: 'center',
-            }}
-            onPress={props.onPress}
-          >
-            <Text
-              style={{
-                fontSize: 18,
+          <Text
+            style={[
+              stylesInserTable.inputItemText,
+              {
                 color: props.choiceItem ? '#222426' : '#bcbcbc',
-                flex: 1,
-              }}
-            >
-              {props.choiceItem ? props.choiceItem : 'Selecionar Item'}
-            </Text>
-            <Feather
-              name="chevron-down"
-              size={20}
-              color="#f48024"
-              style={{ marginRight: 10 }}
-            />
-          </TouchableOpacity>
-        </View>
+              },
+            ]}
+          >
+            {props.choiceItem ? props.choiceItem : 'Selecionar Item'}
+          </Text>
+          <Feather
+            name="chevron-down"
+            size={20}
+            color="#f48024"
+            style={stylesInserTable.inputItemIcon}
+          />
+        </TouchableOpacity>
+        {/* </View> */}
       </View>
 
       <ModalListItem
@@ -216,6 +223,6 @@ export default function InsertTable(props) {
       />
 
       <BtnInsertList onPress={props.onInsert} />
-    </View>
+    </>
   );
 }
