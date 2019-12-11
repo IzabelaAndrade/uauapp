@@ -1,3 +1,4 @@
+import moment from 'moment';
 import api from '../services/api';
 
 function orderOwnerByPurchaseNumber(owners) {
@@ -46,6 +47,8 @@ function formatOrder(purchase, owners) {
       quote: element['Cotação'],
       productCode: element.CodIns,
       amount: element.QtdPedido,
+      unit: element.Unidade,
+      category: element.Categoria,
       orderConfirmation: element['Data Confirmacao do Pedido'],
       deliveryDate: element.DataEntrega,
       stage: element.Estagio,
@@ -78,7 +81,7 @@ function formatOrder(purchase, owners) {
   return ordersFormated;
 }
 
-export const getPurchaseOrder = async places => {
+export async function getPurchaseOrder(places) {
   const companyAndPlace = places.map(place => {
     return `1|${place}`;
   });
@@ -107,4 +110,54 @@ export const getPurchaseOrder = async places => {
   }
 
   return formatOrder(orderInquiry.data, responsibleConsultation.data);
-};
+}
+
+export async function addPurchaseOrder(placeCode, login, products) {
+  const formatedproducts = products.map(element => {
+    return {
+      codigoInsumo: element.productCode,
+      CAP: element.cap,
+      unidade: element.unit,
+      controleEstoque: 1,
+      dataEntrega: element.deliveryForecast,
+      quantidade: element.amount,
+      precoOrcado: 0,
+      observacao: '',
+      especificacao: '',
+      codDepreciacao: '',
+      listaVinculo: [
+        {
+          produtoPl: '2',
+          contratoPl: '1',
+          itemPl: '01.02',
+          servicoPl: 'SP0002',
+          mesPl: moment().format('MM/YYYY'),
+          codigoInsumoPl: 'SP0001',
+          quantidadeVinculo: element.amount,
+          numeroItemContrato: 1,
+        },
+      ],
+    };
+  });
+
+  let response = null;
+  try {
+    response = await api.post(
+      'PedidoCompra/GravarPedidoDeCompraDoTipoMaterial',
+      {
+        dadosPedido: {
+          codigoEmpresa: '1',
+          codigoObra: placeCode,
+          considerarVinculoSemSaldoMes: true,
+          codigoObraFiscal: placeCode,
+          usuario: login,
+          observacao: '',
+        },
+        listaDadosItemPedido: formatedproducts,
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
+  return response;
+}
