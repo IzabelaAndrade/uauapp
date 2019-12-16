@@ -92,13 +92,14 @@ const stylesInserTable = StyleSheet.create({
 function Item(props) {
   return (
     <View style={stylesInserTable.itemModal}>
-      <Text style={stylesInserTable.itemModalUn}>{props.item.unidade}</Text>
-      {/* <View style={{ flex: 1 }} /> */}
+      <Text style={stylesInserTable.itemModalUn}>{props.item.Und}</Text>
       <TouchableOpacity
         style={stylesInserTable.btnModal}
         onPress={() => props.onPress(props.item)}
       >
-        <Text style={stylesInserTable.btnTextModal}>{props.item.product}</Text>
+        <Text style={stylesInserTable.btnTextModal}>
+          {props.item.Descrição}
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -108,11 +109,15 @@ function ModalListItem(props) {
   const [textinputvalue, setTextinput] = React.useState('');
   const [filteredlist, setfilteredlist] = React.useState(props.data);
 
-  searchList = text => {
+  const searchList = text => {
     setTextinput(text);
+    if (text === '') {
+      setfilteredlist(props.data);
+      return;
+    }
     const reg = new RegExp(text, 'ig');
     const list = props.data.filter(item => {
-      return reg.test(item.product);
+      return reg.test(item.Descrição);
     });
     setfilteredlist(list);
   };
@@ -143,7 +148,7 @@ function ModalListItem(props) {
           renderItem={({ item }) => (
             <Item item={item} onPress={props.onSelect} />
           )}
-          keyExtractor={item => item.productCode}
+          keyExtractor={item => item.Codigo}
         />
       </View>
     </Modal>
@@ -184,14 +189,6 @@ export default function InsertTable(props) {
             value={props.amount}
           />
         </View>
-        {/* <View
-          style={{
-            flex: 4,
-            borderBottomWidth: 1,
-            borderColor: '#f48024',
-            backgroundColor: 'yellow',
-          }}
-        > */}
         <TouchableOpacity
           style={stylesInserTable.inputItem}
           onPress={props.onPress}
@@ -213,7 +210,6 @@ export default function InsertTable(props) {
             style={stylesInserTable.inputItemIcon}
           />
         </TouchableOpacity>
-        {/* </View> */}
       </View>
 
       <ModalListItem

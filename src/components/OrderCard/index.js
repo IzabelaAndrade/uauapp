@@ -17,6 +17,7 @@ const stylesOrderCard = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     shadowOffset: { width: 0, height: 1 },
+    elevation: 2,
   },
   header: {
     flexDirection: 'row',
@@ -36,7 +37,7 @@ const stylesOrderCard = StyleSheet.create({
   },
   contentLable: { color: '#bcbcbc', marginTop: 10 },
   contentValue: { fontWeight: '600', color: '#000', fontSize: 16 },
-  contentTags: { color: '#f9aa31', marginVertical: 5 },
+  contentQuoteNumber: { color: '#f9aa31', marginVertical: 5 },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -59,8 +60,8 @@ export default function OrderCard(props) {
     createat,
     place,
     author,
-    finalDate,
-    tags,
+    deliveryDate,
+    quoteNumber,
     status,
     onPressCard,
   } = props;
@@ -86,11 +87,16 @@ export default function OrderCard(props) {
       <Text style={stylesOrderCard.contentLable}>
         Previsão de Entrega:{'\t'}
         <Text style={stylesOrderCard.headerSubTitle}>
-          {moment(finalDate).format('DD/MM/YYYY')}
+          {deliveryDate
+            ? moment(deliveryDate).format('DD/MM/YYYY')
+            : 'Não informado'}
         </Text>
       </Text>
 
-      <Text style={stylesOrderCard.contentTags}> Tags: {tags}</Text>
+      <Text style={stylesOrderCard.contentQuoteNumber}>
+        {' '}
+        Número da Cotação: {quoteNumber}
+      </Text>
       <View style={stylesOrderCard.footer}>
         <OrderCardStatus status={status} />
 
@@ -118,6 +124,6 @@ OrderCard.prototype = {
   createat: PropTypes.string.isRequired,
   place: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  finalDate: PropTypes.string.isRequired,
-  tags: PropTypes.string.isRequired,
+  deliveryDate: PropTypes.string.isRequired,
+  quoteNumber: PropTypes.string.isRequired,
 };

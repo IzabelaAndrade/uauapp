@@ -1,7 +1,12 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import { AntDesign, Feather } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 import Date from '../../utils/Date';
+
+import { getAllProtucts } from '../../controller/ProductsController';
+import { getAllPlaces } from '../../controller/PlacesController';
 
 import HeaderOrderTable from '../../components/HeaderOrderTable';
 import InsertTable from '../../components/InsertTable';
@@ -20,29 +25,6 @@ const stylesCreateOrder = StyleSheet.create({
   },
 });
 
-const testorderList = [
-  {
-    id: '1',
-    description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
-    unidade: 'Un',
-    qtde: '03',
-  },
-  { id: '2', description: 'Interruptor', unidade: 'Un', qtde: '06' },
-  { id: '3', description: 'Tomada', unidade: 'Un', qtde: '08' },
-  { id: '4', description: 'Cabo Flex', unidade: 'M', qtde: '200' },
-];
-
-const serverList = [
-  {
-    id: '1',
-    description: 'Luminária Redonda Ônix 127V 35cm x 100cm',
-    unidade: 'Un',
-  },
-  { id: '2', description: 'Interruptor', unidade: 'Un' },
-  { id: '3', description: 'Tomada', unidade: 'Un' },
-  { id: '4', description: 'Cabo Flex', unidade: 'M' },
-];
-
 const serverListPlaces = [
   { id: '1', name: 'Tribunal de Justiça' },
   { id: '2', name: 'Secretaria de Saúde' },
@@ -50,50 +32,157 @@ const serverListPlaces = [
   { id: '4', name: 'Detran' },
 ];
 
-export default function CreateOrder() {
-  const [qtde, setQtde] = React.useState('');
-  const [finalDate, setFinalDate] = React.useState('');
+function Header({ navigation }) {
+  return (
+    <TouchableOpacity
+      style={{
+        backgroundColor: '#f48024',
+        height: Constants.statusBarHeight + 45,
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          marginTop: Constants.statusBarHeight,
+          alignItems: 'center',
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            height: 45,
+            width: 75,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingLeft: 5,
+          }}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Feather name="chevron-left" size={30} color="#fff" />
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+          }}
+        >
+          <Text
+            style={{
+              color: '#fff',
+              fontWeight: '500',
+              fontSize: 18,
+              alignSelf: 'center',
+            }}
+          >
+            {' '}
+            Pedido Detalhado{' '}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={{
+            height: 45,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => {
+            // navigation.goBack();
+          }}
+        >
+          <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
+          <AntDesign name="save" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+export default function CreateOrder({ navigation }) {
+  const [amount, setAmount] = React.useState('');
+  const [deliveryDate, setDeliveryDate] = React.useState('');
   const [visible, setModalVisible] = React.useState(false);
   const [visiblePlaces, setVisiblePlaces] = React.useState(false);
   const [choiceItem, setChoiceItem] = React.useState('');
+  const [selectedItem, setSelectedItem] = React.useState('');
   const [choicePlace, setChoicePlace] = React.useState('');
+  // const [choicePlace1, setChoicePlace1] = React.useState('');
+  const [places, setPlace] = React.useState('');
+  // const [choicePlace, setChoicePlace] = React.useState('');
+  const [listProducts, setListProducts] = React.useState('');
 
-  const [orderList, setOrderList] = React.useState(testorderList);
+  const [orderList, setOrderList] = React.useState('');
   const moment = require('moment');
 
-  getItem = item => {
+  // navigation.setOptions({
+  //   title: 'Pedido Detalhado',
+  //   headerRight: () => (
+  //     <TouchableOpacity
+  //       style={{
+  //         flexDirection: 'row',
+  //         alignItems: 'center',
+  //       }}
+  //       // onPress={}
+  //     >
+  //       <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
+  //       <AntDesign name="save" size={20} color="#fff" />
+  //     </TouchableOpacity>
+  //   ),
+  // });
+
+  useEffect(() => {
+    async function loadPurchaseOrder() {
+      let products = null;
+      let places = null;
+      try {
+        products = await getAllProtucts();
+      } catch (error) {
+        console.log(error);
+        // if (error.response.status === 401) {
+        //   // dispatch(signOut());
+        // }
+      }
+      try {
+        places = await getAllPlaces();
+      } catch (error) {
+        console.log(error);
+      }
+      setListProducts(products);
+      setPlace(places);
+    }
+    loadPurchaseOrder();
+  }, []);
+
+  const getItem = item => {
     if (item) {
-      console.log(item);
-      setChoiceItem(item.description);
+      setChoiceItem(item.Descrição);
+      setSelectedItem(item);
     }
     setModalVisible(!visible);
   };
 
-  getPlaces = item => {
+  const getPlaces = item => {
     if (item) {
-      console.log(item);
-      setChoicePlace(item.name);
+      setChoicePlace(item);
     }
-    console.log('item');
     setVisiblePlaces(!visiblePlaces);
   };
 
-  function getFinalDate(date) {
-    console.log(date);
+  function getDeliveryDate(date) {
     const d = Date.format(date);
-    setFinalDate(d);
+    setDeliveryDate(d);
   }
 
   function validadteDate() {
-    // moment().isValid()
     let minDate = false;
-    const valide = moment(finalDate, 'DD/MM/YYYY').isValid();
+    const valide = moment(deliveryDate, 'DD/MM/YYYY').isValid();
     if (valide) {
       minDate = moment().isSameOrBefore(
-        moment(finalDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+        moment(deliveryDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
       );
     }
-    const size = finalDate.length == 10;
+    const size = deliveryDate.length == 10;
     if (valide && size && minDate) {
       console.log(true);
       return;
@@ -102,36 +191,66 @@ export default function CreateOrder() {
   }
 
   function handleAddTable() {
-    if (!choiceItem || !qtde) return;
+    if (!choiceItem || !amount) return;
+    if (
+      orderList &&
+      orderList.some(elem => elem.productCode === selectedItem.Codigo)
+    ) {
+      Alert.alert('O item selecionado já foi adicionado ao pedido');
+      return;
+    }
     setOrderList([
       {
-        id: `${Math.random()}`,
-        description: choiceItem,
-        unidade: 'Un',
-        qtde: qtde < 10 ? `0${qtde.toString()}` : qtde.toString(),
+        CAP: selectedItem.CAP,
+        productCode: selectedItem.Codigo,
+        DataCadastro: selectedItem.DataCadastro,
+        product: selectedItem.Descrição,
+        QuemCadastrou: selectedItem.QuemCadastrou,
+        unidade: selectedItem.Und,
+        amount,
+        // CAP: selectedItem.CAP,
+        // Codigo: selectedItem.Codigo,
+        // DataCadastro: selectedItem.DataCadastro,
+        // Descrição: selectedItem.Descrição,
+        // QuemCadastrou: selectedItem.QuemCadastrou,
+        // Und: selectedItem.Und,
+        // amount,
+
+        // productCode: `${Math.random()}`,
+        // product: choiceItem,
+        // unidade: 'Un',
+        // amount: amount < 10 ? `0${amount.toString()}` : amount.toString(),
       },
+
+      // {
+      //   productCode: `${Math.random()}`,
+      //   product: choiceItem,
+      //   unidade: 'Un',
+      //   amount: amount < 10 ? `0${amount.toString()}` : amount.toString(),
+      // },
       ...orderList,
     ]);
+    setAmount('');
     setChoiceItem('');
-    setQtde('');
+    setSelectedItem('');
   }
 
   function handleRemoveTable(item) {
     const orderListUpdate = orderList.filter(element => {
-      if (element.id === item.id) return false;
+      if (element.productCode === item.productCode) return false;
       return true;
     });
     setOrderList(orderListUpdate);
-    // return { ...state, favorites: rmUpdate }
   }
 
   return (
     <View style={stylesCreateOrder.container}>
+      <Header navigation={navigation} />
       <HeaderOrderTable
-        value={finalDate}
-        onChangeText={text => getFinalDate(text)}
+        value={deliveryDate}
+        onChangeText={text => getDeliveryDate(text)}
         onEndEditing={() => validadteDate()}
-        data={serverListPlaces}
+        data={places}
         visible={visiblePlaces}
         onPress={() => getPlaces('')}
         onSelectPlace={item => getPlaces(item)}
@@ -142,11 +261,11 @@ export default function CreateOrder() {
         <InsertTable
           onPress={() => getItem('')}
           visible={visible}
-          data={serverList}
+          data={listProducts}
           onSelect={item => getItem(item)}
           choiceItem={choiceItem}
-          onChangeText={text => setQtde(text)}
-          qtde={qtde}
+          onChangeText={text => setAmount(text)}
+          amount={amount}
           onInsert={handleAddTable}
         />
 
@@ -159,3 +278,19 @@ export default function CreateOrder() {
     </View>
   );
 }
+
+// CreateOrder.navigationOptions = screenProps => ({
+//   title: 'Pedido Detalhado',
+//   headerRight: () => (
+//     <TouchableOpacity
+//       style={{
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//       }}
+//       onPress={}
+//     >
+//       <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
+//       <AntDesign name="save" size={20} color="#fff" />
+//     </TouchableOpacity>
+//   ),
+// });

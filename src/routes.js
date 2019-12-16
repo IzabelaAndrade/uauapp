@@ -9,9 +9,25 @@ import Signin from './pages/Signin';
 
 const AppStack = createStackNavigator(
   {
-    Main,
-    CreateOrder,
-    Order,
+    Main: {
+      screen: Main,
+      navigationOptions: {
+        title: 'Pedidos',
+      },
+    },
+    // CreateOrder,
+    CreateOrder: {
+      screen: CreateOrder,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    Order: {
+      screen: Order,
+      navigationOptions: {
+        title: 'Pedido Detalhado',
+      },
+    },
     User,
   },
   {

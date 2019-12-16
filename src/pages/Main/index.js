@@ -5,8 +5,12 @@ import {
   FlatList,
   SafeAreaView,
   StyleSheet,
+  Button,
+  Text,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
+import { signOut } from '../../store/modules/auth/actions';
 
 import { getPurchaseOrder } from '../../controller/PurchaseOrderController';
 
@@ -58,6 +62,27 @@ const orderList = [
     ],
   },
 ];
+const orderList1 = [
+  {
+    id: '1',
+    author: 'Autor',
+    createat: '2019-12-06',
+    deliveryDate: '2019-12-13',
+    number: '372',
+    place: 'Tribunal de Justiça',
+    status: '5 - Confirmado',
+
+    quoteNumber: 'Elétrica, Alvenaria',
+    products: [
+      {
+        productCode: '1',
+        product: 'Luminária Redonda Ônix 127V 35cm x 100cm',
+        unidade: 'Un',
+        amount: '03',
+      },
+    ],
+  },
+];
 
 const stylesMain = StyleSheet.create({
   container: {
@@ -84,6 +109,8 @@ const stylesMain = StyleSheet.create({
 export default function Main({ navigation }) {
   // const [orderData, setOrderData] = React.useState(orderList);
   const [orders, setOrders] = React.useState([]);
+  const dispatch = useDispatch();
+
   function seeOrder(item) {
     navigation.navigate('Order', {
       data: item,
@@ -96,17 +123,21 @@ export default function Main({ navigation }) {
       try {
         response = await getPurchaseOrder(places);
       } catch (error) {
-        console.log(error);
+        // console.log(error.response.status);
+        if (error.response.status === 401) {
+          dispatch(signOut());
+        }
       }
+      // console.log(response);
       setOrders(response);
     }
     loadPurchaseOrder();
-  }, []);
+  }, [dispatch, navigation]);
   return (
     <>
       <SafeAreaView style={stylesMain.container}>
         <FlatList
-          data={orderList}
+          data={orders}
           renderItem={({ item }) => {
             return (
               <OrderCard
@@ -115,10 +146,10 @@ export default function Main({ navigation }) {
                 createat={item.createat}
                 place={item.place}
                 author={item.author}
-                finalDate={item.finalDate}
-                tags={item.tags}
+                deliveryDate={item.deliveryDate}
                 status={item.status}
-                itens={item.itens}
+                quoteNumber={item.quoteNumber}
+                products={item.products}
                 onPressCard={() => seeOrder(item)}
               />
             );

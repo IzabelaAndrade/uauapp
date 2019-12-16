@@ -74,7 +74,7 @@ export default function Order(props) {
   return (
     <View style={stylesOrder.container}>
       <Header />
-      <OrderTable data={orderData.itens} enabled={false} />
+      <OrderTable data={orderData.products} enabled={false} />
     </View>
   );
 }
