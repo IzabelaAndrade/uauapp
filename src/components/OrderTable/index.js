@@ -54,10 +54,10 @@ function Item(props) {
   return (
     <View style={stylesOrderTable.content}>
       <View style={stylesOrderTable.colun1}>
-        <Text style={stylesOrderTable.contentText}>{props.item.amount}</Text>
-        <Text style={stylesOrderTable.contentTextMeta}>
-          {props.item.unidade}
+        <Text style={stylesOrderTable.contentText}>
+          {props.item.originalQuantity}
         </Text>
+        <Text style={stylesOrderTable.contentTextMeta}>{props.item.unity}</Text>
       </View>
       <View style={stylesOrderTable.colun2}>
         <Text style={stylesOrderTable.contentText}>{props.item.product}</Text>

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import moment from 'moment';
 
 import OrderTable from '../../components/OrderTable';
+
+import { getOnePurchaseOrder } from '../../controller/PurchaseOrderController';
 
 const stylesOrder = StyleSheet.create({
   container: {
@@ -41,10 +43,29 @@ const stylesOrder = StyleSheet.create({
 });
 
 export default function Order(props) {
-  // const [orderList, setOrderList] = React.useState(tst);
+  const [products, setProducts] = React.useState([]);
   const orderData = props.navigation.state.params.data;
   console.log(orderData.requestDate);
   const date = moment(orderData.requestDate, 'DD/MM/YYYY').format('DD MMM');
+
+  useEffect(() => {
+    async function loadPurchaseOrder() {
+      let response = null;
+      try {
+        response = await getOnePurchaseOrder(
+          orderData.placeCode,
+          orderData.requestNumber
+        );
+      } catch (error) {
+        if (error.response.status === 401) {
+          dispatch(signOut());
+        }
+      }
+      console.log(response.data);
+      setProducts(response.data);
+    }
+    loadPurchaseOrder();
+  }, [orderData.placeCode, orderData.requestNumber]);
 
   function Header() {
     return (
@@ -74,7 +95,7 @@ export default function Order(props) {
   return (
     <View style={stylesOrder.container}>
       <Header />
-      <OrderTable data={orderData.products} enabled={false} />
+      <OrderTable data={products} enabled={false} />
     </View>
   );
 }

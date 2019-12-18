@@ -64,6 +64,7 @@ export default function Main({ navigation }) {
     }
     loadPurchaseOrder();
   }, [dispatch, navigation, user]);
+
   return (
     <>
       <SafeAreaView style={stylesMain.container}>

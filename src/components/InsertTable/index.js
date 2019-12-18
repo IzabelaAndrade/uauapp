@@ -92,14 +92,12 @@ const stylesInserTable = StyleSheet.create({
 function Item(props) {
   return (
     <View style={stylesInserTable.itemModal}>
-      <Text style={stylesInserTable.itemModalUn}>{props.item.Und}</Text>
+      <Text style={stylesInserTable.itemModalUn}>{props.item.unity}</Text>
       <TouchableOpacity
         style={stylesInserTable.btnModal}
         onPress={() => props.onPress(props.item)}
       >
-        <Text style={stylesInserTable.btnTextModal}>
-          {props.item.Descrição}
-        </Text>
+        <Text style={stylesInserTable.btnTextModal}>{props.item.product}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,7 +115,7 @@ function ModalListItem(props) {
     }
     const reg = new RegExp(text, 'ig');
     const list = props.data.filter(item => {
-      return reg.test(item.Descrição);
+      return reg.test(item.product);
     });
     setfilteredlist(list);
   };
@@ -148,7 +146,7 @@ function ModalListItem(props) {
           renderItem={({ item }) => (
             <Item item={item} onPress={props.onSelect} />
           )}
-          keyExtractor={item => item.Codigo}
+          keyExtractor={item => item.productCode}
         />
       </View>
     </Modal>

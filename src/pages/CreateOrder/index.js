@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
@@ -7,6 +8,7 @@ import Date from '../../utils/Date';
 
 import { getAllProtucts } from '../../controller/ProductsController';
 import { getAllPlaces } from '../../controller/PlacesController';
+import { addPurchaseOrder } from '../../controller/PurchaseOrderController';
 
 import HeaderOrderTable from '../../components/HeaderOrderTable';
 import InsertTable from '../../components/InsertTable';
@@ -32,9 +34,9 @@ const serverListPlaces = [
   { id: '4', name: 'Detran' },
 ];
 
-function Header({ navigation }) {
+function Header({ navigation, onPress }) {
   return (
-    <TouchableOpacity
+    <View
       style={{
         backgroundColor: '#f48024',
         height: Constants.statusBarHeight + 45,
@@ -86,17 +88,17 @@ function Header({ navigation }) {
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          onPress={() => {
-            // navigation.goBack();
-          }}
+          onPress={() => onPress()}
         >
           <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
           <AntDesign name="save" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
+
+const sendCreateOrder = () => {};
 
 export default function CreateOrder({ navigation }) {
   const [amount, setAmount] = React.useState('');
@@ -106,12 +108,11 @@ export default function CreateOrder({ navigation }) {
   const [choiceItem, setChoiceItem] = React.useState('');
   const [selectedItem, setSelectedItem] = React.useState('');
   const [choicePlace, setChoicePlace] = React.useState('');
-  // const [choicePlace1, setChoicePlace1] = React.useState('');
   const [places, setPlace] = React.useState('');
-  // const [choicePlace, setChoicePlace] = React.useState('');
   const [listProducts, setListProducts] = React.useState('');
-
   const [orderList, setOrderList] = React.useState('');
+  const user = useSelector(state => state.auth.user);
+
   const moment = require('moment');
 
   // navigation.setOptions({
@@ -155,7 +156,7 @@ export default function CreateOrder({ navigation }) {
 
   const getItem = item => {
     if (item) {
-      setChoiceItem(item.Descrição);
+      setChoiceItem(item.product);
       setSelectedItem(item);
     }
     setModalVisible(!visible);
@@ -200,13 +201,13 @@ export default function CreateOrder({ navigation }) {
     }
     setOrderList([
       {
-        CAP: selectedItem.CAP,
-        productCode: selectedItem.Codigo,
-        DataCadastro: selectedItem.DataCadastro,
-        product: selectedItem.Descrição,
-        QuemCadastrou: selectedItem.QuemCadastrou,
-        unidade: selectedItem.Und,
-        amount,
+        cap: selectedItem.cap,
+        productCode: selectedItem.productCode,
+        product: selectedItem.product,
+        unity: selectedItem.unity,
+        originalQuantity: amount,
+        // DataCadastro: selectedItem.DataCadastro,
+        // QuemCadastrou: selectedItem.QuemCadastrou,
         // CAP: selectedItem.CAP,
         // Codigo: selectedItem.Codigo,
         // DataCadastro: selectedItem.DataCadastro,
@@ -242,9 +243,26 @@ export default function CreateOrder({ navigation }) {
     setOrderList(orderListUpdate);
   }
 
+  async function createNewOrder() {
+    console.log('onPreeeeess');
+    console.log(choicePlace.Cod_obr);
+    console.log(deliveryDate);
+    console.log(user);
+    console.log(orderList);
+
+    // let response = null;
+    // try {
+    //   response = await addPurchaseOrder(orderData.placeCode, user, orderList);
+    // } catch (error) {
+    //   if (error.response.status === 401) {
+    //     dispatch(signOut());
+    //   }
+    // }
+  }
+
   return (
     <View style={stylesCreateOrder.container}>
-      <Header navigation={navigation} />
+      <Header navigation={navigation} onPress={createNewOrder} />
       <HeaderOrderTable
         value={deliveryDate}
         onChangeText={text => getDeliveryDate(text)}
