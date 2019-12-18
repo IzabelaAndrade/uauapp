@@ -1,13 +1,13 @@
 import moment from 'moment';
 import api from '../services/api';
 
-export async function getPurchaseOrder(user) {
+export async function getAllPurchaseOrder(user) {
   let response = null;
   try {
     response = await api.post('RotinasGerais/ExecutarConsultaGeral', {
       Id: '8',
       Personalizado: '1',
-      Parameters: ['user', user],
+      Parameters: ['user', "'".concat(user, "'")],
     });
   } catch (error) {
     throw error;

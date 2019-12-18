@@ -76,8 +76,7 @@ function Header({ navigation }) {
               alignSelf: 'center',
             }}
           >
-            {' '}
-            Pedido Detalhado{' '}
+            Novo Pedido
           </Text>
         </View>
         <TouchableOpacity

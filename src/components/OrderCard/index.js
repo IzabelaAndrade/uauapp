@@ -37,7 +37,7 @@ const stylesOrderCard = StyleSheet.create({
   },
   contentLable: { color: '#bcbcbc', marginTop: 10 },
   contentValue: { fontWeight: '600', color: '#000', fontSize: 16 },
-  contentQuoteNumber: { color: '#f9aa31', marginVertical: 5 },
+  contentQuantityOfItems: { color: '#f9aa31', marginVertical: 5 },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -56,22 +56,23 @@ const stylesOrderCard = StyleSheet.create({
 
 export default function OrderCard(props) {
   const {
-    number,
-    createat,
+    requestNumber,
+    requestDate,
     place,
     author,
-    deliveryDate,
-    quoteNumber,
+    deliveryForecast,
+    quantityOfItems,
     status,
     onPressCard,
   } = props;
-  // console.log(props);
   return (
     <View style={stylesOrderCard.container}>
       <View style={stylesOrderCard.header}>
-        <Text style={stylesOrderCard.headerTitle}>Pedido Nº {number}</Text>
+        <Text style={stylesOrderCard.headerTitle}>
+          Pedido Nº {requestNumber}
+        </Text>
         <Text style={stylesOrderCard.headerSubTitle}>
-          {moment(createat).format('DD MMM')}
+          {moment(requestDate, 'DD/MM/YYYY').format('DD MMM')}
         </Text>
       </View>
 
@@ -87,15 +88,15 @@ export default function OrderCard(props) {
       <Text style={stylesOrderCard.contentLable}>
         Previsão de Entrega:{'\t'}
         <Text style={stylesOrderCard.headerSubTitle}>
-          {deliveryDate
-            ? moment(deliveryDate).format('DD/MM/YYYY')
+          {deliveryForecast
+            ? moment(deliveryForecast).format('DD/MM/YYYY')
             : 'Não informado'}
         </Text>
       </Text>
 
-      <Text style={stylesOrderCard.contentQuoteNumber}>
+      <Text style={stylesOrderCard.contentQuantityOfItems}>
         {' '}
-        Número da Cotação: {quoteNumber}
+        Quantidade de Itens: {quantityOfItems}
       </Text>
       <View style={stylesOrderCard.footer}>
         <OrderCardStatus status={status} />
@@ -120,10 +121,10 @@ export default function OrderCard(props) {
 OrderCard.prototype = {
   data: PropTypes.object.isRequired,
   status: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-  createat: PropTypes.string.isRequired,
+  requestNumber: PropTypes.string.isRequired,
+  requestDate: PropTypes.string.isRequired,
   place: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  deliveryDate: PropTypes.string.isRequired,
+  deliveryForecast: PropTypes.string.isRequired,
   quoteNumber: PropTypes.string.isRequired,
 };

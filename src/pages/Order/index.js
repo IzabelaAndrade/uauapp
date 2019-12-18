@@ -43,8 +43,8 @@ const stylesOrder = StyleSheet.create({
 export default function Order(props) {
   // const [orderList, setOrderList] = React.useState(tst);
   const orderData = props.navigation.state.params.data;
-
-  const date = moment(orderData.createat).format('DD MMM');
+  console.log(orderData.requestDate);
+  const date = moment(orderData.requestDate, 'DD/MM/YYYY').format('DD MMM');
 
   function Header() {
     return (
