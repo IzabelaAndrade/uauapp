@@ -15,6 +15,25 @@ export async function getAllPurchaseOrder(user) {
   return response;
 }
 
+export async function getOnePurchaseOrder(placeCode, requestNumber) {
+  let response = null;
+  try {
+    response = await api.post('RotinasGerais/ExecutarConsultaGeral', {
+      Id: '3',
+      Personalizado: '1',
+      Parameters: [
+        'placeCode',
+        "'".concat(placeCode, "'"),
+        'requestNumber',
+        "'".concat(requestNumber, "'"),
+      ],
+    });
+  } catch (error) {
+    throw error;
+  }
+  return response;
+}
+
 export async function addPurchaseOrder(placeCode, login, products) {
   const formatedproducts = products.map(element => {
     return {
