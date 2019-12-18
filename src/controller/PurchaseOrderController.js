@@ -7,7 +7,7 @@ export async function getAllPurchaseOrder(user) {
     response = await api.post('RotinasGerais/ExecutarConsultaGeral', {
       Id: '8',
       Personalizado: '1',
-      Parameters: ['user', user],
+      Parameters: ['user', "'".concat(user, "'")],
     });
   } catch (error) {
     throw error;
@@ -47,6 +47,7 @@ export async function addPurchaseOrder(
       unidade: element.unity,
       controleEstoque: 1,
       dataEntrega: moment(deliveryForecast, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+
       quantidade: element.originalQuantity,
       precoOrcado: 0,
       observacao: '',

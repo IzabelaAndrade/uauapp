@@ -7,6 +7,7 @@ import {
   Modal,
   FlatList,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -87,13 +88,13 @@ const stylesCOHeader = StyleSheet.create({
   bnTextModal: { fontWeight: '600', fontSize: 16 },
 });
 
-function Item(props) {
+function Item({ place, onPress }) {
   return (
     <TouchableOpacity
       style={stylesCOHeader.btnModal}
-      onPress={() => props.onPress(props.place)}
+      onPress={() => onPress(place)}
     >
-      <Text style={stylesCOHeader.bnTextModal}>{props.place.name}</Text>
+      <Text style={stylesCOHeader.bnTextModal}>{place.Descr_obr}</Text>
     </TouchableOpacity>
   );
 }
@@ -102,11 +103,17 @@ function ModalListItem(props) {
   const [textinputvaluePlace, setTextinputPlace] = React.useState('');
   const [filteredlistPlace, setfilteredlistPlace] = React.useState(props.data);
 
-  searchListPlace = text => {
+  const searchListPlace = text => {
     setTextinputPlace(text);
+
+    if (!text) {
+      setfilteredlistPlace(props.data);
+      return;
+    }
+
     const reg = new RegExp(text, 'ig');
     const list = props.data.filter(item => {
-      return reg.test(item.name);
+      return reg.test(item.Descr_obr);
     });
     setfilteredlistPlace(list);
   };
@@ -137,7 +144,7 @@ function ModalListItem(props) {
           renderItem={({ item }) => (
             <Item place={item} onPress={props.onSelectPlace} />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.Cod_obr}
         />
       </View>
     </Modal>
@@ -159,7 +166,7 @@ export default function HeaderOrderTable(props) {
             })
           }
         >
-          {props.choicePlace ? props.choicePlace : 'Escolha uma Obra'}
+          {props.choicePlace ? props.choicePlace.Descr_obr : 'Escolha uma Obra'}
         </Text>
         <Feather
           name="chevron-down"

@@ -119,7 +119,7 @@ function Signin() {
         <View style={stylesSignIn.boxForm}>
           <Image
             style={stylesSignIn.imgLogo}
-            source={require('../../assets/logoavanci.png')}
+            source={require('../../assets/logoavanci.svg')}
           />
           <TextInput
             style={stylesSignIn.inputUser}

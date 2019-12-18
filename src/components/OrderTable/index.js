@@ -54,15 +54,13 @@ function Item(props) {
   return (
     <View style={stylesOrderTable.content}>
       <View style={stylesOrderTable.colun1}>
-        <Text style={stylesOrderTable.contentText}>{props.item.qtde}</Text>
-        <Text style={stylesOrderTable.contentTextMeta}>
-          {props.item.unidade}
+        <Text style={stylesOrderTable.contentText}>
+          {props.item.originalQuantity}
         </Text>
+        <Text style={stylesOrderTable.contentTextMeta}>{props.item.unity}</Text>
       </View>
       <View style={stylesOrderTable.colun2}>
-        <Text style={stylesOrderTable.contentText}>
-          {props.item.description}
-        </Text>
+        <Text style={stylesOrderTable.contentText}>{props.item.product}</Text>
       </View>
       {props.enabled ? (
         <TouchableOpacity
@@ -85,7 +83,7 @@ export default function OrderTable(props) {
       renderItem={({ item }) => (
         <Item item={item} onPress={props.onDelete} enabled={props.enabled} />
       )}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item.productCode}
       ListFooterComponent={<View style={stylesOrderTable.footer} />}
     />
   );
