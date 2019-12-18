@@ -34,15 +34,20 @@ export async function getOnePurchaseOrder(placeCode, requestNumber) {
   return response;
 }
 
-export async function addPurchaseOrder(placeCode, login, products) {
+export async function addPurchaseOrder(
+  placeCode,
+  login,
+  products,
+  deliveryForecast
+) {
   const formatedproducts = products.map(element => {
     return {
       codigoInsumo: element.productCode,
       CAP: element.cap,
-      unidade: element.unit,
+      unidade: element.unity,
       controleEstoque: 1,
-      dataEntrega: element.deliveryForecast,
-      quantidade: element.amount,
+      dataEntrega: moment(deliveryForecast, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+      quantidade: element.originalQuantity,
       precoOrcado: 0,
       observacao: '',
       especificacao: '',
@@ -55,7 +60,7 @@ export async function addPurchaseOrder(placeCode, login, products) {
           servicoPl: 'SP0002',
           mesPl: moment().format('MM/YYYY'),
           codigoInsumoPl: 'SP0001',
-          quantidadeVinculo: element.amount,
+          quantidadeVinculo: element.originalQuantity,
           numeroItemContrato: 1,
         },
       ],
