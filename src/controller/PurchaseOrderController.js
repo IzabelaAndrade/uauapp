@@ -46,7 +46,8 @@ export async function addPurchaseOrder(
       CAP: element.cap,
       unidade: element.unity,
       controleEstoque: 1,
-      dataEntrega: deliveryForecast,
+      dataEntrega: moment(deliveryForecast, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+
       quantidade: element.originalQuantity,
       precoOrcado: 0,
       observacao: '',
