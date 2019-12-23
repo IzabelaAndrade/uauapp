@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import moment from 'moment';
 
 import OrderTable from '../../components/OrderTable';
@@ -45,7 +45,6 @@ const stylesOrder = StyleSheet.create({
 export default function Order(props) {
   const [products, setProducts] = React.useState([]);
   const orderData = props.navigation.state.params.data;
-  console.log(orderData.requestDate);
   const date = moment(orderData.requestDate, 'DD/MM/YYYY').format('DD MMM');
 
   useEffect(() => {
@@ -59,9 +58,9 @@ export default function Order(props) {
       } catch (error) {
         if (error.response.status === 401) {
           dispatch(signOut());
+          return;
         }
       }
-      console.log(response.data);
       setProducts(response.data);
     }
     loadPurchaseOrder();
@@ -72,7 +71,7 @@ export default function Order(props) {
       <>
         <View style={stylesOrder.header}>
           <Text style={stylesOrder.headerTitle}>
-            Pedido Nº {orderData.number}
+            Pedido Nº {orderData.requestNumber}
           </Text>
           <Text style={stylesOrder.metaDate}>{date}</Text>
         </View>
@@ -92,10 +91,15 @@ export default function Order(props) {
     );
   }
 
+  const onPressItem = item => {
+    const deliveryDate = moment(item.deliveryDate).format('DD/MM/YYYY');
+    return Alert.alert(`Entregue em ${deliveryDate}`);
+  };
+
   return (
     <View style={stylesOrder.container}>
       <Header />
-      <OrderTable data={products} enabled={false} />
+      <OrderTable data={products} onPressItem={item => onPressItem(item)} />
     </View>
   );
 }

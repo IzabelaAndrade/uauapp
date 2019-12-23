@@ -2,19 +2,20 @@
   "expo": {
     "name": "avanci",
     "slug": "avanci",
-    "privacy": "public",
+    "icon": "./src/assets/icon_.png",
+    "version": "1.0.0",
     "sdkVersion": "36.0.0",
+    "orientation": "portrait",
+    "scheme": "avanci",
+    "privacy": "public",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
     "splash": {
-      "image": "./src/assets/splash.png",
-      "resizeMode": "contain",
+      "image": "./src/assets/splash_.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -24,7 +25,15 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.avanci.avanci",
+      "buildNumber": "1.0.0",
+      "icon": "./src/assets/iconios.png",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.avanci.avanci",
+      "versionCode": 2,
+      "permissions": []
     }
   }
 }

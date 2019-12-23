@@ -5,7 +5,7 @@ export async function getAllPurchaseOrder(user) {
   let response = null;
   try {
     response = await api.post('RotinasGerais/ExecutarConsultaGeral', {
-      Id: '8',
+      Id: '10',
       Personalizado: '1',
       Parameters: ['user', "'".concat(user, "'")],
     });
@@ -35,7 +35,7 @@ export async function getOnePurchaseOrder(placeCode, requestNumber) {
 }
 
 export async function addPurchaseOrder(
-  placeCode,
+  place,
   login,
   products,
   deliveryForecast
@@ -47,7 +47,6 @@ export async function addPurchaseOrder(
       unidade: element.unity,
       controleEstoque: 1,
       dataEntrega: moment(deliveryForecast, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-
       quantidade: element.originalQuantity,
       precoOrcado: 0,
       observacao: '',
@@ -55,19 +54,18 @@ export async function addPurchaseOrder(
       codDepreciacao: '',
       listaVinculo: [
         {
-          produtoPl: '2',
-          contratoPl: '1',
-          itemPl: '01.02',
+          produtoPl: place.plannedProduct,
+          contratoPl: place.plannedContract,
+          itemPl: place.plannedItem,
           servicoPl: 'SP0002',
           mesPl: moment().format('MM/YYYY'),
-          codigoInsumoPl: 'SP0001',
+          codigoInsumoPl: place.plannedInput,
           quantidadeVinculo: element.originalQuantity,
           numeroItemContrato: 1,
         },
       ],
     };
   });
-
   let response = null;
   try {
     response = await api.post(
@@ -75,9 +73,9 @@ export async function addPurchaseOrder(
       {
         dadosPedido: {
           codigoEmpresa: '1',
-          codigoObra: placeCode,
+          codigoObra: place.placeCode,
           considerarVinculoSemSaldoMes: true,
-          codigoObraFiscal: placeCode,
+          codigoObraFiscal: place.placeCode,
           usuario: login,
           observacao: '',
         },
@@ -87,5 +85,5 @@ export async function addPurchaseOrder(
   } catch (error) {
     throw error;
   }
-  return response;
+  return response.data;
 }

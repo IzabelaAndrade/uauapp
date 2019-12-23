@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import moment from 'moment';
 
 import PropTypes from 'prop-types';
-import OrderCardStatus from '../OrderCardStatus';
+import OrderCardIcon from '../OrderCardIcon';
 
 const stylesOrderCard = StyleSheet.create({
   container: {
@@ -40,7 +39,6 @@ const stylesOrderCard = StyleSheet.create({
   contentQuantityOfItems: { color: '#f9aa31', marginVertical: 5 },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 10,
     borderTopWidth: 0.5,
     borderColor: '#bcbcbc',
@@ -64,9 +62,11 @@ export default function OrderCard(props) {
     quantityOfItems,
     status,
     onPressCard,
+    numberOfExcluded,
+    quantityDelivery,
   } = props;
   return (
-    <View style={stylesOrderCard.container}>
+    <TouchableOpacity style={stylesOrderCard.container} onPress={onPressCard}>
       <View style={stylesOrderCard.header}>
         <Text style={stylesOrderCard.headerTitle}>
           Pedido Nº {requestNumber}
@@ -87,34 +87,19 @@ export default function OrderCard(props) {
       </Text>
       <Text style={stylesOrderCard.contentLable}>
         Previsão de Entrega:{'\t'}
-        <Text style={stylesOrderCard.headerSubTitle}>
+        <Text style={stylesOrderCard.contentValue}>
           {deliveryForecast
             ? moment(deliveryForecast).format('DD/MM/YYYY')
             : 'Não informado'}
         </Text>
       </Text>
 
-      <Text style={stylesOrderCard.contentQuantityOfItems}>
-        {' '}
-        Quantidade de Itens: {quantityOfItems}
-      </Text>
       <View style={stylesOrderCard.footer}>
-        <OrderCardStatus status={status} />
-
-        <TouchableOpacity
-          style={stylesOrderCard.footerBtn}
-          onPress={onPressCard}
-        >
-          <Text style={stylesOrderCard.footerText}>Ver Pedido</Text>
-          <Feather
-            name="chevron-down"
-            size={20}
-            color="#f48024"
-            style={stylesOrderCard.footerIcon}
-          />
-        </TouchableOpacity>
+        <OrderCardIcon type="quantityOfItems" value={quantityOfItems} />
+        <OrderCardIcon type="numberOfExcluded" value={numberOfExcluded} />
+        <OrderCardIcon type="quantityDelivery" value={quantityDelivery} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

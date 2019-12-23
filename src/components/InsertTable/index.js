@@ -87,6 +87,16 @@ const stylesInserTable = StyleSheet.create({
     flex: 6,
   },
   btnTextModal: { fontWeight: '600', fontSize: 16 },
+  btnAddList: {
+    margin: 15,
+    backgroundColor: '#f48024',
+    borderRadius: 4,
+    height: 30,
+    width: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnAddListText: { color: '#fff' },
 });
 
 function Item(props) {
@@ -156,18 +166,10 @@ function ModalListItem(props) {
 function BtnInsertList(props) {
   return (
     <TouchableOpacity
-      style={{
-        margin: 15,
-        backgroundColor: '#f48024',
-        borderRadius: 4,
-        height: 30,
-        width: 150,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      style={stylesInserTable.btnAddList}
       onPress={props.onPress}
     >
-      <Text style={{ color: '#fff' }}>+ Add Item</Text>
+      <Text style={stylesInserTable.btnAddListText}>+ Add Item</Text>
     </TouchableOpacity>
   );
 }

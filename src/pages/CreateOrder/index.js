@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import Constants from 'expo-constants';
@@ -34,7 +41,7 @@ const serverListPlaces = [
   { id: '4', name: 'Detran' },
 ];
 
-function Header({ navigation, onPress }) {
+function Header({ navigation, onPress, btn }) {
   return (
     <View
       style={{
@@ -58,11 +65,16 @@ function Header({ navigation, onPress }) {
             alignItems: 'center',
             paddingLeft: 5,
           }}
+          disabled={btn}
           onPress={() => {
             navigation.goBack();
           }}
         >
-          <Feather name="chevron-left" size={30} color="#fff" />
+          <Feather
+            name="chevron-left"
+            size={30}
+            color={btn ? 'rgba(255,255,255,.3)' : '#fff'}
+          />
         </TouchableOpacity>
         <View
           style={{
@@ -88,10 +100,23 @@ function Header({ navigation, onPress }) {
             justifyContent: 'center',
             alignItems: 'center',
           }}
+          disabled={btn}
           onPress={() => onPress()}
         >
-          <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
-          <AntDesign name="save" size={20} color="#fff" />
+          <Text
+            style={{
+              color: btn ? 'rgba(255,255,255,.3)' : '#fff',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            Salvar{' '}
+          </Text>
+          <AntDesign
+            name="save"
+            size={20}
+            color={btn ? 'rgba(255,255,255,.3)' : '#fff'}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -110,26 +135,12 @@ export default function CreateOrder({ navigation }) {
   const [choicePlace, setChoicePlace] = React.useState('');
   const [places, setPlace] = React.useState('');
   const [listProducts, setListProducts] = React.useState('');
-  const [orderList, setOrderList] = React.useState('');
+  const [orderList, setOrderList] = React.useState([]);
+  const [validDate, setValidDate] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const user = useSelector(state => state.auth.user);
 
   const moment = require('moment');
-
-  // navigation.setOptions({
-  //   title: 'Pedido Detalhado',
-  //   headerRight: () => (
-  //     <TouchableOpacity
-  //       style={{
-  //         flexDirection: 'row',
-  //         alignItems: 'center',
-  //       }}
-  //       // onPress={}
-  //     >
-  //       <Text style={{ color: '#fff', fontWeight: '500' }}> Salvar </Text>
-  //       <AntDesign name="save" size={20} color="#fff" />
-  //     </TouchableOpacity>
-  //   ),
-  // });
 
   useEffect(() => {
     async function loadPurchaseOrder() {
@@ -138,21 +149,18 @@ export default function CreateOrder({ navigation }) {
       try {
         products = await getAllProtucts();
       } catch (error) {
-        console.log(error);
         // if (error.response.status === 401) {
         //   // dispatch(signOut());
         // }
       }
       try {
-        places = await getAllPlaces();
-      } catch (error) {
-        console.log(error);
-      }
+        places = await getAllPlaces(user);
+      } catch (error) {}
       setListProducts(products);
-      setPlace(places);
+      setPlace(places.data);
     }
     loadPurchaseOrder();
-  }, []);
+  }, [user]);
 
   const getItem = item => {
     if (item) {
@@ -184,17 +192,18 @@ export default function CreateOrder({ navigation }) {
     }
     const size = deliveryDate.length == 10;
     if (valide && size && minDate) {
-      console.log(true);
-      return;
+      setValidDate(true);
+    } else {
+      setValidDate(false);
+      return Alert.alert('A data informada é inválida.');
     }
-    console.log(false);
   }
 
   function handleAddTable() {
     if (!choiceItem || !amount) return;
     if (
       orderList &&
-      orderList.some(elem => elem.productCode === selectedItem.Codigo)
+      orderList.some(elem => elem.productCode === selectedItem.productCode)
     ) {
       Alert.alert('O item selecionado já foi adicionado ao pedido');
       return;
@@ -206,28 +215,8 @@ export default function CreateOrder({ navigation }) {
         product: selectedItem.product,
         unity: selectedItem.unity,
         originalQuantity: amount,
-        // DataCadastro: selectedItem.DataCadastro,
-        // QuemCadastrou: selectedItem.QuemCadastrou,
-        // CAP: selectedItem.CAP,
-        // Codigo: selectedItem.Codigo,
-        // DataCadastro: selectedItem.DataCadastro,
-        // Descrição: selectedItem.Descrição,
-        // QuemCadastrou: selectedItem.QuemCadastrou,
-        // Und: selectedItem.Und,
-        // amount,
-
-        // productCode: `${Math.random()}`,
-        // product: choiceItem,
-        // unidade: 'Un',
-        // amount: amount < 10 ? `0${amount.toString()}` : amount.toString(),
       },
 
-      // {
-      //   productCode: `${Math.random()}`,
-      //   product: choiceItem,
-      //   unidade: 'Un',
-      //   amount: amount < 10 ? `0${amount.toString()}` : amount.toString(),
-      // },
       ...orderList,
     ]);
     setAmount('');
@@ -244,54 +233,83 @@ export default function CreateOrder({ navigation }) {
   }
 
   async function createNewOrder() {
-    console.log('onPreeeeess');
-    console.log(choicePlace.Cod_obr);
-    console.log(deliveryDate);
-    console.log(user);
-    console.log(orderList);
-
-    // let response = null;
-    // try {
-    //   response = await addPurchaseOrder(orderData.placeCode, user, orderList);
-    // } catch (error) {
-    //   if (error.response.status === 401) {
-    //     dispatch(signOut());
-    //   }
-    // }
+    if (!choicePlace)
+      return Alert.alert('Selecione uma Obra para esse pedido.');
+    if (!validDate) return Alert.alert('A data informada é inválida.');
+    if (orderList == '') return Alert.alert('O pedido não contém itens.');
+    setLoading(true);
+    let response = null;
+    try {
+      response = await addPurchaseOrder(
+        choicePlace,
+        user,
+        orderList,
+        deliveryDate
+      );
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      // if (error.response.status === 401) {
+      //   dispatch(signOut());
+      // }
+    }
+    setLoading(false);
+    console.log(response);
+    Alert.alert('Seu pedido foi criado com sucesso.', '', [
+      {
+        text: 'OK',
+        onPress: () => {
+          navigation.goBack();
+        },
+      },
+    ]);
   }
 
   return (
     <View style={stylesCreateOrder.container}>
-      <Header navigation={navigation} onPress={createNewOrder} />
-      <HeaderOrderTable
-        value={deliveryDate}
-        onChangeText={text => getDeliveryDate(text)}
-        onEndEditing={() => validadteDate()}
-        data={places}
-        visible={visiblePlaces}
-        onPress={() => getPlaces('')}
-        onSelectPlace={item => getPlaces(item)}
-        choicePlace={choicePlace}
-      />
+      {loading ? (
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+          <Header navigation={navigation} onPress={createNewOrder} btn />
+          <View
+            style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
+          >
+            <ActivityIndicator size="large" color="#f48024" />
+          </View>
+        </View>
+      ) : (
+        <>
+          <Header navigation={navigation} onPress={createNewOrder} />
+          <HeaderOrderTable
+            value={deliveryDate}
+            onChangeText={text => getDeliveryDate(text)}
+            onEndEditing={() => validadteDate()}
+            data={places}
+            visible={visiblePlaces}
+            onPress={() => getPlaces('')}
+            onSelectPlace={item => getPlaces(item)}
+            choicePlace={choicePlace}
+          />
 
-      <View style={stylesCreateOrder.boxTable}>
-        <InsertTable
-          onPress={() => getItem('')}
-          visible={visible}
-          data={listProducts}
-          onSelect={item => getItem(item)}
-          choiceItem={choiceItem}
-          onChangeText={text => setAmount(text)}
-          amount={amount}
-          onInsert={handleAddTable}
-        />
+          <View style={stylesCreateOrder.boxTable}>
+            <InsertTable
+              onPress={() => getItem('')}
+              visible={visible}
+              data={listProducts}
+              onSelect={item => getItem(item)}
+              choiceItem={choiceItem}
+              onChangeText={text => setAmount(text)}
+              amount={amount}
+              onInsert={handleAddTable}
+            />
 
-        <OrderTable
-          data={orderList}
-          enabled
-          onDelete={item => handleRemoveTable(item)}
-        />
-      </View>
+            <OrderTable
+              data={orderList}
+              onPressItem={item => handleRemoveTable(item)}
+              remove
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 }

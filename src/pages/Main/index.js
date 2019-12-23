@@ -41,6 +41,7 @@ const stylesMain = StyleSheet.create({
 export default function Main({ navigation }) {
   // const [orderData, setOrderData] = React.useState(orderList);
   const [orders, setOrders] = React.useState([]);
+  const [refresh, setRefresh] = React.useState(false);
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.auth.user);
@@ -58,12 +59,19 @@ export default function Main({ navigation }) {
       } catch (error) {
         if (error.response.status === 401) {
           dispatch(signOut());
+          setRefresh(false);
+          return;
         }
       }
       setOrders(response.data);
+      setRefresh(false);
     }
     loadPurchaseOrder();
-  }, [dispatch, navigation, user]);
+  }, [dispatch, navigation, user, refresh]);
+
+  function handleRefresh() {
+    setRefresh(true);
+  }
 
   return (
     <>
@@ -71,6 +79,8 @@ export default function Main({ navigation }) {
         <FlatList
           data={orders}
           keyExtractor={item => item.placeCode.concat(item.requestNumber)}
+          refreshing={refresh}
+          onRefresh={() => handleRefresh()}
           renderItem={({ item }) => {
             return (
               <OrderCard
@@ -82,6 +92,8 @@ export default function Main({ navigation }) {
                 deliveryForecast={item.deliveryForecast}
                 status={item.status}
                 quantityOfItems={item.quantityOfItems}
+                numberOfExcluded={item.numberOfExcluded}
+                quantityDelivery={item.quantityDelivery}
                 onPressCard={() => seeOrder(item)}
               />
             );

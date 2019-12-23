@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
 const stylesOrderTable = StyleSheet.create({
   table: {
@@ -51,6 +51,28 @@ function Header() {
 }
 
 function Item(props) {
+  if (props.item.deleted === 1) {
+    return (
+      <View style={stylesOrderTable.content}>
+        <View style={stylesOrderTable.colun1}>
+          <Text style={[stylesOrderTable.contentText, { color: '#bcbcbc' }]}>
+            {props.item.originalQuantity}
+          </Text>
+          <Text
+            style={[stylesOrderTable.contentTextMeta, { color: '#bcbcbc' }]}
+          >
+            {props.item.unity}
+          </Text>
+        </View>
+        <View style={stylesOrderTable.colun2}>
+          <Text style={[stylesOrderTable.contentText, { color: '#bcbcbc' }]}>
+            {props.item.product}
+          </Text>
+        </View>
+        <ButtonIcon item={props.item} icon="delete" disabled />
+      </View>
+    );
+  }
   return (
     <View style={stylesOrderTable.content}>
       <View style={stylesOrderTable.colun1}>
@@ -62,15 +84,33 @@ function Item(props) {
       <View style={stylesOrderTable.colun2}>
         <Text style={stylesOrderTable.contentText}>{props.item.product}</Text>
       </View>
-      {props.enabled ? (
-        <TouchableOpacity
-          style={stylesOrderTable.btnDelete}
-          onPress={() => props.onPress(props.item)}
-        >
-          <AntDesign name="closecircle" size={20} color="#bcbcbc" />
-        </TouchableOpacity>
+      {props.remove ? (
+        <ButtonIcon
+          item={props.item}
+          icon="closecircle"
+          onPress={props.onPress}
+        />
+      ) : null}
+      {props.item.deliveryDate ? (
+        <ButtonIcon item={props.item} icon="truck" onPress={props.onPress} />
       ) : null}
     </View>
+  );
+}
+
+function ButtonIcon(props) {
+  return (
+    <TouchableOpacity
+      style={stylesOrderTable.btnDelete}
+      disabled={props.disabled}
+      onPress={() => props.onPress(props.item)}
+    >
+      {props.icon === 'truck' ? (
+        <Feather name={props.icon} size={20} color="#388E3C" />
+      ) : (
+        <AntDesign name={props.icon} size={20} color="#bcbcbc" />
+      )}
+    </TouchableOpacity>
   );
 }
 
@@ -81,7 +121,7 @@ export default function OrderTable(props) {
       ListHeaderComponent={() => <Header />}
       data={props.data}
       renderItem={({ item }) => (
-        <Item item={item} onPress={props.onDelete} enabled={props.enabled} />
+        <Item item={item} onPress={props.onPressItem} remove={props.remove} />
       )}
       keyExtractor={item => item.productCode}
       ListFooterComponent={<View style={stylesOrderTable.footer} />}

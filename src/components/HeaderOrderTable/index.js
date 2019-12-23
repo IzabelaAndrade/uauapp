@@ -94,7 +94,7 @@ function Item({ place, onPress }) {
       style={stylesCOHeader.btnModal}
       onPress={() => onPress(place)}
     >
-      <Text style={stylesCOHeader.bnTextModal}>{place.Descr_obr}</Text>
+      <Text style={stylesCOHeader.bnTextModal}>{place.place}</Text>
     </TouchableOpacity>
   );
 }
@@ -105,7 +105,6 @@ function ModalListItem(props) {
 
   const searchListPlace = text => {
     setTextinputPlace(text);
-
     if (!text) {
       setfilteredlistPlace(props.data);
       return;
@@ -113,7 +112,7 @@ function ModalListItem(props) {
 
     const reg = new RegExp(text, 'ig');
     const list = props.data.filter(item => {
-      return reg.test(item.Descr_obr);
+      return reg.test(item.place);
     });
     setfilteredlistPlace(list);
   };
@@ -144,7 +143,7 @@ function ModalListItem(props) {
           renderItem={({ item }) => (
             <Item place={item} onPress={props.onSelectPlace} />
           )}
-          keyExtractor={item => item.Cod_obr}
+          keyExtractor={item => item.placeCode}
         />
       </View>
     </Modal>
@@ -166,7 +165,7 @@ export default function HeaderOrderTable(props) {
             })
           }
         >
-          {props.choicePlace ? props.choicePlace.Descr_obr : 'Escolha uma Obra'}
+          {props.choicePlace ? props.choicePlace.place : 'Escolha uma Obra'}
         </Text>
         <Feather
           name="chevron-down"
@@ -177,7 +176,7 @@ export default function HeaderOrderTable(props) {
       </TouchableOpacity>
 
       <View style={stylesCOHeader.containerDate}>
-        <Text style={stylesCOHeader.lableTextDate}>Previsão de Etrega:</Text>
+        <Text style={stylesCOHeader.lableTextDate}>Previsão de Entrega:</Text>
         <View style={stylesCOHeader.containerInputDate}>
           <TextInput
             style={[
