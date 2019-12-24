@@ -3,7 +3,7 @@
     "name": "avanci",
     "slug": "avanci",
     "icon": "./src/assets/icon_.png",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "sdkVersion": "36.0.0",
     "orientation": "portrait",
     "scheme": "avanci",
@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.avanci.avanci",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": []
     }
   }

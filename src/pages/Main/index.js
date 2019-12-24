@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   TouchableOpacity,
   Dimensions,
   FlatList,
   SafeAreaView,
   StyleSheet,
+  ActivityIndicator,
+  View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
@@ -81,6 +83,16 @@ export default function Main({ navigation }) {
           keyExtractor={item => item.placeCode.concat(item.requestNumber)}
           refreshing={refresh}
           onRefresh={() => handleRefresh()}
+          ListEmptyComponent={
+            <View
+              style={{
+                height: height / 2,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <ActivityIndicator size="large" color="#f48024" />
+            </View>
+          }
           renderItem={({ item }) => {
             return (
               <OrderCard
