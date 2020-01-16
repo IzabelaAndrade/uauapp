@@ -1,4 +1,4 @@
-export default class DateFormat {
+export default class Date {
   static format(str) {
     if (str === '') return '';
     const mD = str.match(/\d/g);

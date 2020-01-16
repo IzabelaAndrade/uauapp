@@ -1,3 +1,16 @@
+import React from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StatusBar,
+  Text,
+  Image,
+  TextInput,
+  ScrollView,
+} from 'react-native';
+
+import { Feather, Ionicons } from '@expo/vector-icons';
+
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -6,27 +19,54 @@ import User from './pages/User';
 import Order from './pages/Order';
 import CreateOrder from './pages/CreateOrder';
 import Signin from './pages/Signin';
+import PersonalDataForm from './pages/PersonalDataForm';
+import SocioeconomicForm from './pages/SocioeconomicForm';
+import ReferenceForm from './pages/ReferenceForm';
+import Interviewed from './pages/Interviewed';
 
 const AppStack = createStackNavigator(
   {
-    Main: {
-      screen: Main,
-      navigationOptions: {
-        title: 'Pedidos',
-      },
-    },
-    // CreateOrder,
-    CreateOrder: {
-      screen: CreateOrder,
+    // Main: {
+    //   screen: Main,
+    //   navigationOptions: {
+    //     title: 'Pedidos',
+    //   },
+    // },
+    // CreateOrder: {
+    //   screen: CreateOrder,
+    //   navigationOptions: () => ({
+    //     headerShown: false,
+    //   }),
+    // },
+    // Order: {
+    //   screen: Order,
+    //   navigationOptions: {
+    //     title: 'Pedido Detalhado',
+    //   },
+    // },
+    Interviewed: {
+      screen: Interviewed,
       navigationOptions: () => ({
         headerShown: false,
       }),
     },
-    Order: {
-      screen: Order,
-      navigationOptions: {
-        title: 'Pedido Detalhado',
-      },
+    PersonalDataForm: {
+      screen: PersonalDataForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    SocioeconomicForm: {
+      screen: SocioeconomicForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    ReferenceForm: {
+      screen: ReferenceForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
     },
     User,
   },
@@ -52,6 +92,42 @@ const AuthStack = createStackNavigator({
   },
 });
 
+// const FormStack = createStackNavigator({
+//   PersonalDataForm: {
+//     screen: PersonalDataForm,
+//     navigationOptions: () => ({
+//       headerShown: false,
+//       // headerLeft: () => {
+//       //   return (
+//       //     <TouchableOpacity
+//       //       style={{
+//       //         paddingHorizontal: 20,
+//       //         height: 50,
+//       //         justifyContent: 'center',
+//       //         alignItems: 'center',
+//       //         backgroundColor: 'pink',
+//       //       }}
+//       //     >
+//       //       <Feather name="chevron-left" size={28} color="#f48024" />
+//       //     </TouchableOpacity>
+//       //   );
+//       // },
+//     }),
+//   },
+//   SocioeconomicForm: {
+//     screen: SocioeconomicForm,
+//     navigationOptions: () => ({
+//       headerShown: false,
+//     }),
+//   },
+//   ReferenceForm: {
+//     screen: ReferenceForm,
+//     navigationOptions: () => ({
+//       headerShown: false,
+//     }),
+//   },
+// });
+
 const Routes = (signedIn = false) =>
   createAppContainer(
     createSwitchNavigator(
@@ -60,7 +136,8 @@ const Routes = (signedIn = false) =>
         App: AppStack,
       },
       {
-        initialRouteName: signedIn ? 'App' : 'Sign',
+        // initialRouteName: signedIn ? 'App' : 'Sign',
+        initialRouteName: 'App',
       }
     )
   );

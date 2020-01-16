@@ -254,7 +254,6 @@ export default function CreateOrder({ navigation }) {
       // }
     }
     setLoading(false);
-    console.log(response);
     Alert.alert('Seu pedido foi criado com sucesso.', '', [
       {
         text: 'OK',
