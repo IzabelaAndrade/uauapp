@@ -14,6 +14,8 @@ import {
 import Constants from 'expo-constants';
 
 import { Feather } from '@expo/vector-icons';
+import Cpf from '../../utils/Cpf';
+
 import { signInRequest } from '../../store/modules/auth/actions';
 
 const { width } = Dimensions.get('window');
@@ -89,13 +91,14 @@ const stylesSignIn = StyleSheet.create({
 function Signin() {
   const loading = useSelector(state => state.auth.loading);
   const dispatch = useDispatch();
-  const [user, setUser] = React.useState('');
+  const [cpf, setcpf] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
   const [iconShowPassword, setIconShowPassword] = React.useState('eye-off');
 
   function handleSubmit() {
-    dispatch(signInRequest(user, password));
+    // console.log(Cpf.getNumber(cpf));
+    dispatch(signInRequest(Cpf.getNumber(cpf), password));
   }
 
   function showPassword() {
@@ -123,11 +126,13 @@ function Signin() {
           />
           <TextInput
             style={stylesSignIn.inputUser}
-            maxLength={40}
-            placeholder="Usuário"
+            maxLength={14}
+            keyboardType="numeric"
+            returnKeyType="done"
+            placeholder="CPF"
             placeholderTextColor="#bcbcbc"
-            onChangeText={setUser}
-            value={user}
+            onChangeText={setcpf}
+            value={Cpf.format(cpf)}
           />
 
           <View style={stylesSignIn.inputPass}>

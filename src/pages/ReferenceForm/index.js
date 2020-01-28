@@ -1,6 +1,13 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
+import { Ionicons } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -17,14 +24,16 @@ import SelectPiker from '../../components/SelectPiker';
 const typeJobList = ['Selecione uma opção', 'Contrato', 'CLT', 'Outros'];
 
 export default function ReferenceForm({ navigation }) {
-  const [lastJob, setlastJob] = React.useState('');
-  const [timeJob, settimeJob] = React.useState('');
-  const [typeJob, settypeJob] = React.useState('');
-  const [descriptionJob, setdescriptionJob] = React.useState('');
   const [visible, setvisible] = React.useState('');
 
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
+
+  const makeRegister = () => {
+    // try {
+    // } catch (error) {
+    // }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -32,8 +41,9 @@ export default function ReferenceForm({ navigation }) {
         navigation={navigation}
         screen="Main"
         back
-        save
-        onPress={() => console.log(register)}
+        iconRight="next"
+        // onPress={() => makeRegister()}
+        onPress={() => navigation.navigate('FinancesDataForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
@@ -54,7 +64,7 @@ export default function ReferenceForm({ navigation }) {
             value={register.lastJob}
           />
           <FildInputForm
-            lable="Quanto tempo"
+            lable="Tempo de Permanência"
             placeholder="Informe o periodo de tempo"
             onChangeText={text => dispatch(modifyTimeJob(text))}
             value={register.timeJob}
@@ -66,13 +76,26 @@ export default function ReferenceForm({ navigation }) {
             value={register.descriptionJob}
           />
           <FildInputForm
-            lable="Forma de Trabalho"
+            lable="Regime de Trabalho"
             placeholder="Selecione uma opção"
             list
             onPress={() => setvisible(true)}
             value={register.typeJob}
           />
         </ScrollView>
+        <TouchableOpacity
+          style={{
+            alignSelf: 'flex-end',
+            paddingHorizontal: 20,
+            height: 50,
+            width: 80,
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+          }}
+          onPress={() => navigation.navigate('FinancesDataForm')}
+        >
+          <Ionicons name="ios-arrow-round-forward" size={40} color="#f48024" />
+        </TouchableOpacity>
       </KeyboardAvoidingView>
       {visible ? (
         <SelectPiker

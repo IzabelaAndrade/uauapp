@@ -9,20 +9,24 @@ export function* signIn({ payload }) {
   try {
     const { login, password } = payload;
 
-    const response = yield call(api.post, 'Autenticador/AutenticarUsuarioApp', {
-      login,
-      senha: password,
+    const response = yield call(api.post, 'sessions', {
+      cpf: login,
+      password,
     });
 
-    const name = response.data[0].Usuario[1].Nome_usr;
-    const { token } = response.data[0].Usuario[1];
+    // console.log(response.data);
 
-    api.defaults.headers.Authorization = token;
+    const { uuid, name, cpf } = response.data.user;
+    const { token } = response.data;
 
-    yield put(signInSuccess(token, name, login));
-  } catch (err) {
-    Alert.alert('Falha na autenticação, verifique seus dados');
-    yield put(signFailure());
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
+    yield put(signInSuccess(token, name, cpf, uuid));
+  } catch (error) {
+    console.log(error);
+
+    // Alert.alert('Falha na autenticação, verifique seus dados');
+    // yield put(signFailure());
   }
 }
 

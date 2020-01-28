@@ -22,7 +22,13 @@ import Signin from './pages/Signin';
 import PersonalDataForm from './pages/PersonalDataForm';
 import SocioeconomicForm from './pages/SocioeconomicForm';
 import ReferenceForm from './pages/ReferenceForm';
+import FinancesDataForm from './pages/FinancesDataForm';
+import DocumentsForm from './pages/DocumentsForm';
 import Interviewed from './pages/Interviewed';
+import ShowData from './pages/ShowData';
+import PersonalData from './pages/PersonalData';
+import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 const AppStack = createStackNavigator(
   {
@@ -44,8 +50,26 @@ const AppStack = createStackNavigator(
     //     title: 'Pedido Detalhado',
     //   },
     // },
+    Home: {
+      screen: Home,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
     Interviewed: {
       screen: Interviewed,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    PersonalData: {
+      screen: PersonalData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    ShowData: {
+      screen: ShowData,
       navigationOptions: () => ({
         headerShown: false,
       }),
@@ -64,6 +88,24 @@ const AppStack = createStackNavigator(
     },
     ReferenceForm: {
       screen: ReferenceForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    FinancesDataForm: {
+      screen: FinancesDataForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    DocumentsForm: {
+      screen: DocumentsForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    Profile: {
+      screen: Profile,
       navigationOptions: () => ({
         headerShown: false,
       }),
@@ -136,8 +178,9 @@ const Routes = (signedIn = false) =>
         App: AppStack,
       },
       {
-        // initialRouteName: signedIn ? 'App' : 'Sign',
-        initialRouteName: 'App',
+        initialRouteName: signedIn ? 'App' : 'Sign',
+        // initialRouteName: 'App',
+        // initialRouteName: 'Sign',
       }
     )
   );

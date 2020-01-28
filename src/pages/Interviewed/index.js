@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Feather,
   MaterialCommunityIcons,
@@ -16,7 +18,9 @@ import {
   FontAwesome,
   Entypo,
   MaterialIcons,
+  AntDesign,
 } from '@expo/vector-icons';
+import api from '../../services/api';
 // import { Container } from './styles';
 
 const intreviewedList = [
@@ -55,27 +59,35 @@ const intreviewedList = [
   },
 ];
 
-function Info({ item }) {
+function Info({ item, navigation }) {
+  const img = item.Files.find(element => element.type === 'photo');
   return (
-    <View
+    <TouchableOpacity
       style={{
         paddingHorizontal: 20,
         paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center',
       }}
+      onPress={() =>
+        navigation.navigate('PersonalData', {
+          person: item,
+        })
+      }
     >
       <Image
         style={{ width: 35, height: 35, borderRadius: 25 }}
-        source={{ uri: item.image }}
+        source={{ uri: img.url }}
       />
       <View style={{ marginLeft: 20, flex: 1 }}>
         <Text style={{ fontWeight: '500', fontSize: 18 }}>{item.name}</Text>
-        <Text style={{ color: '#afafaf' }}>{item.especialidade}</Text>
+        <Text style={{ color: '#afafaf' }}>
+          {item.hability.length < 1 ? '' : item.hability.join(', ')}
+        </Text>
         <Text style={{}}>{item.phone}</Text>
-        <ScoreStatus score={item.score} />
+        {/* <ScoreStatus score={item.score} /> */}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -160,6 +172,30 @@ function Score({ color }) {
 }
 
 export default function Interviewed({ navigation }) {
+  const user = useSelector(state => state.auth);
+  const [interviewed, setinterviewed] = React.useState([]);
+
+  useEffect(() => {
+    async function getAllInterviewed() {
+      let response = null;
+      try {
+        response = await api.get('/person', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+      } catch (error) {
+        if (error.response.status === 401) {
+          // dispatch(signOut());
+          // setRefresh(false);
+        }
+        console.log(error);
+        return error;
+      }
+      setinterviewed(response.data);
+    }
+    getAllInterviewed();
+  }, [user]);
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <StatusBar barStyle="default" />
@@ -173,6 +209,12 @@ export default function Interviewed({ navigation }) {
           alignItems: 'center',
         }}
       >
+        <TouchableOpacity
+          style={{ width: 35, alignItems: 'flex-end' }}
+          onPress={() => navigation.goBack()}
+        >
+          <Feather name="chevron-left" size={28} color="#f48024" />
+        </TouchableOpacity>
         <Text style={{ fontSize: 22, fontWeight: '600' }}>
           Lista de Entrevistados
         </Text>
@@ -180,13 +222,13 @@ export default function Interviewed({ navigation }) {
           style={{ width: 35, alignItems: 'flex-end' }}
           onPress={() => navigation.navigate('PersonalDataForm')}
         >
-          <Feather name="plus" size={35} color="#f48024" />
+          <Feather name="plus" size={28} color="#f48024" />
         </TouchableOpacity>
       </View>
       <FlatList
-        data={intreviewedList}
-        renderItem={({ item }) => <Info item={item} />}
-        keyExtractor={item => item.id}
+        data={interviewed}
+        renderItem={({ item }) => <Info item={item} navigation={navigation} />}
+        keyExtractor={item => item.uuid}
       />
     </View>
   );

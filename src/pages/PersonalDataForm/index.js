@@ -17,11 +17,14 @@ import {
   modifyName,
   modifyRG,
   modifyCPF,
+  modifyVoterTitle,
+  modifyEmail,
   modifyBirthday,
   modifyPhone,
   modifyEducation,
-  modifyDesiredVacancy,
+  modifyHability,
   modifyReference,
+  modifyPhoto,
 } from '../../store/modules/register/actions';
 
 import Date from '../../utils/Date';
@@ -43,27 +46,43 @@ const educationList = [
 ];
 
 const jobList = [
-  { title: 'Alvenaria', check: false },
-  { title: 'Pintura', check: false },
-  { title: 'Elétrica', check: false },
-  { title: 'Pedreiro', check: false },
+  'Administrativo',
+  'Ajudante',
+  'Almoxarifado',
+  'Azulejista',
+  'Coringa',
+  'Cozinhiero(a)',
+  'Eletricista',
+  'Empreiteiro(a)',
+  'Encanador(a)',
+  'Encarregado(a) de Obra',
+  'Engenheiro(a)',
+  'Estagiario(a)',
+  'Financeiro',
+  'Gesseiro(a)',
+  'Guarda',
+  'Hidraulica',
+  'Instalador(a) de PVC',
+  'Marceneiro(a)',
+  'Meio Oficial',
+  'Montador(a)',
+  'Motorista',
+  'Moto Boy',
+  'Pedreiro(a)',
+  'Pintor(a)',
+  'Refrigeração',
+  'Segurança do Trabalho',
+  'Serralheiro(a)',
+  'Serviços Gerais',
+  'Tec Manutenção',
+  'Vidraceiro(a)',
 ];
 
 export default function PersonalDataForm({ navigation }) {
   const [image, setimage] = React.useState(null);
   const [saveImage, setsaveImage] = React.useState(false);
-  const [name, setname] = React.useState('');
-  const [rg, setrg] = React.useState('');
-  const [cpf, setcpf] = React.useState('');
-  const [birthday, setbirthday] = React.useState('');
-  const [phone, setphone] = React.useState('');
-  const [desiredVacancy, setdesiredVacancy] = React.useState('');
-  const [education, seteducation] = React.useState('');
-  const [reference, setreference] = React.useState('');
   const [visible, setvisible] = React.useState(false);
-  const [visibledesiredVacancy, setvisibledesiredVacancy] = React.useState(
-    false
-  );
+  const [visiblehability, setvisiblehability] = React.useState(false);
 
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
@@ -75,10 +94,14 @@ export default function PersonalDataForm({ navigation }) {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
+      quality: 1,
     });
     if (!result.cancelled) {
+      console.log(result.uri);
+      dispatch(modifyPhoto(result.uri));
       setimage(result.uri);
       setsaveImage(true);
     }
@@ -90,6 +113,7 @@ export default function PersonalDataForm({ navigation }) {
         navigation={navigation}
         screen="SocioeconomicForm"
         back
+        iconRight="next"
         onPress={() => navigation.navigate('SocioeconomicForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
@@ -156,6 +180,26 @@ export default function PersonalDataForm({ navigation }) {
             value={Cpf.format(register.cpf)}
           />
           <FildInputForm
+            lable="Título de Eleitor"
+            placeholder="Informe o nº do titulo"
+            keyboardType="numeric"
+            maxLength={14}
+            // onChangeText={text => setcpf(text)}
+            // value={Cpf.format(cpf)}
+            onChangeText={text => dispatch(modifyVoterTitle(text))}
+            value={register.voterTitle}
+          />
+
+          <FildInputForm
+            lable="E-mail"
+            placeholder="Informe o email"
+            keyboardType="email-address"
+            // onChangeText={text => setcpf(text)}
+            // value={Cpf.format(cpf)}
+            onChangeText={text => dispatch(modifyEmail(text))}
+            value={register.email}
+          />
+          <FildInputForm
             lable="Data de Nascimento"
             keyboardType="numeric"
             maxLength={10}
@@ -183,11 +227,13 @@ export default function PersonalDataForm({ navigation }) {
             value={register.education}
           />
           <FildInputForm
-            lable="Vaga Pretendida"
-            placeholder="Selecione uma opção"
+            lable="Habilidades"
+            placeholder="Selecione uma ou mais opções"
             list
-            onPress={() => setvisibledesiredVacancy(true)}
-            value={register.desiredVacancy}
+            onPress={() => setvisiblehability(true)}
+            value={
+              register.hability.length < 1 ? '' : register.hability.join(', ')
+            }
           />
           <FildInputForm
             lable="Contato de Referencia"
@@ -228,12 +274,14 @@ export default function PersonalDataForm({ navigation }) {
         />
       ) : null}
       <MultiSelectPiker
-        show={visibledesiredVacancy}
-        list={jobList}
-        onPressClose={jobs => {
-          dispatch(modifyDesiredVacancy(jobs));
+        show={visiblehability}
+        jobList={jobList}
+        selectedList={register.hability}
+        onPressConfirm={selectedList => {
+          console.log(selectedList);
+          dispatch(modifyHability(selectedList));
           // setdesiredVacancy(jobs);
-          setvisibledesiredVacancy(false);
+          setvisiblehability(false);
         }}
       />
     </View>

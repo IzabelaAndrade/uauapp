@@ -12,14 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
   modifyMaritalStatus,
-  modifyChildren,
   modifyDependents,
-  modifySpouse,
   modifyHome,
+  modifyPostalCode,
   modifyNeighborhood,
-  modifyStreet,
-  modifyFinances,
-  modifyDebtValue,
+  modifyAddress,
   modifyTransport,
   modifyHabilitation,
 } from '../../store/modules/register/actions';
@@ -38,23 +35,18 @@ const maritalStatusList = [
 
 const homeList = [
   'Selecione uma opção',
-  'Própria',
+  'Própria - Financiada',
+  'Própria - Quitada',
   'Alugada',
   'Compartilhada (amigo ou parente)',
 ];
 
-const spouseList = ['Selecione uma opção', 'Empregado', 'Desempregado'];
-
-const financesList = [
-  'Selecione uma opção',
-  'Possiu Dívidas ou Financiameto',
-  'Não Possui Dívidas ou Financiameto',
-];
-
 const transportList = [
   'Selecione uma opção',
-  'Moto',
-  'Carro',
+  'Moto - Financiada',
+  'Moto - Quitada',
+  'Carro - Financiado',
+  'Carro - Quitado',
   'Transporte Público',
   'Outros',
 ];
@@ -71,17 +63,6 @@ const habilitationList = [
 
 export default function SocioeconomicForm({ navigation }) {
   const [list, setlist] = React.useState([]);
-  const [maritalStatus, setmaritalStatus] = React.useState('');
-  const [children, setchildren] = React.useState('');
-  const [street, setstreet] = React.useState('');
-  const [home, sethome] = React.useState('');
-  const [neighborhood, setneighborhood] = React.useState('');
-  const [finances, setfinances] = React.useState('');
-  const [debtValue, setdebtValue] = React.useState('');
-  const [dependents, setdependents] = React.useState('');
-  const [spouse, setspouse] = React.useState('');
-  const [transport, settransport] = React.useState('');
-  const [habilitation, sethabilitation] = React.useState('');
   const [pikerType, setpikerType] = React.useState('');
   const [visible, setvisible] = React.useState(false);
 
@@ -91,33 +72,19 @@ export default function SocioeconomicForm({ navigation }) {
   const onPressDone = (type, value) => {
     switch (type) {
       case 'maritalStatus':
-        // setmaritalStatus(value);
         dispatch(modifyMaritalStatus(value));
-        break;
-
-      case 'spouse':
-        dispatch(modifySpouse(value));
-        // setspouse(value);
         break;
 
       case 'home':
         dispatch(modifyHome(value));
-        // sethome(value);
-        break;
-
-      case 'finances':
-        dispatch(modifyFinances(value));
-        // setfinances(value);
         break;
 
       case 'transport':
         dispatch(modifyTransport(value));
-        // settransport(value);
         break;
 
       case 'habilitation':
         dispatch(modifyHabilitation(value));
-        // sethabilitation(value);
         break;
 
       default:
@@ -132,6 +99,7 @@ export default function SocioeconomicForm({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
+        iconRight="next"
         onPress={() => navigation.navigate('ReferenceForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
@@ -158,34 +126,12 @@ export default function SocioeconomicForm({ navigation }) {
             value={register.maritalStatus}
           />
           <FildInputForm
-            lable="Número de Filhos"
-            keyboardType="numeric"
-            maxLength={2}
-            placeholder="Informe o nº de filhos"
-            // onChangeText={text => setchildren(text)}
-            // value={children}
-            onChangeText={text => dispatch(modifyChildren(text))}
-            value={register.children}
-          />
-          <FildInputForm
             lable="Número de Dependentes"
             keyboardType="numeric"
             maxLength={2}
             placeholder="Informe o nº de dependentes"
-            // onChangeText={text => setdependents(text)}
             onChangeText={text => dispatch(modifyDependents(text))}
             value={register.dependents}
-          />
-          <FildInputForm
-            lable="Ocupação do Conjuge"
-            placeholder="Selecione uma opção"
-            list
-            onPress={() => {
-              setlist(spouseList);
-              setvisible(true);
-              setpikerType('spouse');
-            }}
-            value={register.spouse}
           />
           <FildInputForm
             lable="Tipo de Moradia"
@@ -199,39 +145,24 @@ export default function SocioeconomicForm({ navigation }) {
             value={register.home}
           />
           <FildInputForm
+            lable="CEP"
+            placeholder="Informe o CEP"
+            keyboardType="numeric"
+            maxLength={9}
+            onChangeText={text => dispatch(modifyPostalCode(text))}
+            value={register.postalCode}
+          />
+          <FildInputForm
             lable="Bairro"
             placeholder="Informe o bairro"
-            // onChangeText={text => setneighborhood(text)}
             onChangeText={text => dispatch(modifyNeighborhood(text))}
             value={register.neighborhood}
           />
           <FildInputForm
             lable="Logradouro"
             placeholder="Informe o logradouro"
-            // onChangeText={text => setstreet(text)}
-            onChangeText={text => dispatch(modifyStreet(text))}
-            value={register.street}
-          />
-
-          <FildInputForm
-            lable="Situação Financeira"
-            placeholder="Selecione uma opção"
-            list
-            onPress={() => {
-              setlist(financesList);
-              setvisible(true);
-              setpikerType('finances');
-            }}
-            value={register.finances}
-          />
-          <FildInputForm
-            lable="Valor Mensal da Parcela"
-            placeholder="Informe o valor"
-            keyboardType="numeric"
-            maxLength={10}
-            // onChangeText={text => setdebtValue(text)}
-            onChangeText={text => dispatch(modifyDebtValue(text))}
-            value={register.debtValue}
+            onChangeText={text => dispatch(modifyAddress(text))}
+            value={register.address}
           />
           <FildInputForm
             lable="Meio de Transporte"

@@ -38,7 +38,7 @@ export default function FildInputForm({
               color: value ? '#000' : '#c4c4c6',
             }}
           >
-            {value || 'Selecione uma opção'}
+            {value || placeholder}
           </Text>
         </TouchableOpacity>
       ) : (

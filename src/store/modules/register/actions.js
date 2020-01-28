@@ -19,6 +19,20 @@ export function modifyCPF(cpf) {
   };
 }
 
+export function modifyVoterTitle(voterTitle) {
+  return {
+    type: '@register/MODIFY_VOTER_TITLE',
+    payload: { voterTitle },
+  };
+}
+
+export function modifyEmail(email) {
+  return {
+    type: '@register/MODIFY_EMAIL',
+    payload: { email },
+  };
+}
+
 export function modifyBirthday(birthday) {
   return {
     type: '@register/MODIFY_BIRTHDAY',
@@ -40,10 +54,10 @@ export function modifyEducation(education) {
   };
 }
 
-export function modifyDesiredVacancy(desiredVacancy) {
+export function modifyHability(hability) {
   return {
-    type: '@register/MODIFY_DESIRED_VACANCY',
-    payload: { desiredVacancy },
+    type: '@register/MODIFY_HABILITY',
+    payload: { hability },
   };
 }
 
@@ -61,24 +75,10 @@ export function modifyMaritalStatus(maritalStatus) {
   };
 }
 
-export function modifyChildren(children) {
-  return {
-    type: '@register/MODIFY_CHILDREN',
-    payload: { children },
-  };
-}
-
 export function modifyDependents(dependents) {
   return {
     type: '@register/MODIFY_DEPENDENTS',
     payload: { dependents },
-  };
-}
-
-export function modifySpouse(spouse) {
-  return {
-    type: '@register/MODIFY_SPOUSE',
-    payload: { spouse },
   };
 }
 
@@ -89,6 +89,13 @@ export function modifyHome(home) {
   };
 }
 
+export function modifyPostalCode(cep) {
+  return {
+    type: '@register/MODIFY_POSTAL_CODE',
+    payload: { cep },
+  };
+}
+
 export function modifyNeighborhood(neighborhood) {
   return {
     type: '@register/MODIFY_NEIGHBORHOOD',
@@ -96,24 +103,10 @@ export function modifyNeighborhood(neighborhood) {
   };
 }
 
-export function modifyStreet(street) {
+export function modifyAddress(address) {
   return {
-    type: '@register/MODIFY_STREET',
-    payload: { street },
-  };
-}
-
-export function modifyFinances(finances) {
-  return {
-    type: '@register/MODIFY_FINANCES',
-    payload: { finances },
-  };
-}
-
-export function modifyDebtValue(debtValue) {
-  return {
-    type: '@register/MODIFY_DEBT_VALUE',
-    payload: { debtValue },
+    type: '@register/MODIFY_ADDRESS',
+    payload: { address },
   };
 }
 
@@ -156,5 +149,110 @@ export function modifyTypeJob(typeJob) {
   return {
     type: '@register/MODIFY_TYPE_JOB',
     payload: { typeJob },
+  };
+}
+
+export function modifyBank(bank) {
+  return {
+    type: '@register/MODIFY_BANK',
+    payload: { bank },
+  };
+}
+
+export function modifyAccountType(accountType) {
+  return {
+    type: '@register/MODIFY_ACCOUNT_TYPE',
+    payload: { accountType },
+  };
+}
+
+export function modifyAgency(agency) {
+  return {
+    type: '@register/MODIFY_AGENCY',
+    payload: { agency },
+  };
+}
+
+export function modifyOperation(operation) {
+  return {
+    type: '@register/MODIFY_OPERATION',
+    payload: { operation },
+  };
+}
+
+export function modifyAccountNumber(accountNumber) {
+  return {
+    type: '@register/MODIFY_ACCOUNT_NUMBER',
+    payload: { accountNumber },
+  };
+}
+
+export function modifyHolder(holder) {
+  return {
+    type: '@register/MODIFY_HOLDER',
+    payload: { holder },
+  };
+}
+
+export function modifyHolderCPF(holderCPF) {
+  return {
+    type: '@register/MODIFY_HOLDER_CPF',
+    payload: { holderCPF },
+  };
+}
+
+export function modifyShirt(shirt) {
+  return {
+    type: '@register/MODIFY_SHIRT',
+    payload: { shirt },
+  };
+}
+
+export function modifyPants(pants) {
+  return {
+    type: '@register/MODIFY_PANTS',
+    payload: { pants },
+  };
+}
+
+export function modifyShoes(shoes) {
+  return {
+    type: '@register/MODIFY_SHOES',
+    payload: { shoes },
+  };
+}
+
+export function modifyPhoto(photo) {
+  return {
+    type: '@register/MODIFY_PHOTO',
+    payload: { photo },
+  };
+}
+
+export function modifyDocFront(docFront) {
+  return {
+    type: '@register/MODIFY_DOCFRONT',
+    payload: { docFront },
+  };
+}
+
+export function modifyDocBack(docBack) {
+  return {
+    type: '@register/MODIFY_DOCBACK',
+    payload: { docBack },
+  };
+}
+
+export function modifyImgVoterTitle(imgVoterTitle) {
+  return {
+    type: '@register/MODIFY_IMG_VOTER_TITLE',
+    payload: { imgVoterTitle },
+  };
+}
+
+export function modifyImgAddress(imgAddress) {
+  return {
+    type: '@register/MODIFY_IMG_ADDRESS',
+    payload: { imgAddress },
   };
 }

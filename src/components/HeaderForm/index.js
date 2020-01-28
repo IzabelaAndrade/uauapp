@@ -2,15 +2,56 @@ import React from 'react';
 import { View, TouchableOpacity, StatusBar, Text, Image } from 'react-native';
 import Constants from 'expo-constants';
 
-import { Feather } from '@expo/vector-icons';
+import { Feather, AntDesign } from '@expo/vector-icons';
 
 export default function HeaderForm({
   navigation,
   screen,
   back,
-  save,
+  iconRight,
   onPress,
 }) {
+  function renderIconRight(icon) {
+    switch (icon) {
+      case 'save':
+        return (
+          <>
+            <Text
+              style={{
+                color: '#f48024',
+                fontWeight: '600',
+                fontSize: 15,
+                marginRight: 5,
+              }}
+            >
+              salvar
+            </Text>
+            <Feather name="save" size={20} color="#f48024" />
+          </>
+        );
+      case 'next':
+        return (
+          <>
+            <Text style={{ color: '#f48024', fontWeight: '600', fontSize: 15 }}>
+              Próxima
+            </Text>
+            <Feather name="chevron-right" size={20} color="#f48024" />
+          </>
+        );
+      case 'edit':
+        return (
+          <>
+            <Text style={{ color: '#f48024', fontWeight: '600', fontSize: 15 }}>
+              Editar
+            </Text>
+            <AntDesign name="edit" size={20} color="#f48024" />
+          </>
+        );
+      default:
+        return <View style={{ width: 60 }} />;
+    }
+  }
+
   return (
     <>
       <StatusBar barStyle="default" backgroundColor="#f48024" />
@@ -54,30 +95,7 @@ export default function HeaderForm({
           }}
           onPress={onPress}
         >
-          {save ? (
-            <>
-              <Text
-                style={{
-                  color: '#f48024',
-                  fontWeight: '600',
-                  fontSize: 15,
-                  marginRight: 5,
-                }}
-              >
-                salvar
-              </Text>
-              <Feather name="save" size={20} color="#f48024" />
-            </>
-          ) : (
-            <>
-              <Text
-                style={{ color: '#f48024', fontWeight: '600', fontSize: 15 }}
-              >
-                Próxima
-              </Text>
-              <Feather name="chevron-right" size={20} color="#f48024" />
-            </>
-          )}
+          {renderIconRight(iconRight)}
         </TouchableOpacity>
       </View>
     </>
