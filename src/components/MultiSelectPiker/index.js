@@ -33,7 +33,7 @@ function JobIten({ item, onPress, checked }) {
 export default function MultiSelectPiker({
   onPressConfirm,
   show,
-  jobList,
+  dataList,
   selectedList,
 }) {
   const [selectedJobs, setselectedJobs] = React.useState(selectedList);
@@ -71,7 +71,7 @@ export default function MultiSelectPiker({
         >
           <FlatList
             style={{ padding: 20 }}
-            data={jobList}
+            data={dataList}
             renderItem={({ item }) => (
               <JobIten
                 item={item}

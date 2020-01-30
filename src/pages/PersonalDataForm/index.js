@@ -25,6 +25,9 @@ import {
   modifyHability,
   modifyReference,
   modifyPhoto,
+  modifyShirt,
+  modifyPants,
+  modifyShoes,
 } from '../../store/modules/register/actions';
 
 import Date from '../../utils/Date';
@@ -78,11 +81,45 @@ const jobList = [
   'Vidraceiro(a)',
 ];
 
+const sizeList = [
+  'Selecione uma opção',
+  'Pequeno',
+  'Médio',
+  'Grande',
+  'Extra Grande',
+];
+
+const shoesList = [
+  'Selecione uma opção',
+  '35',
+  '36',
+  '37',
+  '38',
+  '39',
+  '40',
+  '41',
+  '42',
+  '43',
+  '44',
+  '45',
+  '46',
+  '47',
+  '48',
+  '49',
+  '50',
+];
+
 export default function PersonalDataForm({ navigation }) {
+  // console.log(navigation.state.params.screen);
+  const oldScreen = navigation.state.params
+    ? navigation.state.params.screen
+    : null;
   const [image, setimage] = React.useState(null);
   const [saveImage, setsaveImage] = React.useState(false);
   const [visible, setvisible] = React.useState(false);
   const [visiblehability, setvisiblehability] = React.useState(false);
+  const [list, setlist] = React.useState('');
+  const [pikerType, setpikerType] = React.useState([]);
 
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
@@ -107,6 +144,30 @@ export default function PersonalDataForm({ navigation }) {
     }
   };
 
+  const onPressDone = (type, value) => {
+    switch (type) {
+      case 'education':
+        dispatch(modifyEducation(value));
+        break;
+      case 'shirt':
+        // setshirt(value);
+        dispatch(modifyShirt(value));
+        break;
+
+      case 'pants':
+        dispatch(modifyPants(value));
+        break;
+
+      case 'shoes':
+        dispatch(modifyShoes(value));
+        break;
+
+      default:
+        break;
+    }
+    setvisible(false);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <HeaderForm
@@ -122,7 +183,9 @@ export default function PersonalDataForm({ navigation }) {
             <Image
               style={{ width: 100, height: 100, borderRadius: 50 }}
               source={
-                image ? { uri: image } : require('../../assets/avatar.png')
+                register.photo
+                  ? { uri: register.photo }
+                  : require('../../assets/avatar.png')
               }
             />
             <TouchableOpacity
@@ -223,7 +286,12 @@ export default function PersonalDataForm({ navigation }) {
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
-            onPress={() => setvisible(true)}
+            onPress={() => {
+              setlist(educationList);
+              setvisible(true);
+              setpikerType('education');
+            }}
+            // onPress={() => setvisible(true)}
             value={register.education}
           />
           <FildInputForm
@@ -243,6 +311,44 @@ export default function PersonalDataForm({ navigation }) {
             // onChangeText={text => setreference(text)}
             // value={reference}
           />
+          {/* {oldScreen ? (
+            <>
+              <FildInputForm
+                lable="Tamanho Camisa"
+                placeholder="Selecione uma opção"
+                list
+                onPress={() => {
+                  setlist(sizeList);
+                  setvisible(true);
+                  setpikerType('shirt');
+                }}
+                value={register.shirt}
+              />
+              <FildInputForm
+                lable="Tamanho Calça"
+                placeholder="Selecione uma opção"
+                list
+                onPress={() => {
+                  setlist(sizeList);
+                  setvisible(true);
+                  setpikerType('pants');
+                }}
+                value={register.pants}
+              />
+              <FildInputForm
+                lable="Tamanho Sapato"
+                placeholder="Selecione uma opção"
+                list
+                onPress={() => {
+                  setlist(shoesList);
+                  setvisible(true);
+                  setpikerType('shoes');
+                }}
+                value={register.shoes}
+              />
+            </>
+          ) : null} */}
+
           <TouchableOpacity
             style={{
               alignSelf: 'flex-end',
@@ -265,17 +371,18 @@ export default function PersonalDataForm({ navigation }) {
 
       {visible ? (
         <SelectPiker
-          list={educationList}
-          onPress={value => {
-            dispatch(modifyEducation(value));
-            // seteducation(value);
-            setvisible(false);
-          }}
+          list={list}
+          // onPress={value => {
+          //   dispatch(modifyEducation(value));
+          //   // seteducation(value);
+          //   setvisible(false);
+          // }}
+          onPress={value => onPressDone(pikerType, value)}
         />
       ) : null}
       <MultiSelectPiker
         show={visiblehability}
-        jobList={jobList}
+        dataList={jobList}
         selectedList={register.hability}
         onPressConfirm={selectedList => {
           console.log(selectedList);
