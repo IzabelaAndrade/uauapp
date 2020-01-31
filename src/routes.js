@@ -1,16 +1,3 @@
-import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StatusBar,
-  Text,
-  Image,
-  TextInput,
-  ScrollView,
-} from 'react-native';
-
-import { Feather, Ionicons } from '@expo/vector-icons';
-
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
@@ -28,9 +15,15 @@ import FinancialDetailed from './pages/FinancialDetailed';
 import DocumentsForm from './pages/DocumentsForm';
 import Interviewed from './pages/Interviewed';
 import ShowData from './pages/ShowData';
+import EditPersonalData from './pages/EditPersonalData';
+import EditSocioeconomicData from './pages/EditSocioeconomicData';
+import EditReferenceData from './pages/EditReferenceData';
+import EditFinancesData from './pages/EditFinancesData';
+import EditDocumentsData from './pages/EditDocumentsData';
 import PersonalData from './pages/PersonalData';
 import DiscountsForm from './pages/DiscountsForm';
 import AdditionForm from './pages/AdditionForm';
+import ContractData from './pages/ContractData';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
 
@@ -98,6 +91,42 @@ const AppStack = createStackNavigator(
     },
     ShowData: {
       screen: ShowData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    EditPersonalData: {
+      screen: EditPersonalData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    EditSocioeconomicData: {
+      screen: EditSocioeconomicData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    EditReferenceData: {
+      screen: EditReferenceData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    EditFinancesData: {
+      screen: EditFinancesData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    EditDocumentsData: {
+      screen: EditDocumentsData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    ContractData: {
+      screen: ContractData,
       navigationOptions: () => ({
         headerShown: false,
       }),

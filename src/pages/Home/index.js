@@ -61,6 +61,9 @@ function RenderIcon(icon) {
     case 'check':
       return <AntDesign name="check" size={25} color="#bcbcbc" />;
 
+    case 'contract':
+      return <AntDesign name="copy1" size={25} color="#bcbcbc" />;
+
     case 'addperson':
       return <MaterialIcons name="assignment-ind" size={25} color="#bcbcbc" />;
 
@@ -113,9 +116,13 @@ export default function Home({ navigation }) {
           <BtnMenu
             lable="Buscar Profissional"
             icon="search"
-            onPress={() => navigation.navigate('Interviewed')}
+            onPress={() => navigation.navigate('Interviewed', { edit: false })}
           />
-          <BtnMenu lable="Completar Cadastro" icon="complete" />
+          <BtnMenu
+            lable="Completar Cadastro"
+            icon="complete"
+            onPress={() => navigation.navigate('Interviewed', { edit: true })}
+          />
           <Text
             style={{
               fontSize: 23,
@@ -127,8 +134,25 @@ export default function Home({ navigation }) {
           >
             Pendências RH
           </Text>
-          <BtnMenu lable="Adicionar Validação de CPF" icon="addfile" />
-          <BtnMenu lable="Validar Documentação" icon="check" />
+          <BtnMenu
+            lable="Validar Documentação"
+            icon="check"
+            onPress={() =>
+              navigation.navigate('Interviewed', {
+                origin: 'EditDocumentsData',
+              })
+            }
+          />
+          <BtnMenu
+            lable="Regime de Contrato"
+            icon="contract"
+            onPress={() =>
+              navigation.navigate('Interviewed', {
+                origin: 'ContractData',
+              })
+            }
+            // onPress={() => navigation.navigate('ContractData')}
+          />
 
           <Text
             style={{
