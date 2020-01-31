@@ -142,6 +142,32 @@ export default function Home({ navigation }) {
             Diretoria
           </Text>
           <BtnMenu lable="Aprovar Contratação" icon="addperson" />
+          <Text
+            style={{
+              fontSize: 23,
+              fontWeight: '400',
+              color: '#f48024',
+              marginTop: 20,
+              marginBottom: 10,
+            }}
+          >
+            Financeiro
+          </Text>
+          <BtnMenu
+            lable="Descontos"
+            icon="new"
+            onPress={() => navigation.navigate('DiscountsForm')}
+          />
+          <BtnMenu
+            lable="Recebimentos"
+            icon="new"
+            onPress={() => navigation.navigate('AdditionForm')}
+          />
+          <BtnMenu
+            lable="Fechamento"
+            icon="new"
+            onPress={() => navigation.navigate('FinancialClose')}
+          />
         </View>
         <TouchableOpacity
           style={{

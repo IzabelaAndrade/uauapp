@@ -23,10 +23,14 @@ import PersonalDataForm from './pages/PersonalDataForm';
 import SocioeconomicForm from './pages/SocioeconomicForm';
 import ReferenceForm from './pages/ReferenceForm';
 import FinancesDataForm from './pages/FinancesDataForm';
+import FinancialClose from './pages/FinancialClose';
+import FinancialDetailed from './pages/FinancialDetailed';
 import DocumentsForm from './pages/DocumentsForm';
 import Interviewed from './pages/Interviewed';
 import ShowData from './pages/ShowData';
 import PersonalData from './pages/PersonalData';
+import DiscountsForm from './pages/DiscountsForm';
+import AdditionForm from './pages/AdditionForm';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
 
@@ -64,6 +68,30 @@ const AppStack = createStackNavigator(
     },
     PersonalData: {
       screen: PersonalData,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    DiscountsForm: {
+      screen: DiscountsForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    AdditionForm: {
+      screen: AdditionForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    FinancialClose: {
+      screen: FinancialClose,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    FinancialDetailed: {
+      screen: FinancialDetailed,
       navigationOptions: () => ({
         headerShown: false,
       }),

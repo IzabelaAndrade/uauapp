@@ -11,6 +11,7 @@ export default function FildInputForm({
   keyboardType,
   maxLength,
   onEndEditing,
+  multiline,
 }) {
   return (
     <View
@@ -44,7 +45,7 @@ export default function FildInputForm({
       ) : (
         <TextInput
           style={{
-            height: 40,
+            height: multiline ? null : 40,
             fontSize: 21,
             fontWeight: '300',
           }}
@@ -56,6 +57,7 @@ export default function FildInputForm({
           onChangeText={text => onChangeText(text)}
           onEndEditing={onEndEditing}
           value={value}
+          multiline={multiline}
         />
       )}
     </View>
