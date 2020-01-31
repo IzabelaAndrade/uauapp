@@ -85,7 +85,7 @@ function Info({ item, navigation, origin }) {
       <View style={{}}>
         <Image
           style={{ width: 45, height: 45, borderRadius: 25 }}
-          source={{ uri: img.url }}
+          source={img ? { uri: img.ulr } : require('../../assets/avatar.png')}
         />
         {/* <View
           style={{

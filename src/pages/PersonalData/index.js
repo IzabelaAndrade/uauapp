@@ -94,7 +94,8 @@ export default function PersonalData({ navigation }) {
   // const register = useSelector(state => state.register);
 
   useEffect(() => {
-    if (person.Files) {
+    if (person.Files && person.Files.lenght > 0) {
+      console.log('entrou no if');
       const photo = person.Files.find(element => element.type === 'photo');
       const docFront = person.Files.find(
         element => element.type === 'docFront'
@@ -169,7 +170,7 @@ export default function PersonalData({ navigation }) {
         >
           <Image
             style={{ width: 100, height: 100, borderRadius: 50 }}
-            source={{ uri: img.url }}
+            source={img ? { uri: img.ulr } : require('../../assets/avatar.png')}
           />
           <Text
             style={{
@@ -250,7 +251,9 @@ export default function PersonalData({ navigation }) {
             disabled={disabledDocs}
             onPress={() =>
               edit
-                ? navigation.navigate('EditDocumentsData')
+                ? navigation.navigate('EditDocumentsData', {
+                    origim: 'EditDocumentsData',
+                  })
                 : navigation.navigate('ShowData', {
                     screen: 'Docs',
                     data: person.Files,

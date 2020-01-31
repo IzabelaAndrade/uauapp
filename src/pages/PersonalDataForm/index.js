@@ -6,12 +6,13 @@ import {
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  StyleSheet,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 import {
   modifyName,
@@ -25,9 +26,6 @@ import {
   modifyHability,
   modifyReference,
   modifyPhoto,
-  modifyShirt,
-  modifyPants,
-  modifyShoes,
 } from '../../store/modules/register/actions';
 
 import Date from '../../utils/Date';
@@ -38,82 +36,39 @@ import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 import MultiSelectPiker from '../../components/MultiSelectPiker';
+import BtnBottomNext from '../../components/BtnBottomNext';
 
-const educationList = [
-  'Selecione uma opção',
-  'Não Possui',
-  'Ensino Fundamental',
-  'Ensino Médio',
-  'Ensino Superior Incompleto',
-  'Ensino Superior Completo',
-];
+import { educationList, jobList } from '../../utils/List';
 
-const jobList = [
-  'Administrativo',
-  'Ajudante',
-  'Almoxarifado',
-  'Azulejista',
-  'Coringa',
-  'Cozinhiero(a)',
-  'Eletricista',
-  'Empreiteiro(a)',
-  'Encanador(a)',
-  'Encarregado(a) de Obra',
-  'Engenheiro(a)',
-  'Estagiario(a)',
-  'Financeiro',
-  'Gesseiro(a)',
-  'Guarda',
-  'Hidraulica',
-  'Instalador(a) de PVC',
-  'Marceneiro(a)',
-  'Meio Oficial',
-  'Montador(a)',
-  'Motorista',
-  'Moto Boy',
-  'Pedreiro(a)',
-  'Pintor(a)',
-  'Refrigeração',
-  'Segurança do Trabalho',
-  'Serralheiro(a)',
-  'Serviços Gerais',
-  'Tec Manutenção',
-  'Vidraceiro(a)',
-];
-
-const sizeList = [
-  'Selecione uma opção',
-  'Pequeno',
-  'Médio',
-  'Grande',
-  'Extra Grande',
-];
-
-const shoesList = [
-  'Selecione uma opção',
-  '35',
-  '36',
-  '37',
-  '38',
-  '39',
-  '40',
-  '41',
-  '42',
-  '43',
-  '44',
-  '45',
-  '46',
-  '47',
-  '48',
-  '49',
-  '50',
-];
+const stylesPDForm = StyleSheet.create({
+  cotainer: { flex: 1, backgroundColor: '#fff' },
+  avatarImg: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: 'center',
+  },
+  avatarBtn: {
+    backgroundColor: '#fff',
+    width: 26,
+    height: 26,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    marginTop: -26,
+    zIndex: 1,
+    marginRight: -80,
+    alignSelf: 'center',
+  },
+  title: {
+    fontWeight: '500',
+    fontSize: 25,
+    alignSelf: 'center',
+    marginVertical: 20,
+  },
+});
 
 export default function PersonalDataForm({ navigation }) {
-  // console.log(navigation.state.params.screen);
-  const oldScreen = navigation.state.params
-    ? navigation.state.params.screen
-    : null;
   const [image, setimage] = React.useState(null);
   const [saveImage, setsaveImage] = React.useState(false);
   const [visible, setvisible] = React.useState(false);
@@ -149,18 +104,6 @@ export default function PersonalDataForm({ navigation }) {
       case 'education':
         dispatch(modifyEducation(value));
         break;
-      case 'shirt':
-        // setshirt(value);
-        dispatch(modifyShirt(value));
-        break;
-
-      case 'pants':
-        dispatch(modifyPants(value));
-        break;
-
-      case 'shoes':
-        dispatch(modifyShoes(value));
-        break;
 
       default:
         break;
@@ -169,7 +112,7 @@ export default function PersonalDataForm({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={stylesPDForm.cotainer}>
       <HeaderForm
         navigation={navigation}
         screen="SocioeconomicForm"
@@ -179,45 +122,25 @@ export default function PersonalDataForm({ navigation }) {
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
-          <View style={{ alignItems: 'center' }}>
-            <Image
-              style={{ width: 100, height: 100, borderRadius: 50 }}
-              source={
-                register.photo
-                  ? { uri: register.photo }
-                  : require('../../assets/avatar.png')
-              }
-            />
-            <TouchableOpacity
-              style={{
-                backgroundColor: '#fff',
-                width: 26,
-                height: 26,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 14,
-                marginTop: -26,
-                zIndex: 1,
-                marginRight: -80,
-              }}
-              onPress={() => {
-                _pickImage();
-              }}
-            >
-              <Feather name="plus" size={20} color="#f48024" />
-            </TouchableOpacity>
-          </View>
-          <Text
-            style={{
-              fontWeight: '500',
-              fontSize: 25,
-              alignSelf: 'center',
-              marginVertical: 20,
+          <Image
+            style={stylesPDForm.avatarImg}
+            source={
+              register.photo
+                ? { uri: register.photo }
+                : require('../../assets/avatar.png')
+            }
+          />
+          <TouchableOpacity
+            style={stylesPDForm.avatarBtn}
+            onPress={() => {
+              _pickImage();
             }}
           >
-            Dados Pessoais
-          </Text>
+            <Feather name="plus" size={20} color="#f48024" />
+          </TouchableOpacity>
+          <Text style={stylesPDForm.title}>Dados Pessoais</Text>
           <FildInputForm
+            required
             lable="Nome Completo"
             placeholder="Informe o nome"
             onChangeText={text => dispatch(modifyName(text))}
@@ -233,6 +156,7 @@ export default function PersonalDataForm({ navigation }) {
             value={register.rg}
           />
           <FildInputForm
+            required
             lable="CPF"
             placeholder="Informe o nº do CPF"
             keyboardType="numeric"
@@ -263,6 +187,7 @@ export default function PersonalDataForm({ navigation }) {
             value={register.email}
           />
           <FildInputForm
+            required
             lable="Data de Nascimento"
             keyboardType="numeric"
             maxLength={10}
@@ -273,6 +198,7 @@ export default function PersonalDataForm({ navigation }) {
             // value={Date.format(birthday)}
           />
           <FildInputForm
+            required
             lable="Telefone"
             placeholder="Informe o nº de telefone"
             keyboardType="numeric"
@@ -283,6 +209,7 @@ export default function PersonalDataForm({ navigation }) {
             // value={Phone.format(phone)}
           />
           <FildInputForm
+            required
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
@@ -295,6 +222,7 @@ export default function PersonalDataForm({ navigation }) {
             value={register.education}
           />
           <FildInputForm
+            required
             lable="Habilidades"
             placeholder="Selecione uma ou mais opções"
             list
@@ -304,6 +232,7 @@ export default function PersonalDataForm({ navigation }) {
             }
           />
           <FildInputForm
+            required
             lable="Contato de Referencia"
             placeholder="Informe um contato"
             onChangeText={text => dispatch(modifyReference(text))}
@@ -311,72 +240,16 @@ export default function PersonalDataForm({ navigation }) {
             // onChangeText={text => setreference(text)}
             // value={reference}
           />
-          {/* {oldScreen ? (
-            <>
-              <FildInputForm
-                lable="Tamanho Camisa"
-                placeholder="Selecione uma opção"
-                list
-                onPress={() => {
-                  setlist(sizeList);
-                  setvisible(true);
-                  setpikerType('shirt');
-                }}
-                value={register.shirt}
-              />
-              <FildInputForm
-                lable="Tamanho Calça"
-                placeholder="Selecione uma opção"
-                list
-                onPress={() => {
-                  setlist(sizeList);
-                  setvisible(true);
-                  setpikerType('pants');
-                }}
-                value={register.pants}
-              />
-              <FildInputForm
-                lable="Tamanho Sapato"
-                placeholder="Selecione uma opção"
-                list
-                onPress={() => {
-                  setlist(shoesList);
-                  setvisible(true);
-                  setpikerType('shoes');
-                }}
-                value={register.shoes}
-              />
-            </>
-          ) : null} */}
 
-          <TouchableOpacity
-            style={{
-              alignSelf: 'flex-end',
-              paddingHorizontal: 20,
-              height: 50,
-              width: 80,
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-            }}
+          <BtnBottomNext
             onPress={() => navigation.navigate('SocioeconomicForm')}
-          >
-            <Ionicons
-              name="ios-arrow-round-forward"
-              size={40}
-              color="#f48024"
-            />
-          </TouchableOpacity>
+          />
         </ScrollView>
       </KeyboardAvoidingView>
 
       {visible ? (
         <SelectPiker
           list={list}
-          // onPress={value => {
-          //   dispatch(modifyEducation(value));
-          //   // seteducation(value);
-          //   setvisible(false);
-          // }}
           onPress={value => onPressDone(pikerType, value)}
         />
       ) : null}
@@ -385,9 +258,7 @@ export default function PersonalDataForm({ navigation }) {
         dataList={jobList}
         selectedList={register.hability}
         onPressConfirm={selectedList => {
-          console.log(selectedList);
           dispatch(modifyHability(selectedList));
-          // setdesiredVacancy(jobs);
           setvisiblehability(false);
         }}
       />
