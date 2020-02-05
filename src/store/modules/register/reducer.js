@@ -1,6 +1,7 @@
 import produce from 'immer';
 
 const INITIAL_STATE = {
+  uuid: null,
   name: null,
   rg: null,
   cpf: '',
@@ -43,11 +44,23 @@ const INITIAL_STATE = {
   docBack: null,
   imgVoterTitle: null,
   imgAddress: null,
+  imgCpf: null,
+
+  contractType: null,
+  jobRules: null,
+  payment: null,
+  paymentValue: null,
+  bonus: [],
+  cotractDate: '',
 };
 
 export default function auth(state = INITIAL_STATE, action) {
   return produce(state, draft => {
     switch (action.type) {
+      case '@register/MODIFY_UUID': {
+        draft.uuid = action.payload.uuid;
+        break;
+      }
       case '@register/MODIFY_NAME': {
         draft.name = action.payload.name;
         break;
@@ -196,7 +209,41 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.imgAddress = action.payload.imgAddress;
         break;
       }
+      case '@register/MODIFY_IMG_CPF': {
+        draft.imgCpf = action.payload.imgCpf;
+        break;
+      }
+      case '@register/MODIFY_CONTRACT_TYPE': {
+        draft.contractType = action.payload.contractType;
+        break;
+      }
+      case '@register/MODIFY_JOB_RULES': {
+        draft.jobRules = action.payload.jobRules;
+        break;
+      }
+      case '@register/MODIFY_PAYMENT': {
+        draft.payment = action.payload.payment;
+        break;
+      }
+      case '@register/MODIFY_PAYMENT_VALUE': {
+        draft.paymentValue = action.payload.paymentValue;
+        break;
+      }
+      case '@register/MODIFY_BONUS': {
+        draft.bonus = action.payload.bonus;
+        break;
+      }
+      case '@register/MODIFY_CONTRACT_DATA': {
+        draft = INITIAL_STATE;
+        break;
+      }
       default:
     }
   });
 }
+// contractType: null,
+// jobRules: null,
+// payment: null,
+// paymentValue: null,
+// bonus: [],
+// cotractDate: '',

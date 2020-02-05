@@ -1,7 +1,16 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  ScrollView,
+  Alert,
+} from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
+import FullLoading from '../../components/FullLoading';
+
+import api from '../../services/api';
 
 import {
   modifyLastJob,
@@ -21,7 +30,10 @@ export default function EditReferenceData({ navigation }) {
   const [visible, setvisible] = React.useState('');
 
   const dispatch = useDispatch();
+
+  const [loading, setloading] = React.useState(false);
   const register = useSelector(state => state.register);
+  const user = useSelector(state => state.auth);
 
   const [lastJob, setlastJob] = React.useState(register.lastJob);
   const [timeJob, settimeJob] = React.useState(register.timeJob);
@@ -30,11 +42,68 @@ export default function EditReferenceData({ navigation }) {
   );
   const [typeJob, settypeJob] = React.useState(register.typeJob);
 
-  const onPressSave = () => {
-    dispatch(modifyLastJob(text));
-    dispatch(modifyTimeJob(text));
-    dispatch(modifyDescriptionJob(text));
-    dispatch(modifyTypeJob(value));
+  const onPressSave = async () => {
+    setloading(true);
+    let response = null;
+    try {
+      response = await api.put(
+        '/person',
+        {
+          uuid: register.uuid,
+          lastJob,
+          timeJob,
+          descriptionJob,
+          typeJob,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      throw error;
+    }
+
+    dispatch(
+      modifyLastJob(response.data.person.professional_experience.lastJob)
+    );
+    dispatch(
+      modifyTimeJob(response.data.person.professional_experience.timeJob)
+    );
+    dispatch(
+      modifyDescriptionJob(
+        response.data.person.professional_experience.descriptionJob
+      )
+    );
+    dispatch(
+      modifyTypeJob(response.data.person.professional_experience.typeJob)
+    );
+
+    Alert.alert(
+      '',
+      'Os dados foram alterados com sucesso.',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setloading(false);
+            navigation.goBack();
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
   };
 
   return (
@@ -44,7 +113,7 @@ export default function EditReferenceData({ navigation }) {
         screen="Main"
         back
         iconRight="save"
-        // onPress={() => navigation.navigate('FinancesDataForm')}
+        onPress={onPressSave}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
@@ -95,6 +164,7 @@ export default function EditReferenceData({ navigation }) {
           }}
         />
       ) : null}
+      <FullLoading loading={loading} />
     </View>
   );
 }

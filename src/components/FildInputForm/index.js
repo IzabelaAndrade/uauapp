@@ -1,5 +1,33 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+
+const stylesInputForm = StyleSheet.create({
+  container: {
+    marginHorizontal: 20,
+    marginTop: 15,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: '#eeeeee',
+  },
+  textlable: { fontWeight: '500', fontSize: 14 },
+  textrequired: { color: 'red', fontWeight: 'bold' },
+  btn: { minHeight: 40, justifyContent: 'center' },
+  btntext: {
+    fontSize: 21,
+    fontWeight: '300',
+  },
+  input: {
+    minHeight: 40,
+    fontSize: 21,
+    fontWeight: '300',
+  },
+});
 
 export default function FildInputForm({
   lable,
@@ -12,46 +40,37 @@ export default function FildInputForm({
   maxLength,
   onEndEditing,
   multiline,
+  required,
+  disabled,
 }) {
   return (
-    <View
-      style={{
-        marginHorizontal: 20,
-        marginTop: 15,
-        paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderColor: '#eeeeee',
-      }}
-    >
-      <Text style={{ fontWeight: '500', fontSize: 14 }}>{lable}</Text>
+    <View style={stylesInputForm.container}>
+      <Text style={stylesInputForm.textlable}>
+        {lable}
+        {required ? <Text style={stylesInputForm.textrequired}> *</Text> : null}
+      </Text>
       {list ? (
         <TouchableOpacity
-          style={{
-            height: 40,
-            justifyContent: 'center',
-          }}
+          style={stylesInputForm.btn}
           onPress={onPress}
+          disabled={disabled}
         >
           <Text
-            style={{
-              fontSize: 21,
-              fontWeight: '300',
-              color: value ? '#000' : '#c4c4c6',
-            }}
+            style={[
+              stylesInputForm.btntext,
+              { color: value ? '#000' : '#c4c4c6' },
+            ]}
           >
             {value || placeholder}
           </Text>
         </TouchableOpacity>
       ) : (
         <TextInput
-          style={{
-            height: multiline ? null : 40,
-            fontSize: 21,
-            fontWeight: '300',
-          }}
+          style={[stylesInputForm.input]}
           keyboardType={keyboardType}
           returnKeyType="done"
           maxLength={maxLength}
+          editable={!disabled}
           placeholder={placeholder}
           underlineColorAndroid="transparent"
           onChangeText={text => onChangeText(text)}

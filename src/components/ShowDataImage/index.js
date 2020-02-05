@@ -13,7 +13,9 @@ export default function ShowDataImage({
   icon,
   onPressDelete,
   del,
+  disabled,
 }) {
+  console.log(url);
   const renderIcon = () => {
     switch (icon) {
       case 'photo':
@@ -55,6 +57,7 @@ export default function ShowDataImage({
           flexDirection: 'row',
           flex: 1,
         }}
+        disabled={disabled}
         onPress={() => onPress(url)}
       >
         <View style={{ flex: 1 }}>

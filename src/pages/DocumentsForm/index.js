@@ -169,6 +169,31 @@ export default function DocumentsForm({ navigation }) {
   async function makeRegister() {
     setloading(true);
 
+    if (
+      !register.photo ||
+      !register.name ||
+      !register.cpf ||
+      !register.birthday ||
+      !register.phone ||
+      !register.education ||
+      !register.hability ||
+      !register.reference
+    ) {
+      return Alert.alert(
+        'Ops!',
+        'Existem itens obrigatórios que não foram informados',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              setloading(false);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+
     let response = null;
     try {
       response = await api.post('/person', register, {

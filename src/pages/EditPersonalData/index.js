@@ -1,16 +1,19 @@
 import React from 'react';
 import {
   View,
-  TouchableOpacity,
+  Alert,
   Text,
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
 import {
@@ -39,29 +42,32 @@ import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 import MultiSelectPiker from '../../components/MultiSelectPiker';
 import BtnCancel from '../../components/BtnCancel';
+import FullLoading from '../../components/FullLoading';
 
 import { educationList, jobList, sizeList, shoesList } from '../../utils/List';
 
+import api from '../../services/api';
+
 export default function EditPersonalData({ navigation }) {
   const register = useSelector(state => state.register);
+  const user = useSelector(state => state.auth);
 
-  // console.log(navigation.state.params.screen);
-  const oldScreen = navigation.state.params
-    ? navigation.state.params.screen
-    : null;
-  const [image, setimage] = React.useState(null);
+  // console.log(register);
   const [saveImage, setsaveImage] = React.useState(false);
   const [visible, setvisible] = React.useState(false);
   const [visiblehability, setvisiblehability] = React.useState(false);
   const [list, setlist] = React.useState('');
   const [pikerType, setpikerType] = React.useState([]);
+  const [loading, setloading] = React.useState(false);
 
   const [name, setname] = React.useState(register.name);
   const [rg, setrg] = React.useState(register.rg);
   const [cpf, setcpf] = React.useState(register.cpf);
   const [voterTitle, setvoterTitle] = React.useState(register.voterTitle);
   const [email, setemail] = React.useState(register.email);
-  const [birthday, setbirthday] = React.useState(register.birthday);
+  const [birthday, setbirthday] = React.useState(
+    moment(register.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY')
+  );
   const [phone, setphone] = React.useState(register.phone);
   const [education, seteducation] = React.useState(register.education);
   const [hability, sethability] = React.useState(register.hability);
@@ -72,20 +78,79 @@ export default function EditPersonalData({ navigation }) {
 
   const dispatch = useDispatch();
 
-  const onPressSave = () => {
-    dispatch(modifyName(text));
-    dispatch(modifyRG(text));
-    dispatch(modifyCPF(text));
-    dispatch(modifyVoterTitle(text));
-    dispatch(modifyBirthday(text));
-    dispatch(modifyEmail(text));
-    dispatch(modifyPhone(text));
-    dispatch(modifyReference(text));
-    dispatch(modifyEducation(value));
-    dispatch(modifyShirt(value));
-    dispatch(modifyPants(value));
-    dispatch(modifyShoes(value));
-    dispatch(modifyHability(selectedList));
+  const onPressSave = async () => {
+    setloading(true);
+    let response = null;
+    try {
+      response = await api.put(
+        '/person',
+        {
+          uuid: register.uuid,
+          name,
+          rg,
+          cpf,
+          voterTitle,
+          email,
+          birthday,
+          phone,
+          education,
+          hability,
+          reference,
+          shirt,
+          shoes,
+          pants,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      throw error;
+    }
+    dispatch(modifyName(response.data.person.name));
+    dispatch(modifyRG(response.data.person.rg));
+    dispatch(modifyCPF(response.data.person.cpf));
+    dispatch(modifyVoterTitle(response.data.person.voter_title));
+    dispatch(
+      modifyBirthday(
+        moment(response.data.person.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY')
+      )
+    );
+    dispatch(modifyEmail(response.data.person.email));
+    dispatch(modifyPhone(response.data.person.phone));
+    dispatch(modifyReference(response.data.person.reference));
+    dispatch(modifyEducation(response.data.person.education));
+    dispatch(modifyShirt(response.data.person.shirt_size));
+    dispatch(modifyPants(response.data.person.pants_size));
+    dispatch(modifyShoes(response.data.person.boot_size));
+    dispatch(modifyHability(response.data.person.hability));
+
+    Alert.alert(
+      '',
+      'Os dados foram alterados com sucesso.',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setloading(false);
+            navigation.goBack();
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
   };
 
   const onPressDone = (type, value) => {
@@ -113,7 +178,12 @@ export default function EditPersonalData({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm navigation={navigation} back iconRight="save" />
+      <HeaderForm
+        navigation={navigation}
+        back
+        iconRight="save"
+        onPress={onPressSave}
+      />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
           <Text
@@ -242,11 +312,6 @@ export default function EditPersonalData({ navigation }) {
       {visible ? (
         <SelectPiker
           list={list}
-          // onPress={value => {
-          //   dispatch(modifyEducation(value));
-          //   // seteducation(value);
-          //   setvisible(false);
-          // }}
           onPress={value => onPressDone(pikerType, value)}
         />
       ) : null}
@@ -259,6 +324,7 @@ export default function EditPersonalData({ navigation }) {
           setvisiblehability(false);
         }}
       />
+      <FullLoading loading={loading} />
     </View>
   );
 }
