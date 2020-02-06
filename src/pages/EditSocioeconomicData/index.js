@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  KeyboardAvoidingView,
+  Alert,
+} from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,6 +24,9 @@ import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 import BtnCancel from '../../components/BtnCancel';
+import FullLoading from '../../components/FullLoading';
+
+import api from '../../services/api';
 
 import {
   maritalStatusList,
@@ -33,7 +42,9 @@ export default function EditSocioeconomicData({ navigation }) {
 
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
+  const user = useSelector(state => state.auth);
 
+  const [loading, setloading] = React.useState(false);
   const [maritalStatus, setmaritalStatus] = React.useState(
     register.maritalStatus
   );
@@ -69,15 +80,67 @@ export default function EditSocioeconomicData({ navigation }) {
     setvisible(false);
   };
 
-  const onPressSave = () => {
-    dispatch(modifyMaritalStatus(value));
-    dispatch(modifyHome(value));
-    dispatch(modifyTransport(value));
-    dispatch(modifyHabilitation(value));
-    dispatch(modifyDependents(text));
-    dispatch(modifyPostalCode(text));
-    dispatch(modifyNeighborhood(text));
-    dispatch(modifyAddress(text));
+  const onPressSave = async () => {
+    setloading(true);
+    let response = null;
+    try {
+      response = await api.put(
+        '/person',
+        {
+          uuid: register.uuid,
+          maritalStatus,
+          dependents,
+          home,
+          postalCode,
+          neighborhood,
+          address,
+          transport,
+          habilitation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      throw error;
+    }
+    console.log(response.data);
+
+    dispatch(modifyMaritalStatus(response.data.person.marital_status));
+    dispatch(modifyHome(response.data.person.home));
+    dispatch(modifyTransport(response.data.person.transport));
+    dispatch(modifyHabilitation(response.data.person.habilitation));
+    dispatch(modifyDependents(response.data.person.dependents));
+    dispatch(modifyPostalCode(response.data.person.postal_code));
+    dispatch(modifyNeighborhood(response.data.person.neighborhood));
+    dispatch(modifyAddress(response.data.person.address));
+
+    Alert.alert(
+      '',
+      'Os dados foram alterados com sucesso.',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setloading(false);
+            navigation.goBack();
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
   };
 
   return (
@@ -87,7 +150,7 @@ export default function EditSocioeconomicData({ navigation }) {
         screen="ReferenceForm"
         back
         iconRight="save"
-        // onPress={() => navigation.navigate('ReferenceForm')}
+        onPress={onPressSave}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
@@ -182,6 +245,7 @@ export default function EditSocioeconomicData({ navigation }) {
           onPress={value => onPressDone(pikerType, value)}
         />
       ) : null}
+      <FullLoading loading={loading} />
     </View>
   );
 }

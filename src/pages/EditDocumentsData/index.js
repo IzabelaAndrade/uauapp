@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   KeyboardAvoidingView,
   ScrollView,
   Text,
-  Image,
-  Modal,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -17,20 +14,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import api from '../../services/api';
 
 import HeaderForm from '../../components/HeaderForm';
-import FildInputForm from '../../components/FildInputForm';
-import FildImageForm from '../../components/FildImageForm';
 import SelectPiker from '../../components/SelectPiker';
 import BtnCancel from '../../components/BtnCancel';
+import FullLoading from '../../components/FullLoading';
 import ShowDataImage from '../../components/ShowDataImage';
+import ShowFullImage from '../../components/ShowFullImage';
 
 import {
   modifyShirt,
   modifyPants,
   modifyShoes,
+  modifyPhoto,
   modifyDocFront,
   modifyDocBack,
   modifyImgVoterTitle,
   modifyImgAddress,
+  modifyUuid,
+  modifyImgCpf,
+  clearRegister,
 } from '../../store/modules/register/actions';
 
 export default function EditDocumentsData({ navigation }) {
@@ -43,6 +44,9 @@ export default function EditDocumentsData({ navigation }) {
   const user = useSelector(state => state.auth);
 
   const [visible, setvisible] = React.useState(false);
+  const [button, setbutton] = React.useState('edit');
+  const [imgVisible, setimgVisible] = React.useState(false);
+  const [imageUrl, setimageUrl] = React.useState('');
   const [loading, setloading] = React.useState(false);
   const [list, setlist] = React.useState('');
   const [pikerType, setpikerType] = React.useState([]);
@@ -57,6 +61,46 @@ export default function EditDocumentsData({ navigation }) {
     register.imgVoterTitle
   );
   const [imageCPF, setimageCPF] = React.useState(null);
+
+  useEffect(() => {
+    if (origin === 'EditDocumentsData') {
+      const { person } = navigation.state.params;
+      console.log(person);
+      dispatch(modifyUuid(person.uuid));
+      if (person.Files && person.Files.length > 0) {
+        const imgphoto = person.Files.find(element => element.type === 'photo');
+
+        const docFront = person.Files.find(
+          element => element.type === 'docFront'
+        );
+        const docBack = person.Files.find(
+          element => element.type === 'docBack'
+        );
+        const vTitle = person.Files.find(
+          element => element.type === 'voterTitle'
+        );
+        const address = person.Files.find(
+          element => element.type === 'address'
+        );
+        const imgCpf = person.Files.find(
+          element => element.type === 'validator'
+        );
+
+        setphoto(imgphoto ? imgphoto.url : null);
+        setimageDocFront(docFront ? docFront.url : null);
+        setimageDocBack(docBack ? docBack.url : null);
+        setimageDocVoterTitle(vTitle ? vTitle.url : null);
+        setimageDocAddress(address ? address.url : null);
+        setimageCPF(imgCpf ? imgCpf.url : null);
+        dispatch(modifyPhoto(imgphoto ? imgphoto.url : null));
+        dispatch(modifyDocFront(docFront ? docFront.url : null));
+        dispatch(modifyDocBack(docBack ? docBack.url : null));
+        dispatch(modifyImgVoterTitle(vTitle ? vTitle.url : null));
+        dispatch(modifyImgAddress(address ? address.url : null));
+        dispatch(modifyImgCpf(imgCpf ? imgCpf.url : null));
+      }
+    }
+  }, [dispatch, navigation.state.params, origin]);
 
   const _pickImage = async image => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -119,73 +163,159 @@ export default function EditDocumentsData({ navigation }) {
     return formData;
   };
 
-  const sendImage = async (uri, type, uuid) => {
+  const sendImage = async (uri, type, uuid, requestType) => {
     const image = handleImage(uri);
     let response = null;
-    try {
-      response = await api.post(`/files?user=${uuid}&type=${type}`, image, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'content-type': 'multipart/form-data',
-        },
-      });
-    } catch (error) {
-      // console.log(error.response);
-      throw error;
+    if (requestType === 'post') {
+      console.log('post');
+      try {
+        response = await api.post(`/files?user=${uuid}&type=${type}`, image, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            'content-type': 'multipart/form-data',
+          },
+        });
+      } catch (error) {
+        setloading(false);
+        console.log(error);
+        throw error;
+      }
+    } else {
+      try {
+        response = await api.put(`/files?user=${uuid}&type=${type}`, image, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            'content-type': 'multipart/form-data',
+          },
+        });
+      } catch (error) {
+        setloading(false);
+        console.log(error);
+        throw error;
+      }
     }
-    // console.log(response);
     return response;
   };
 
-  const AlertConfirm = () => {
-    return Alert.alert(
+  const onPressSave1 = async () => {
+    if (button === 'edit') {
+      setbutton('save');
+      return;
+    }
+    let requestType = null;
+    // register.imgVoterTitle !== imageDocVoterTitle)
+    console.log(`regDocFront': ${register.docFront}`);
+    console.log(`DocFront': ${imageDocFront}`);
+    console.log(`regTitulo': ${register.imgVoterTitle}`);
+    console.log(`tiEleitor': ${imageDocVoterTitle}`);
+    console.log(`regAddress': ${register.imgAddress}`);
+    console.log(`Address': ${imageDocAddress}`);
+    if (register.docFront !== imageDocFront) {
+      console.log('docFront');
+      requestType = register.docFront ? 'put' : 'post';
+      response = await sendImage(
+        imageDocFront,
+        'docFront',
+        register.uuid,
+        requestType
+      );
+      dispatch(modifyDocFront(response.data.url));
+    }
+  };
+
+  const onPressSave = async () => {
+    if (button === 'edit') {
+      setbutton('save');
+      return;
+    }
+    setloading(true);
+    let response = null;
+    let requestType = null;
+
+    if (register.photo !== photo) {
+      console.log('photo');
+      requestType = register.photo ? 'put' : 'post';
+      response = await sendImage(photo, 'photo', register.uuid, requestType);
+      dispatch(modifyPhoto(response.data.url));
+    }
+    if (register.docFront !== imageDocFront) {
+      console.log('docFront');
+      requestType = register.docFront ? 'put' : 'post';
+      response = await sendImage(
+        imageDocFront,
+        'docFront',
+        register.uuid,
+        requestType
+      );
+      dispatch(modifyDocFront(response.data.url));
+    }
+    if (register.docBack !== imageDocBack) {
+      console.log('docBack');
+      requestType = register.docBack ? 'put' : 'post';
+      response = await sendImage(
+        imageDocBack,
+        'docBack',
+        register.uuid,
+        requestType
+      );
+
+      dispatch(modifyDocBack(response.data.url));
+    }
+    if (register.imgVoterTitle !== imageDocVoterTitle) {
+      console.log('imgVoterTitle');
+      requestType = register.imgVoterTitle ? 'put' : 'post';
+      response = await sendImage(
+        imageDocVoterTitle,
+        'voterTitle',
+        register.uuid,
+        requestType
+      );
+
+      dispatch(modifyImgVoterTitle(response.data.url));
+    }
+    if (register.imgAddress !== imageDocAddress) {
+      console.log('imgAddress');
+      requestType = register.imgAddress ? 'put' : 'post';
+      response = await sendImage(
+        imageDocAddress,
+        'address',
+        register.uuid,
+        requestType
+      );
+
+      dispatch(modifyImgAddress(response.data.url));
+    }
+    if (register.imgCpf !== imageCPF) {
+      console.log('imgCpf');
+      requestType = register.imgCpf ? 'put' : 'post';
+      response = await sendImage(
+        imageCPF,
+        'validator',
+        register.uuid,
+        requestType
+      );
+
+      dispatch(modifyImgCpf(response.data.url));
+    }
+
+    Alert.alert(
       '',
-      'Registro realizado com sucesso!',
+      'Os documentos foram alterados com sucesso.',
       [
         {
           text: 'OK',
           onPress: () => {
             setloading(false);
             navigation.navigate('Home');
+            dispatch(clearRegister());
           },
         },
       ],
-      { cancelable: false }
+      {
+        cancelable: false,
+      }
     );
   };
-
-  async function makeRegister() {
-    setloading(true);
-
-    let response = null;
-    try {
-      response = await api.post('/person', register, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-      setloading(false);
-      Alert.alert(
-        'Ops!',
-        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
-        [{ text: 'OK' }],
-        { cancelable: false }
-      );
-      throw error;
-    }
-    const { uuid } = response.data.person;
-
-    if (register.photo) await sendImage(register.photo, 'photo', uuid);
-    if (register.docFront) await sendImage(register.docFront, 'docFront', uuid);
-    if (register.docBack) await sendImage(register.docBack, 'docBack', uuid);
-    if (register.imgVoterTitle)
-      await sendImage(register.imgVoterTitle, 'voterTitle', uuid);
-    if (register.imgAddress) sendImage(register.imgAddress, 'address', uuid);
-
-    AlertConfirm();
-  }
 
   const onPressDone = (type, value) => {
     switch (type) {
@@ -208,12 +338,62 @@ export default function EditDocumentsData({ navigation }) {
     setvisible(false);
   };
 
-  function onPressSave() {
-    dispatch(modifyDocFront(result.uri));
-    dispatch(modifyDocFront(result.uri));
-    dispatch(modifyDocBack(result.uri));
-    dispatch(modifyImgVoterTitle(result.uri));
-    dispatch(modifyImgAddress(result.uri));
+  const onPressDelete = type => {
+    switch (type) {
+      case 'photo':
+        setphoto(null);
+        break;
+      case 'docFront':
+        setimageDocFront(null);
+        break;
+      case 'docBack':
+        setimageDocBack(null);
+        break;
+      case 'address':
+        setimageDocAddress(null);
+        break;
+      case 'voterTitle':
+        setimageDocVoterTitle(null);
+        break;
+      case 'docCPF':
+        setimageCPF(null);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  function onPressSeeImage(type) {
+    switch (type) {
+      case 'photo':
+        setimageUrl(photo);
+        setimgVisible(true);
+        break;
+      case 'docFront':
+        setimageUrl(imageDocFront);
+        setimgVisible(true);
+        break;
+      case 'docBack':
+        setimageUrl(imageDocBack);
+        setimgVisible(true);
+        break;
+      case 'voterTitle':
+        setimageUrl(imageDocVoterTitle);
+        setimgVisible(true);
+        break;
+      case 'address':
+        setimageUrl(imageDocAddress);
+        setimgVisible(true);
+        break;
+      case 'docCPF':
+        setimageUrl(imageCPF);
+        setimgVisible(true);
+        break;
+
+      default:
+        break;
+    }
   }
 
   return (
@@ -222,8 +402,8 @@ export default function EditDocumentsData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight="save"
-        // onPress={() => makeRegister()}
+        iconRight={button}
+        onPress={onPressSave}
         // onPress={() => navigation.navigate('ReferenceForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
@@ -244,10 +424,11 @@ export default function EditDocumentsData({ navigation }) {
             caption="Foto"
             icon="photo"
             url={photo}
-            onPress={() => {
-              _pickImage('photo');
-            }}
-            del={!!photo}
+            disabled={!!(button === 'edit' && !photo)}
+            onPress={() =>
+              button === 'edit' ? onPressSeeImage('photo') : _pickImage('photo')
+            }
+            del={button === 'save' && !!photo}
             onPressDelete={() => setphoto(null)}
           />
           <ShowDataImage
@@ -255,10 +436,13 @@ export default function EditDocumentsData({ navigation }) {
             lable="Frente"
             icon="docFront"
             url={imageDocFront}
-            del={!!imageDocFront}
-            onPress={() => {
-              _pickImage('docFront');
-            }}
+            del={button === 'save' && !!imageDocFront}
+            disabled={!!(button === 'edit' && !imageDocFront)}
+            onPress={() =>
+              button === 'edit'
+                ? onPressSeeImage('docFront')
+                : _pickImage('docFront')
+            }
             onPressDelete={() => setimageDocFront(null)}
           />
           <ShowDataImage
@@ -266,30 +450,39 @@ export default function EditDocumentsData({ navigation }) {
             lable="Verso"
             icon="docBack"
             url={imageDocBack}
-            del={!!imageDocBack}
-            onPress={() => {
-              _pickImage('docBack');
-            }}
+            del={button === 'save' && !!imageDocBack}
+            disabled={!!(button === 'edit' && !imageDocBack)}
+            onPress={() =>
+              button === 'edit'
+                ? onPressSeeImage('docBack')
+                : _pickImage('docBack')
+            }
             onPressDelete={() => setimageDocBack(null)}
           />
           <ShowDataImage
             caption="Título de Eleitor"
             icon="voterTitle"
             url={imageDocVoterTitle}
-            del={!!imageDocVoterTitle}
-            onPress={() => {
-              _pickImage('docVoterTitle');
-            }}
+            del={button === 'save' && !!imageDocVoterTitle}
+            disabled={!!(button === 'edit' && !imageDocVoterTitle)}
+            onPress={() =>
+              button === 'edit'
+                ? onPressSeeImage('voterTitle')
+                : _pickImage('docVoterTitle')
+            }
             onPressDelete={() => setimageDocVoterTitle(null)}
           />
           <ShowDataImage
             caption="Comprovante de Endereço"
             icon="address"
             url={imageDocAddress}
-            del={!!imageDocAddress}
-            onPress={() => {
-              _pickImage('docAddress');
-            }}
+            del={button === 'save' && !!imageDocAddress}
+            disabled={!!(button === 'edit' && !imageDocAddress)}
+            onPress={() =>
+              button === 'edit'
+                ? onPressSeeImage('address')
+                : _pickImage('docAddress')
+            }
             onPressDelete={() => setimageDocAddress(null)}
           />
           {origin ? (
@@ -297,10 +490,13 @@ export default function EditDocumentsData({ navigation }) {
               caption="Validação de CPF"
               icon="docBack"
               url={imageCPF}
-              del={!!imageCPF}
-              onPress={() => {
-                _pickImage('docCPF');
-              }}
+              del={button === 'save' && !!imageCPF}
+              disabled={!!(button === 'edit' && !imageCPF)}
+              onPress={() =>
+                button === 'edit'
+                  ? onPressSeeImage('docCPF')
+                  : _pickImage('docCPF')
+              }
               onPressDelete={() => setimageCPF(null)}
             />
           ) : null}
@@ -313,37 +509,12 @@ export default function EditDocumentsData({ navigation }) {
           onPress={value => onPressDone(pikerType, value)}
         />
       ) : null}
-      <Modal
-        animationType="fade"
-        transparent
-        visible={loading}
-        onRequestClose={() => {
-          // Alert.alert('Modal has been closed.');
-        }}
-      >
-        <View
-          style={{
-            marginTop: 22,
-            backgroundColor: 'rgba(255,255,255,.6)',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <View
-            style={{
-              width: 150,
-              height: 150,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#fff',
-              borderRadius: 8,
-            }}
-          >
-            <ActivityIndicator size="large" color="#f48024" />
-          </View>
-        </View>
-      </Modal>
+      <FullLoading loading={loading} />
+      <ShowFullImage
+        onPress={() => setimgVisible(false)}
+        imageUrl={imageUrl}
+        imgVisible={imgVisible}
+      />
     </View>
   );
 }

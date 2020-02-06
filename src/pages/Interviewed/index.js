@@ -74,6 +74,8 @@ function Info({ item, navigation, origin }) {
         origin
           ? navigation.navigate(origin, {
               origin,
+              uuid: item.uuid,
+              person: item,
             })
           : navigation.navigate('PersonalData', {
               person: item,
@@ -85,7 +87,7 @@ function Info({ item, navigation, origin }) {
       <View style={{}}>
         <Image
           style={{ width: 45, height: 45, borderRadius: 25 }}
-          source={{ uri: img.url }}
+          source={img ? { uri: img.url } : require('../../assets/avatar.png')}
         />
         {/* <View
           style={{
@@ -174,11 +176,11 @@ export default function Interviewed({ navigation }) {
         console.log(error);
         return error;
       }
+      // console.log(response.data);
       setinterviewed(response.data);
     }
     getAllInterviewed();
   }, [user]);
-
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <StatusBar barStyle="default" />

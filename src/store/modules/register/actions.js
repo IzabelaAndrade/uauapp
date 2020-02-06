@@ -1,3 +1,9 @@
+export function modifyUuid(uuid) {
+  return {
+    type: '@register/MODIFY_UUID',
+    payload: { uuid },
+  };
+}
 export function modifyName(name) {
   return {
     type: '@register/MODIFY_NAME',
@@ -244,6 +250,8 @@ export function modifyDocBack(docBack) {
 }
 
 export function modifyImgVoterTitle(imgVoterTitle) {
+  console.log('entrou');
+  console.log(imgVoterTitle);
   return {
     type: '@register/MODIFY_IMG_VOTER_TITLE',
     payload: { imgVoterTitle },
@@ -254,5 +262,60 @@ export function modifyImgAddress(imgAddress) {
   return {
     type: '@register/MODIFY_IMG_ADDRESS',
     payload: { imgAddress },
+  };
+}
+
+export function modifyImgCpf(imgCpf) {
+  return {
+    type: '@register/MODIFY_IMG_CPF',
+    payload: { imgCpf },
+  };
+}
+
+export function modifyContractType(contractType) {
+  return {
+    type: '@register/MODIFY_CONTRACT_TYPE',
+    payload: { contractType },
+  };
+}
+
+export function modifyJobRules(jobRules) {
+  return {
+    type: '@register/MODIFY_JOB_RULES',
+    payload: { jobRules },
+  };
+}
+
+export function modifyPayment(payment) {
+  return {
+    type: '@register/MODIFY_PAYMENT',
+    payload: { payment },
+  };
+}
+
+export function modifyPaymentValue(paymentValue) {
+  return {
+    type: '@register/MODIFY_PAYMENT_VALUE',
+    payload: { paymentValue },
+  };
+}
+
+export function modifyBonus(bonus) {
+  return {
+    type: '@register/MODIFY_BONUS',
+    payload: { bonus },
+  };
+}
+
+export function modifyCotractDate(cotractDate) {
+  return {
+    type: '@register/MODIFY_CONTRACT_DATA',
+    payload: { cotractDate },
+  };
+}
+
+export function clearRegister() {
+  return {
+    type: '@register/CLEAR_REGISTER',
   };
 }

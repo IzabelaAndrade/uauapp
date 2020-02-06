@@ -5,17 +5,13 @@ import {
   Image,
   StatusBar,
   ScrollView,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import Constants from 'expo-constants';
 
-import {
-  Feather,
-  Ionicons,
-  AntDesign,
-  MaterialIcons,
-} from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
+
+import { Feather, AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 // import { Container } from './styles';
 
@@ -73,6 +69,7 @@ function RenderIcon(icon) {
 }
 
 export default function Home({ navigation }) {
+  const user = useSelector(state => state.auth);
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <StatusBar barStyle="default" backgroundColor="#f48024" />
@@ -139,6 +136,7 @@ export default function Home({ navigation }) {
             icon="check"
             onPress={() =>
               navigation.navigate('Interviewed', {
+                edit: true,
                 origin: 'EditDocumentsData',
               })
             }
@@ -222,7 +220,7 @@ export default function Home({ navigation }) {
               flex: 1,
             }}
           >
-            Igor Vinicius Avanci Rosa
+            {user.name}
           </Text>
         </TouchableOpacity>
       </ScrollView>
