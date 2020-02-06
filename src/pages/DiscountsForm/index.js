@@ -17,6 +17,7 @@ import Date from '../../utils/Date';
 import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
+import ModalSearch from '../../components/ModalSearch';
 import api from '../../services/api';
 
 const formOfPayment = ['', 'Dinheiro', 'Transferência', 'Outros'];
@@ -49,6 +50,7 @@ export default function DiscountsForm({ navigation }) {
   const user = useSelector(state => state.auth);
   const [beneficiaries, setBeneficiaries] = React.useState([]);
   const [beneficiary, setBeneficiary] = React.useState('');
+  const [modalSearchShow, setModalSearchShow] = React.useState(false);
 
   useEffect(() => {
     async function getAllInterviewed() {
@@ -63,9 +65,7 @@ export default function DiscountsForm({ navigation }) {
         console.log(error);
         return error;
       }
-      const names = response.data.map(element => element.name);
-      names.push('');
-      setBeneficiaries(names);
+      return setBeneficiaries(response.data);
     }
     getAllInterviewed();
   }, [user]);
@@ -80,9 +80,7 @@ export default function DiscountsForm({ navigation }) {
             placeholder="Selecione uma opção"
             list
             onPress={() => {
-              setSelectPickerItens(beneficiaries);
-              setSeterSelectPicker('setBeneficiary');
-              setvisible(true);
+              setModalSearchShow(true);
             }}
             value={beneficiary}
           />
@@ -145,7 +143,11 @@ export default function DiscountsForm({ navigation }) {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-
+      <ModalSearch
+        open={modalSearchShow}
+        data={beneficiaries}
+        onSelect={item => setBeneficiaries(item)}
+      />
       {visible ? (
         <SelectPiker
           list={selectPickerItens}

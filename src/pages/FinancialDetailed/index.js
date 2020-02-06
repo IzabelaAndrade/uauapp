@@ -84,6 +84,69 @@ const DATA = [
     ],
   },
 ];
+const Lanch = [
+  {
+    title: 'Janeiro - 2020',
+    data: [
+      {
+        value: '300,00',
+        description: 'Ajuda de custo - Gasolina',
+        weekDay: 'qui',
+        monthDay: '30',
+        month: 'Jan',
+      },
+      {
+        value: '700,00',
+        description: 'Ajuda de custo',
+        weekDay: 'sex',
+        monthDay: '03',
+        month: 'Jan',
+      },
+      {
+        value: '150,00',
+        description: 'Bonus',
+        weekDay: 'sab',
+        monthDay: '04',
+        month: 'Jan',
+      },
+      {
+        value: '1.000,00',
+        description:
+          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
+        weekDay: 'seg',
+        monthDay: '27',
+        month: 'Jan',
+      },
+    ],
+  },
+  {
+    title: 'Dezembro - 2019',
+    data: [
+      {
+        value: '300,00',
+        description: 'Reembolso',
+        weekDay: 'sex',
+        monthDay: '03',
+        month: 'Dez',
+      },
+      {
+        value: '700,00',
+        description: 'Ajuda de custo',
+        weekDay: 'sab',
+        monthDay: '04',
+        month: 'Dez',
+      },
+      {
+        value: '2.380,00',
+        description:
+          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
+        weekDay: 'seg',
+        monthDay: '19',
+        month: 'Dez',
+      },
+    ],
+  },
+];
 
 const FinancialHeader = () => {
   return (
@@ -146,7 +209,31 @@ const FinancialHeader = () => {
   );
 };
 
-const FinancialSelectDate = () => {
+function FinancialSelectDate({ onSelect }) {
+  const [dateFilterSelected, setDateFilterSelected] = React.useState('30 dias');
+  function Button({ text, selected, onPress }) {
+    return (
+      <TouchableOpacity
+        style={{
+          paddingHorizontal: 10,
+          paddingVertical: 3,
+          borderRadius: 20,
+          backgroundColor: selected ? '#B5B5B5' : '#e6e6e6',
+        }}
+        onPress={() => {
+          setDateFilterSelected(text);
+          onPress(text);
+        }}
+      >
+        <Text style={{ color: selected ? '#ffff' : '#898989' }}>{text}</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  function handlePressButton(text) {
+    onSelect(text);
+  }
+
   return (
     <View
       style={{
@@ -158,49 +245,29 @@ const FinancialSelectDate = () => {
         flexDirection: 'row',
       }}
     >
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#B5B5B5',
-        }}
-      >
-        <Text style={{ color: '#ffff' }}>30 dias</Text>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#e6e6e6',
-        }}
-      >
-        <Text style={{ color: '#898989' }}>60 dias</Text>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#e6e6e6',
-        }}
-      >
-        <Text style={{ color: '#898989' }}>90 dias</Text>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#e6e6e6',
-        }}
-      >
-        <Text style={{ color: '#898989' }}>Início</Text>
-      </View>
+      <Button
+        text="30 dias"
+        selected={dateFilterSelected === '30 dias'}
+        onPress={text => handlePressButton(text)}
+      />
+      <Button
+        text="60 dias"
+        selected={dateFilterSelected === '60 dias'}
+        onPress={text => handlePressButton(text)}
+      />
+      <Button
+        text="90 dias"
+        selected={dateFilterSelected === '90 dias'}
+        onPress={text => handlePressButton(text)}
+      />
+      <Button
+        text="Início"
+        selected={dateFilterSelected === 'Início'}
+        onPress={text => handlePressButton(text)}
+      />
     </View>
   );
-};
+}
 
 function Item({ data }) {
   return (
@@ -293,8 +360,52 @@ const FinancialItem = () => {
   );
 };
 
-const FinancialRelease = () => {};
-const ViewSwitch = () => {
+const FinancialRelease = () => {
+  return (
+    <SectionList
+      stickySectionHeadersEnabled
+      sections={Lanch}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({ item }) => <Item data={item} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View
+          style={{
+            paddingHorizontal: 10,
+            paddingVertical: 3,
+            backgroundColor: '#e6e6e6',
+          }}
+        >
+          <Text sstyle={{ color: '#898989' }}>{title}</Text>
+        </View>
+      )}
+    />
+  );
+};
+
+const ViewSwitch = ({ onSelect }) => {
+  const [viewSelected, setViewSelected] = React.useState('Extrato');
+  function Button({ text, selected, onPress }) {
+    return (
+      <TouchableOpacity
+        style={{
+          paddingHorizontal: 10,
+          paddingVertical: 3,
+          borderRadius: 20,
+          backgroundColor: selected ? '#B5B5B5' : '#e6e6e6',
+        }}
+        onPress={() => {
+          setViewSelected(text);
+          onPress(text);
+        }}
+      >
+        <Text style={{ color: selected ? '#ffff' : '#898989' }}>{text}</Text>
+      </TouchableOpacity>
+    );
+  }
+  function handlePressButton(text) {
+    onSelect(text);
+  }
+
   return (
     <View
       style={{
@@ -306,42 +417,30 @@ const ViewSwitch = () => {
         flexDirection: 'row',
       }}
     >
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#B5B5B5',
-        }}
-      >
-        <Text style={{ color: '#ffff' }}>Extrato</Text>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: '#e6e6e6',
-        }}
-      >
-        <Text style={{ color: '#898989' }}>Lançamento</Text>
-      </View>
+      <Button
+        text="Extrato"
+        selected={viewSelected === 'Extrato'}
+        onPress={text => handlePressButton(text)}
+      />
+      <Button
+        text="Lançamentos"
+        selected={viewSelected === 'Lançamentos'}
+        onPress={text => handlePressButton(text)}
+      />
     </View>
   );
 };
 
 export default function FinancialDetailed({ navigation }) {
-  const [visible, setvisible] = React.useState(false);
-
+  const [dateFilterSelected, setDateFilterSelected] = React.useState('30 dias');
+  const [viewSelected, setViewSelected] = React.useState('Extrato');
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <HeaderForm navigation={navigation} back />
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-        <FinancialHeader />
-        <ViewSwitch />
-        <FinancialSelectDate />
-        <FinancialItem />
-      </KeyboardAvoidingView>
+      <FinancialHeader />
+      <ViewSwitch onSelect={text => setViewSelected(text)} />
+      <FinancialSelectDate onSelect={text => setDateFilterSelected(text)} />
+      {viewSelected === 'Extrato' ? <FinancialItem /> : <FinancialRelease />}
     </View>
   );
 }
