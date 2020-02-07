@@ -4,13 +4,7 @@ import Constants from 'expo-constants';
 
 import { Feather, AntDesign } from '@expo/vector-icons';
 
-export default function HeaderForm({
-  navigation,
-  screen,
-  back,
-  iconRight,
-  onPress,
-}) {
+export default function HeaderForm({ navigation, back, iconRight, onPress }) {
   function renderIconRight(icon) {
     switch (icon) {
       case 'save':
