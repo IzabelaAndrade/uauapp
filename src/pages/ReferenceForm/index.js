@@ -21,19 +21,13 @@ import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 
-const typeJobList = ['Selecione uma opção', 'Contrato', 'CLT', 'Outros'];
+import { typeJobList } from '../../utils/List';
 
 export default function ReferenceForm({ navigation }) {
   const [visible, setvisible] = React.useState('');
 
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
-
-  const makeRegister = () => {
-    // try {
-    // } catch (error) {
-    // }
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -42,7 +36,6 @@ export default function ReferenceForm({ navigation }) {
         screen="Main"
         back
         iconRight="next"
-        // onPress={() => makeRegister()}
         onPress={() => navigation.navigate('FinancesDataForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
@@ -83,7 +76,6 @@ export default function ReferenceForm({ navigation }) {
             onValueChange={value => {
               dispatch(modifyTypeJob(value));
             }}
-            // onValueChange={value => onPressDone('education', value)}
             onPress={() => setvisible(true)}
             value={register.typeJob}
           />

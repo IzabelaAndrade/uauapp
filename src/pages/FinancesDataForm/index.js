@@ -25,22 +25,7 @@ import {
   modifyHolderCPF,
 } from '../../store/modules/register/actions';
 
-// import { Container } from './styles';
-const listbank1 = [
-  { number: '1', name: 'Banco do Brasil' },
-  { number: '104', name: 'Caixa Econômina Federal' },
-  { number: '237', name: 'Bradesco' },
-  { number: '77', name: 'Banco Intermedium' },
-];
-const listbank = [
-  'Selecione uma opção',
-  'Banco do Brasil',
-  'Caixa Econômina Federal',
-  'Bradesco',
-  'Banco Intermedium',
-];
-
-const listAccount = ['Selecione uma opção', 'Corrente', 'Poupança'];
+import { listbank, listAccount } from '../../utils/List';
 
 export default function FinancesDataForm({ navigation }) {
   const [visible, setvisible] = React.useState(false);
@@ -68,14 +53,6 @@ export default function FinancesDataForm({ navigation }) {
         // setbank(value);
         dispatch(modifyBank(value));
         break;
-
-      // case 'transport':
-      //   dispatch(modifyTransport(value));
-      //   break;
-
-      // case 'habilitation':
-      //   dispatch(modifyHabilitation(value));
-      //   break;
 
       default:
         break;

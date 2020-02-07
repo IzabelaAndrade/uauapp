@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { signOut } from '../../store/modules/auth/actions';
 
 import HeaderForm from '../../components/HeaderForm';
@@ -16,14 +16,7 @@ export default function Profile({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm
-        navigation={navigation}
-        // screen="ReferenceForm"
-        back
-        // iconRight="save"
-        // onPress={() => makeRegister()}
-        // onPress={() => navigation.navigate('ReferenceForm')}
-      />
+      <HeaderForm navigation={navigation} back />
       <View style={{ marginHorizontal: 20 }}>
         <Text style={{ color: '#bcbcbc' }}>Logado como:</Text>
         <Text style={{ fontSize: 20, fontWeight: '400', marginTop: 10 }}>

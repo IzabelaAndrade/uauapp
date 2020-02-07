@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,10 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Feather, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { clearRegister } from '../../store/modules/register/actions';
 
 // import { Container } from './styles';
 
@@ -73,7 +74,7 @@ function RenderIcon(icon) {
 }
 
 export default function Home({ navigation }) {
-  const user = useSelector(state => state.auth);
+  const dispatch = useDispatch();
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <StatusBar barStyle="default" backgroundColor="#f48024" />
@@ -101,10 +102,6 @@ export default function Home({ navigation }) {
           source={require('../../assets/logoavanci.png')}
         />
       </View>
-      {/* <ImageBackground
-        source={require('../../assets/logoavanci.png')}
-        style={{ width: '100%', height: '100%' }}
-      > */}
       <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
         {/* <View > */}
         <Text style={{ fontSize: 23, fontWeight: '400', color: '#f48024' }}>
@@ -113,7 +110,10 @@ export default function Home({ navigation }) {
         <BtnMenu
           lable="Nova Entrevista"
           icon="new"
-          onPress={() => navigation.navigate('PersonalDataForm')}
+          onPress={() => {
+            dispatch(clearRegister());
+            navigation.navigate('PersonalDataForm');
+          }}
         />
         <BtnMenu
           lable="Buscar Profissional"

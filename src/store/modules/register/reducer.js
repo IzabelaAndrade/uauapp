@@ -234,16 +234,59 @@ export default function auth(state = INITIAL_STATE, action) {
         break;
       }
       case '@register/MODIFY_CONTRACT_DATA': {
-        draft = INITIAL_STATE;
+        draft.cotractDate = action.payload.cotractDate;
+        break;
+      }
+      case '@register/CLEAR_REGISTER': {
+        draft.uuid = null;
+        draft.name = null;
+        draft.rg = null;
+        draft.cpf = '';
+        draft.email = null;
+        draft.phone = '';
+        draft.voterTitle = null;
+        draft.birthday = '';
+        draft.education = null;
+        draft.hability = [];
+        draft.reference = null;
+        draft.maritalStatus = null;
+        draft.dependents = null;
+        draft.home = null;
+        draft.postalCode = null;
+        draft.neighborhood = null;
+        draft.address = null;
+        draft.transport = null;
+        draft.habilitation = null;
+        draft.lastJob = null;
+        draft.timeJob = null;
+        draft.descriptionJob = null;
+        draft.typeJob = null;
+        draft.bank = '';
+        draft.accountType = '';
+        draft.agency = null;
+        draft.operation = null;
+        draft.accountNumber = null;
+        draft.holder = null;
+        draft.holderCPF = '';
+        draft.shirt = null;
+        draft.pants = null;
+        draft.shoes = null;
+        draft.photo = null;
+        draft.docFront = null;
+        draft.docBack = null;
+        draft.imgVoterTitle = null;
+        draft.imgAddress = null;
+        draft.imgCpf = null;
+
+        draft.contractType = null;
+        draft.jobRules = null;
+        draft.payment = null;
+        draft.paymentValue = null;
+        draft.bonus = [];
+        draft.cotractDate = '';
         break;
       }
       default:
     }
   });
 }
-// contractType: null,
-// jobRules: null,
-// payment: null,
-// paymentValue: null,
-// bonus: [],
-// cotractDate: '',

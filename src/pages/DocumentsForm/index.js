@@ -29,37 +29,11 @@ import {
   modifyDocBack,
   modifyImgVoterTitle,
   modifyImgAddress,
+  clearRegister,
 } from '../../store/modules/register/actions';
 
 // import { Container } from './styles';
-
-const sizeList = [
-  'Selecione uma opção',
-  'Pequeno',
-  'Médio',
-  'Grande',
-  'Extra Grande',
-];
-
-const shoesList = [
-  'Selecione uma opção',
-  '35',
-  '36',
-  '37',
-  '38',
-  '39',
-  '40',
-  '41',
-  '42',
-  '43',
-  '44',
-  '45',
-  '46',
-  '47',
-  '48',
-  '49',
-  '50',
-];
+import { sizeList, shoesList } from '../../utils/List';
 
 export default function DocumentsForm({ navigation }) {
   const [visible, setvisible] = React.useState(false);
@@ -221,7 +195,7 @@ export default function DocumentsForm({ navigation }) {
     if (register.imgVoterTitle)
       await sendImage(register.imgVoterTitle, 'voterTitle', uuid);
     if (register.imgAddress) sendImage(register.imgAddress, 'address', uuid);
-
+    dispatch(clearRegister());
     AlertConfirm();
   }
 
