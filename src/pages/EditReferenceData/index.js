@@ -160,15 +160,14 @@ export default function EditReferenceData({ navigation }) {
         </ScrollView>
         <BtnCancel onPress={() => navigation.goBack()} />
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={typeJobList}
-          onPress={value => {
-            settypeJob(value);
-            setvisible(false);
-          }}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={typeJobList}
+        onPress={value => {
+          settypeJob(value);
+          setvisible(false);
+        }}
+      />
       <FullLoading loading={loading} />
     </View>
   );

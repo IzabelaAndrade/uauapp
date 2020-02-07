@@ -25,41 +25,12 @@ import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 
-const maritalStatusList = [
-  'Selecione uma opção',
-  'Solteiro(a)',
-  'Casado(a)',
-  'Divorciado(a)',
-  'Viúvo(a)',
-];
-
-const homeList = [
-  'Selecione uma opção',
-  'Própria - Financiada',
-  'Própria - Quitada',
-  'Alugada',
-  'Compartilhada (amigo ou parente)',
-];
-
-const transportList = [
-  'Selecione uma opção',
-  'Moto - Financiada',
-  'Moto - Quitada',
-  'Carro - Financiado',
-  'Carro - Quitado',
-  'Transporte Público',
-  'Outros',
-];
-
-const habilitationList = [
-  'Selecione uma opção',
-  'A',
-  'B',
-  'AB',
-  'D',
-  'E',
-  'Não Possui',
-];
+import {
+  maritalStatusList,
+  homeList,
+  transportList,
+  habilitationList,
+} from '../../utils/List';
 
 export default function SocioeconomicForm({ navigation }) {
   const [list, setlist] = React.useState([]);
@@ -213,12 +184,11 @@ export default function SocioeconomicForm({ navigation }) {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
     </View>
   );
 }

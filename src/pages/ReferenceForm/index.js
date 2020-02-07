@@ -88,29 +88,28 @@ export default function ReferenceForm({ navigation }) {
             value={register.typeJob}
           />
         </ScrollView>
-        <TouchableOpacity
-          style={{
-            alignSelf: 'flex-end',
-            paddingHorizontal: 20,
-            height: 50,
-            width: 80,
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-          }}
-          onPress={() => navigation.navigate('FinancesDataForm')}
-        >
-          <Ionicons name="ios-arrow-round-forward" size={40} color="#f48024" />
-        </TouchableOpacity>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={typeJobList}
-          onPress={value => {
-            dispatch(modifyTypeJob(value));
-            setvisible(false);
-          }}
-        />
-      ) : null}
+      <TouchableOpacity
+        style={{
+          alignSelf: 'flex-end',
+          paddingHorizontal: 20,
+          height: 50,
+          width: 80,
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+        }}
+        onPress={() => navigation.navigate('FinancesDataForm')}
+      >
+        <Ionicons name="ios-arrow-round-forward" size={40} color="#f48024" />
+      </TouchableOpacity>
+      <SelectPiker
+        visible={visible}
+        list={typeJobList}
+        onPress={value => {
+          dispatch(modifyTypeJob(value));
+          setvisible(false);
+        }}
+      />
     </View>
   );
 }

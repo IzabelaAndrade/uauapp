@@ -39,7 +39,7 @@ export default function ContractData({ navigation }) {
   const [visible, setvisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
   const [visiblebonus, setvisiblebonus] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState([]);
 
   const [button, setbutton] = React.useState('edit');
@@ -73,12 +73,12 @@ export default function ContractData({ navigation }) {
         console.log(error);
         return error;
       }
-      setemployee(response.data);
       console.log(response.data);
-      const data = moment(response.data.admission_date, 'YYYY-MM-DD').format(
-        'DD/MM/YYYY'
-      );
+      setemployee(response.data);
       if (response.data) {
+        const data = moment(response.data.admission_date, 'YYYY-MM-DD').format(
+          'DD/MM/YYYY'
+        );
         setcontractDate(data || '');
         setbonus(response.data.benefits);
         sethelpValue(response.data.benefits_value);
@@ -99,70 +99,36 @@ export default function ContractData({ navigation }) {
     console.log(contractDate);
     setloading(true);
     let response = null;
-    if (!employee) {
-      try {
-        response = await api.post(
-          `/workcontract`,
-          {
-            user: uuid,
-            contractType: typeJob,
-            jobRules,
-            payment,
-            paymentValue,
-            bonus,
-            bonusValue: helpValue,
-            contractDate,
+    try {
+      response = await api.post(
+        `/workcontract`,
+        {
+          user: uuid,
+          contractType: typeJob,
+          jobRules,
+          payment,
+          paymentValue,
+          bonus,
+          bonusValue: helpValue,
+          contractDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-      } catch (error) {
-        console.log(error);
-        setloading(false);
-        Alert.alert(
-          'Ops!',
-          'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
-          [{ text: 'OK' }],
-          { cancelable: false }
-        );
-        return;
-        // throw error;
-      }
-    } else {
-      try {
-        response = await api.put(
-          `/workcontract`,
-          {
-            user: uuid,
-            contractType: typeJob,
-            jobRules,
-            payment,
-            paymentValue,
-            bonus,
-            bonusValue: helpValue,
-            contractDate,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-      } catch (error) {
-        console.log(error);
-        setloading(false);
-        Alert.alert(
-          'Ops!',
-          'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
-          [{ text: 'OK' }],
-          { cancelable: false }
-        );
-        return;
-        // throw error;
-      }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      return;
+      // throw error;
     }
 
     // dispatch(modifyContractType(text));
@@ -300,17 +266,11 @@ export default function ContractData({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {visible ? (
-        <SelectPiker
-          list={list}
-          // onPress={value => {
-          //   dispatch(modifyEducation(value));
-          //   // seteducation(value);
-          //   setvisible(false);
-          // }}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
       <MultiSelectPiker
         show={visiblebonus}
         dataList={bonusList}

@@ -48,7 +48,7 @@ export default function EditDocumentsData({ navigation }) {
   const [imgVisible, setimgVisible] = React.useState(false);
   const [imageUrl, setimageUrl] = React.useState('');
   const [loading, setloading] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState([]);
   const [saveImage, setsaveImage] = React.useState(false);
   const [photo, setphoto] = React.useState(register.photo);
@@ -503,12 +503,6 @@ export default function EditDocumentsData({ navigation }) {
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
       <FullLoading loading={loading} />
       <ShowFullImage
         onPress={() => setimgVisible(false)}

@@ -178,12 +178,11 @@ export default function DiscountsForm({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {visible ? (
-        <SelectPiker
-          list={selectPickerItens}
-          onPress={data => onPressDone(seterSelectPicker, data)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={selectPickerItens}
+        onPress={data => onPressDone(seterSelectPicker, data)}
+      />
     </View>
   );
 }

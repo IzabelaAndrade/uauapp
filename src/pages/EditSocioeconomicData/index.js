@@ -247,12 +247,11 @@ export default function EditSocioeconomicData({ navigation }) {
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
       <FullLoading loading={loading} />
     </View>
   );

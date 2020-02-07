@@ -64,7 +64,7 @@ const shoesList = [
 export default function DocumentsForm({ navigation }) {
   const [visible, setvisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState([]);
   const [saveImage, setsaveImage] = React.useState(false);
   const [imageDocFront, setimageDocFront] = React.useState(null);
@@ -344,12 +344,11 @@ export default function DocumentsForm({ navigation }) {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
       <Modal
         animationType="fade"
         transparent

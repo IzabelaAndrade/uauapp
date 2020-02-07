@@ -35,7 +35,7 @@ export default function EditFinancesData({ navigation }) {
 
   const [visible, setvisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState('');
   const [bank, setbank] = React.useState(register.bank);
   const [account, setaccount] = React.useState(register.accountType);
@@ -205,14 +205,13 @@ export default function EditFinancesData({ navigation }) {
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => {
-            onPressDone(pikerType, value);
-          }}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => {
+          onPressDone(pikerType, value);
+        }}
+      />
       <FullLoading loading={loading} />
     </View>
   );

@@ -44,7 +44,7 @@ const listAccount = ['Selecione uma opção', 'Corrente', 'Poupança'];
 
 export default function FinancesDataForm({ navigation }) {
   const [visible, setvisible] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState('');
   const [bank, setbank] = React.useState('');
   const [account, setaccount] = React.useState('');
@@ -185,17 +185,16 @@ export default function FinancesDataForm({ navigation }) {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => {
-            // dispatch(modifyEducation(value));
-            onPressDone(pikerType, value);
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => {
+          // dispatch(modifyEducation(value));
+          onPressDone(pikerType, value);
 
-            // setvisible(false);
-          }}
-        />
-      ) : null}
+          // setvisible(false);
+        }}
+      />
     </View>
   );
 }

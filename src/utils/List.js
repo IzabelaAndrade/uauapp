@@ -1,5 +1,5 @@
 export const educationList = [
-  'Selecione uma opção',
+  '',
   'Não Possui',
   'Ensino Fundamental',
   'Ensino Médio',
@@ -40,16 +40,10 @@ export const jobList = [
   'Vidraceiro(a)',
 ];
 
-export const sizeList = [
-  'Selecione uma opção',
-  'Pequeno',
-  'Médio',
-  'Grande',
-  'Extra Grande',
-];
+export const sizeList = ['', 'Pequeno', 'Médio', 'Grande', 'Extra Grande'];
 
 export const shoesList = [
-  'Selecione uma opção',
+  '',
   '35',
   '36',
   '37',
@@ -69,7 +63,7 @@ export const shoesList = [
 ];
 
 export const maritalStatusList = [
-  'Selecione uma opção',
+  '',
   'Solteiro(a)',
   'Casado(a)',
   'Divorciado(a)',
@@ -77,7 +71,7 @@ export const maritalStatusList = [
 ];
 
 export const homeList = [
-  'Selecione uma opção',
+  '',
   'Própria - Financiada',
   'Própria - Quitada',
   'Alugada',
@@ -85,7 +79,7 @@ export const homeList = [
 ];
 
 export const transportList = [
-  'Selecione uma opção',
+  '',
   'Moto - Financiada',
   'Moto - Quitada',
   'Carro - Financiado',
@@ -94,39 +88,26 @@ export const transportList = [
   'Outros',
 ];
 
-export const habilitationList = [
-  'Selecione uma opção',
-  'A',
-  'B',
-  'AB',
-  'D',
-  'E',
-  'Não Possui',
-];
+export const habilitationList = ['', 'A', 'B', 'AB', 'D', 'E', 'Não Possui'];
 
 export const typeJobList = [
-  'Selecione uma opção',
+  '',
   'Contrato',
   'CLT',
   'Prestador de Serviço - MEI',
 ];
 
 export const listbank = [
-  'Selecione uma opção',
+  '',
   'Banco do Brasil',
   'Caixa Econômina Federal',
   'Bradesco',
   'Banco Intermedium',
 ];
 
-export const paymentList = [
-  'Selecione uma opção',
-  'Salário',
-  'Salário + Comissão',
-  'Medição',
-];
+export const paymentList = ['', 'Salário', 'Salário + Comissão', 'Medição'];
 
-export const listAccount = ['Selecione uma opção', 'Corrente', 'Poupança'];
+export const listAccount = ['', 'Corrente', 'Poupança'];
 
 export const bonusList = [
   'Alimentação',

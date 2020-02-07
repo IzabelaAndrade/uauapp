@@ -73,7 +73,7 @@ export default function PersonalDataForm({ navigation }) {
   const [saveImage, setsaveImage] = React.useState(false);
   const [visible, setvisible] = React.useState(false);
   const [visiblehability, setvisiblehability] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState([]);
 
   const dispatch = useDispatch();
@@ -250,13 +250,11 @@ export default function PersonalDataForm({ navigation }) {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
       <MultiSelectPiker
         show={visiblehability}
         dataList={jobList}

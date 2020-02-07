@@ -318,12 +318,11 @@ export default function EditPersonalData({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {visible ? (
-        <SelectPiker
-          list={list}
-          onPress={value => onPressDone(pikerType, value)}
-        />
-      ) : null}
+      <SelectPiker
+        visible={visible}
+        list={list}
+        onPress={value => onPressDone(pikerType, value)}
+      />
       <MultiSelectPiker
         show={visiblehability}
         dataList={jobList}
