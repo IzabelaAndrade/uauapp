@@ -252,6 +252,8 @@ export default function EditPersonalData({ navigation }) {
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
+            androidList={educationList}
+            onValueChange={value => onPressDone('education', value)}
             onPress={() => {
               setlist(educationList);
               setvisible(true);
@@ -263,6 +265,7 @@ export default function EditPersonalData({ navigation }) {
             lable="Habilidades"
             placeholder="Selecione uma ou mais opções"
             list
+            multiselector
             onPress={() => setvisiblehability(true)}
             value={hability.length < 1 ? '' : hability.join(', ')}
           />
@@ -276,6 +279,8 @@ export default function EditPersonalData({ navigation }) {
             lable="Tamanho Camisa"
             placeholder="Selecione uma opção"
             list
+            androidList={sizeList}
+            onValueChange={value => onPressDone('shirt', value)}
             onPress={() => {
               setlist(sizeList);
               setvisible(true);
@@ -287,6 +292,8 @@ export default function EditPersonalData({ navigation }) {
             lable="Tamanho Calça"
             placeholder="Selecione uma opção"
             list
+            androidList={sizeList}
+            onValueChange={value => onPressDone('pants', value)}
             onPress={() => {
               setlist(sizeList);
               setvisible(true);
@@ -298,6 +305,8 @@ export default function EditPersonalData({ navigation }) {
             lable="Tamanho Sapato"
             placeholder="Selecione uma opção"
             list
+            androidList={shoesList}
+            onValueChange={value => onPressDone('shoes', value)}
             onPress={() => {
               setlist(shoesList);
               setvisible(true);

@@ -213,11 +213,14 @@ export default function PersonalDataForm({ navigation }) {
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
+            androidList={educationList}
+            onValueChange={value => onPressDone('education', value)}
             onPress={() => {
               setlist(educationList);
               setvisible(true);
               setpikerType('education');
             }}
+            // onValueChange={}
             // onPress={() => setvisible(true)}
             value={register.education}
           />
@@ -226,6 +229,7 @@ export default function PersonalDataForm({ navigation }) {
             lable="Habilidades"
             placeholder="Selecione uma ou mais opções"
             list
+            multiselector
             onPress={() => setvisiblehability(true)}
             value={
               register.hability.length < 1 ? '' : register.hability.join(', ')

@@ -307,6 +307,8 @@ export default function DocumentsForm({ navigation }) {
             lable="Tamanho Camisa"
             placeholder="Selecione uma opção"
             list
+            androidList={sizeList}
+            onValueChange={value => onPressDone('shirt', value)}
             onPress={() => {
               setlist(sizeList);
               setvisible(true);
@@ -318,6 +320,8 @@ export default function DocumentsForm({ navigation }) {
             lable="Tamanho Calça"
             placeholder="Selecione uma opção"
             list
+            androidList={sizeList}
+            onValueChange={value => onPressDone('pants', value)}
             onPress={() => {
               setlist(sizeList);
               setvisible(true);
@@ -329,6 +333,8 @@ export default function DocumentsForm({ navigation }) {
             lable="Tamanho Sapato"
             placeholder="Selecione uma opção"
             list
+            androidList={shoesList}
+            onValueChange={value => onPressDone('shoes', value)}
             onPress={() => {
               setlist(shoesList);
               setvisible(true);

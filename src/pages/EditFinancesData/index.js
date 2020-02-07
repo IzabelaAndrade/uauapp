@@ -148,6 +148,8 @@ export default function EditFinancesData({ navigation }) {
             lable="Banco"
             placeholder="Selecione uma opção"
             list
+            androidList={listbank}
+            onValueChange={value => onPressDone('bank', value)}
             onPress={() => {
               setlist(listbank);
               setpikerType('bank');
@@ -159,6 +161,8 @@ export default function EditFinancesData({ navigation }) {
             lable="Tipo de Conta"
             placeholder="Selecione uma opção"
             list
+            androidList={listAccount}
+            onValueChange={value => onPressDone('account', value)}
             onPress={() => {
               setlist(listAccount);
               setpikerType('account');

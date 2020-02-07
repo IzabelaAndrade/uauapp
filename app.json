@@ -4,7 +4,7 @@
     "slug": "avanci",
     "icon": "./src/assets/icon.png",
     "backgroundColor": "#f48024",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "sdkVersion": "36.0.0",
     "orientation": "portrait",
     "scheme": "avanci",
@@ -27,13 +27,16 @@
     ],
     "ios": {
       "bundleIdentifier": "com.avanci.avanci",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.1",
       "icon": "./src/assets/iconios.png",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "As imagens serão armazenadas nos documentos de colaboradores da Avanci."
+      }
     },
     "android": {
       "package": "com.avanci.avanci",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": []
     }
   }

@@ -16,7 +16,7 @@ const formOfPayment = ['', 'Dinheiro', 'Transferência', 'Outros'];
 const Account = ['', 'Caixa', 'Banco do Brasil'];
 
 const discountType = [
-  '',
+  'Selecione uma opção',
   'Vale',
   'Vale Uniforme',
   'Vale Refeição',
@@ -111,6 +111,29 @@ export default function DiscountsForm({ navigation }) {
       }
     );
   }
+  const onPressDone = (type, value) => {
+    switch (type) {
+      case 'setBeneficiary':
+        setBeneficiary(value);
+        break;
+
+      case 'setType':
+        setType(value);
+        break;
+
+      case 'setFormPayment':
+        setFormPayment(value);
+        break;
+
+      case 'setAccount':
+        setAccount(value);
+        break;
+
+      default:
+        break;
+    }
+    setvisible(false);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -126,6 +149,8 @@ export default function DiscountsForm({ navigation }) {
             lable="Beneficiário"
             placeholder="Selecione uma opção"
             list
+            androidList={beneficiaries}
+            onValueChange={data => onPressDone('setBeneficiary', data)}
             onPress={() => {
               setModalSearchShow(true);
             }}
@@ -135,6 +160,8 @@ export default function DiscountsForm({ navigation }) {
             lable="Tipo do desconto"
             placeholder="Selecione uma opção"
             list
+            androidList={discountType}
+            onValueChange={data => onPressDone('setType', data)}
             onPress={() => {
               setSelectPickerItens(discountType);
               setSeterSelectPicker('setType');
@@ -146,6 +173,8 @@ export default function DiscountsForm({ navigation }) {
             lable="Forma de pagamento"
             placeholder="Selecione uma opção"
             list
+            androidList={formOfPayment}
+            onValueChange={data => onPressDone('setFormPayment', data)}
             onPress={() => {
               setSelectPickerItens(formOfPayment);
               setSeterSelectPicker('setFormPayment');
@@ -158,6 +187,8 @@ export default function DiscountsForm({ navigation }) {
               lable="Conta"
               placeholder="Selecione uma opção"
               list
+              androidList={Account}
+              onValueChange={data => onPressDone('setAccount', data)}
               onPress={() => {
                 setSelectPickerItens(Account);
                 setSeterSelectPicker('setAccount');
@@ -203,18 +234,7 @@ export default function DiscountsForm({ navigation }) {
       {visible ? (
         <SelectPiker
           list={selectPickerItens}
-          onPress={data => {
-            if (seterSelectPicker === 'setFormPayment') {
-              setFormPayment(data);
-            } else if (seterSelectPicker === 'setType') {
-              setType(data);
-            } else if (seterSelectPicker === 'setAccount') {
-              setAccount(data);
-            } else if (seterSelectPicker === 'setBeneficiary') {
-              setBeneficiary(data);
-            }
-            setvisible(false);
-          }}
+          onPress={data => onPressDone(seterSelectPicker, data)}
         />
       ) : null}
     </View>

@@ -79,6 +79,11 @@ export default function ReferenceForm({ navigation }) {
             lable="Regime de Trabalho"
             placeholder="Selecione uma opção"
             list
+            androidList={typeJobList}
+            onValueChange={value => {
+              dispatch(modifyTypeJob(value));
+            }}
+            // onValueChange={value => onPressDone('education', value)}
             onPress={() => setvisible(true)}
             value={register.typeJob}
           />

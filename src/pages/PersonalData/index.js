@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, ScrollView, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Platform, Image, Text, TouchableOpacity } from 'react-native';
 
 import { AntDesign, Feather } from '@expo/vector-icons';
 
@@ -171,6 +171,8 @@ export default function PersonalData({ navigation }) {
             shadowColor: '#e1e1e1e1',
             shadowOffset: { width: 0, height: 5 },
             shadowOpacity: 0.5,
+            borderBottomWidth: Platform.OS === 'ios' ? 0 : 0.5,
+            borderColor: '#e1e1e1e1',
             marginBottom: 10,
             backgroundColor: '#fff',
           }}

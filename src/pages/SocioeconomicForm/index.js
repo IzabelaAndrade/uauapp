@@ -118,6 +118,8 @@ export default function SocioeconomicForm({ navigation }) {
             lable="Estado Civil"
             placeholder="Selecione uma opção"
             list
+            androidList={maritalStatusList}
+            onValueChange={value => onPressDone('maritalStatus', value)}
             onPress={() => {
               setlist(maritalStatusList);
               setvisible(true);
@@ -137,6 +139,8 @@ export default function SocioeconomicForm({ navigation }) {
             lable="Tipo de Moradia"
             placeholder="Selecione uma opção"
             list
+            androidList={homeList}
+            onValueChange={value => onPressDone('home', value)}
             onPress={() => {
               setlist(homeList);
               setvisible(true);
@@ -168,6 +172,8 @@ export default function SocioeconomicForm({ navigation }) {
             lable="Meio de Transporte"
             placeholder="Selecione uma opção"
             list
+            androidList={transportList}
+            onValueChange={value => onPressDone('transport', value)}
             onPress={() => {
               setlist(transportList);
               setvisible(true);
@@ -179,6 +185,8 @@ export default function SocioeconomicForm({ navigation }) {
             lable="Habilitação"
             placeholder="Selecione uma opção"
             list
+            androidList={habilitationList}
+            onValueChange={value => onPressDone('habilitation', value)}
             onPress={() => {
               setlist(habilitationList);
               setvisible(true);
