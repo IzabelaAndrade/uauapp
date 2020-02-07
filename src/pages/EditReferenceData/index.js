@@ -158,8 +158,8 @@ export default function EditReferenceData({ navigation }) {
             value={typeJob}
           />
         </ScrollView>
-        <BtnCancel onPress={() => navigation.goBack()} />
       </KeyboardAvoidingView>
+      <BtnCancel onPress={() => navigation.goBack()} />
       <SelectPiker
         visible={visible}
         list={typeJobList}

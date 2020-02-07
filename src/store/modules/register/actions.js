@@ -250,8 +250,6 @@ export function modifyDocBack(docBack) {
 }
 
 export function modifyImgVoterTitle(imgVoterTitle) {
-  console.log('entrou');
-  console.log(imgVoterTitle);
   return {
     type: '@register/MODIFY_IMG_VOTER_TITLE',
     payload: { imgVoterTitle },

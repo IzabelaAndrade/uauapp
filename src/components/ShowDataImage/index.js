@@ -80,24 +80,6 @@ export default function ShowDataImage({
           resizeMode="contain"
         />
       </TouchableOpacity>
-      {del ? (
-        <TouchableOpacity
-          disabled={!url}
-          style={{
-            width: 40,
-            justifyContent: 'flex-end',
-            alignItems: 'flex-end',
-            marginLeft: 10,
-          }}
-          onPress={onPressDelete}
-        >
-          <FontAwesome
-            name="trash-o"
-            size={25}
-            color={url ? 'red' : '#eaeaea'}
-          />
-        </TouchableOpacity>
-      ) : null}
     </View>
   );
 }

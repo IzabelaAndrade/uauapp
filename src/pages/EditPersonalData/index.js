@@ -3,18 +3,12 @@ import {
   View,
   Alert,
   Text,
-  Image,
   ScrollView,
   KeyboardAvoidingView,
-  ActivityIndicator,
-  Modal,
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { Feather, Ionicons } from '@expo/vector-icons';
 
 import {
   modifyName,
@@ -27,7 +21,6 @@ import {
   modifyEducation,
   modifyHability,
   modifyReference,
-  modifyPhoto,
   modifyShirt,
   modifyPants,
   modifyShoes,
@@ -52,11 +45,9 @@ export default function EditPersonalData({ navigation }) {
   const register = useSelector(state => state.register);
   const user = useSelector(state => state.auth);
 
-  // console.log(register);
-  const [saveImage, setsaveImage] = React.useState(false);
   const [visible, setvisible] = React.useState(false);
   const [visiblehability, setvisiblehability] = React.useState(false);
-  const [list, setlist] = React.useState('');
+  const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState([]);
   const [loading, setloading] = React.useState(false);
 
@@ -65,9 +56,7 @@ export default function EditPersonalData({ navigation }) {
   const [cpf, setcpf] = React.useState(register.cpf);
   const [voterTitle, setvoterTitle] = React.useState(register.voterTitle);
   const [email, setemail] = React.useState(register.email);
-  const [birthday, setbirthday] = React.useState(
-    moment(register.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY')
-  );
+  const [birthday, setbirthday] = React.useState(register.birthday);
   const [phone, setphone] = React.useState(register.phone);
   const [education, seteducation] = React.useState(register.education);
   const [hability, sethability] = React.useState(register.hability);
@@ -121,6 +110,7 @@ export default function EditPersonalData({ navigation }) {
     dispatch(modifyRG(response.data.person.rg));
     dispatch(modifyCPF(response.data.person.cpf));
     dispatch(modifyVoterTitle(response.data.person.voter_title));
+    // dispatch(modifyBirthday(response.data.person.birthday));
     dispatch(
       modifyBirthday(
         moment(response.data.person.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY')

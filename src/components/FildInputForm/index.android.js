@@ -67,6 +67,7 @@ export default function FildInputForm({
           </TouchableOpacity>
         ) : (
           <Picker
+            enabled={!disabled}
             selectedValue={value}
             style={{
               color: value ? '#000' : '#c4c4c6',

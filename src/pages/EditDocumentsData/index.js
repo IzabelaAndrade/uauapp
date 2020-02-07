@@ -167,7 +167,6 @@ export default function EditDocumentsData({ navigation }) {
     const image = handleImage(uri);
     let response = null;
     if (requestType === 'post') {
-      console.log('post');
       try {
         response = await api.post(`/files?user=${uuid}&type=${type}`, image, {
           headers: {
@@ -197,32 +196,6 @@ export default function EditDocumentsData({ navigation }) {
     return response;
   };
 
-  const onPressSave1 = async () => {
-    if (button === 'edit') {
-      setbutton('save');
-      return;
-    }
-    let requestType = null;
-    // register.imgVoterTitle !== imageDocVoterTitle)
-    console.log(`regDocFront': ${register.docFront}`);
-    console.log(`DocFront': ${imageDocFront}`);
-    console.log(`regTitulo': ${register.imgVoterTitle}`);
-    console.log(`tiEleitor': ${imageDocVoterTitle}`);
-    console.log(`regAddress': ${register.imgAddress}`);
-    console.log(`Address': ${imageDocAddress}`);
-    if (register.docFront !== imageDocFront) {
-      console.log('docFront');
-      requestType = register.docFront ? 'put' : 'post';
-      response = await sendImage(
-        imageDocFront,
-        'docFront',
-        register.uuid,
-        requestType
-      );
-      dispatch(modifyDocFront(response.data.url));
-    }
-  };
-
   const onPressSave = async () => {
     if (button === 'edit') {
       setbutton('save');
@@ -231,6 +204,20 @@ export default function EditDocumentsData({ navigation }) {
     setloading(true);
     let response = null;
     let requestType = null;
+
+    if (
+      register.photo === photo &&
+      register.docFront === imageDocFront &&
+      register.docBack === imageDocBack &&
+      register.imgVoterTitle === imageDocVoterTitle &&
+      register.imgAddress === imageDocAddress &&
+      register.imgCpf === imageCPF
+    ) {
+      setloading(false);
+      navigation.navigate('Home');
+      dispatch(clearRegister());
+      return;
+    }
 
     if (register.photo !== photo) {
       console.log('photo');
@@ -286,7 +273,6 @@ export default function EditDocumentsData({ navigation }) {
       dispatch(modifyImgAddress(response.data.url));
     }
     if (register.imgCpf !== imageCPF) {
-      console.log('imgCpf');
       requestType = register.imgCpf ? 'put' : 'post';
       response = await sendImage(
         imageCPF,
@@ -315,53 +301,6 @@ export default function EditDocumentsData({ navigation }) {
         cancelable: false,
       }
     );
-  };
-
-  const onPressDone = (type, value) => {
-    switch (type) {
-      case 'shirt':
-        // setshirt(value);
-        dispatch(modifyShirt(value));
-        break;
-
-      case 'pants':
-        dispatch(modifyPants(value));
-        break;
-
-      case 'shoes':
-        dispatch(modifyShoes(value));
-        break;
-
-      default:
-        break;
-    }
-    setvisible(false);
-  };
-
-  const onPressDelete = type => {
-    switch (type) {
-      case 'photo':
-        setphoto(null);
-        break;
-      case 'docFront':
-        setimageDocFront(null);
-        break;
-      case 'docBack':
-        setimageDocBack(null);
-        break;
-      case 'address':
-        setimageDocAddress(null);
-        break;
-      case 'voterTitle':
-        setimageDocVoterTitle(null);
-        break;
-      case 'docCPF':
-        setimageCPF(null);
-        break;
-
-      default:
-        break;
-    }
   };
 
   function onPressSeeImage(type) {
@@ -428,7 +367,6 @@ export default function EditDocumentsData({ navigation }) {
             onPress={() =>
               button === 'edit' ? onPressSeeImage('photo') : _pickImage('photo')
             }
-            del={button === 'save' && !!photo}
             onPressDelete={() => setphoto(null)}
           />
           <ShowDataImage

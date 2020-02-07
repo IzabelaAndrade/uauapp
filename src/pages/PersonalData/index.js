@@ -4,6 +4,7 @@ import { View, Platform, Image, Text, TouchableOpacity } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
 
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import HeaderForm from '../../components/HeaderForm';
 
@@ -122,7 +123,9 @@ export default function PersonalData({ navigation }) {
     dispatch(modifyCPF(person.cpf));
     dispatch(modifyVoterTitle(person.voter_title));
     dispatch(modifyEmail(person.email));
-    dispatch(modifyBirthday(person.birthday));
+    dispatch(
+      modifyBirthday(moment(person.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY'))
+    );
     dispatch(modifyPhone(person.phone));
     dispatch(modifyEducation(person.education));
     dispatch(modifyHability(person.hability));

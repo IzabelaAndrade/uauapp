@@ -10,11 +10,14 @@ import {
   Dimensions,
 } from 'react-native';
 
-import { Feather, AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 import Constants from 'expo-constants';
 
+import moment from 'moment';
 import HeaderForm from '../../components/HeaderForm';
+
+import Cpf from '../../utils/Cpf';
 
 const { width, height } = Dimensions.get('window');
 
@@ -118,12 +121,15 @@ function RenderDatas({ screeninfo, data }) {
         <>
           <ShowDataItem lable="Nome Completo" value={data.name} />
           <ShowDataItem lable="RG" value={data.rg} />
-          <ShowDataItem lable="CPF" value={data.cpf} />
-          <ShowDataItem lable="Data de Nascimento" value={data.birthday} />
+          <ShowDataItem lable="CPF" value={Cpf.format(data.cpf)} />
+          <ShowDataItem
+            lable="Data de Nascimento"
+            value={moment(data.birthday, 'YYYY-MM-DD').format('DD/MM/YYYY')}
+          />
           <ShowDataItem lable="Telefone" value={data.phone} />
           <ShowDataItem lable="Escolaridade" value={data.education} />
           <ShowDataItem
-            lable="Vaga Pretendida"
+            lable="Habilidades"
             value={data.hability.length < 1 ? '' : data.hability.join(', ')}
           />
           <ShowDataItem lable="Contato de Referência" value={data.reference} />
@@ -171,22 +177,9 @@ function RenderDatas({ screeninfo, data }) {
   }
 }
 
-function DocImage({ url }) {
-  return (
-    <View style={{ padding: 10, backgroundColor: 'pink' }}>
-      <Image
-        style={{ width: 200, height: 200 }}
-        source={{ uri: url }}
-        resizeMode="contain"
-      />
-    </View>
-  );
-}
-
 export default function ShowData(props) {
   const screeninfo = props.navigation.state.params.screen;
   const { data } = props.navigation.state.params;
-  // console.log(data);
   const [docs, setdocs] = React.useState([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [imageUrl, setimageUrl] = React.useState('');
@@ -205,7 +198,6 @@ export default function ShowData(props) {
       {screeninfo === 'Docs' ? (
         <FlatList
           data={docs}
-          // renderItem={({ item }) => <DocImage url={item.url} />}
           renderItem={({ item }) => (
             <ShowDataImage
               item={item}
