@@ -1,16 +1,7 @@
 import React, { useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { Feather, Ionicons } from '@expo/vector-icons';
-
-import { modifyEducation } from '../../store/modules/register/actions';
+import { useSelector } from 'react-redux';
 
 import Date from '../../utils/Date';
 
@@ -18,6 +9,7 @@ import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';
 import ModalSearch from '../../components/ModalSearch';
+import FullLoading from '../../components/FullLoading';
 import api from '../../services/api';
 
 const formOfPayment = ['', 'Dinheiro', 'Transferência', 'Outros'];
@@ -46,11 +38,12 @@ export default function DiscountsForm({ navigation }) {
   const [selectPickerItens, setSelectPickerItens] = React.useState([]);
   const [seterSelectPicker, setSeterSelectPicker] = React.useState(null);
   const [visible, setvisible] = React.useState(false);
-
-  const user = useSelector(state => state.auth);
+  const [loading, setLoading] = React.useState(false);
   const [beneficiaries, setBeneficiaries] = React.useState([]);
   const [beneficiary, setBeneficiary] = React.useState('');
   const [modalSearchShow, setModalSearchShow] = React.useState(false);
+
+  const user = useSelector(state => state.auth);
 
   useEffect(() => {
     async function getAllInterviewed() {
@@ -70,9 +63,63 @@ export default function DiscountsForm({ navigation }) {
     getAllInterviewed();
   }, [user]);
 
+  async function save() {
+    setLoading(true);
+    try {
+      await api.post(
+        '/financerecord',
+        {
+          user: beneficiary.uuid,
+          date,
+          description: note,
+          value,
+          type,
+          transaction_type: formPayment,
+          account,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      throw error;
+    }
+    Alert.alert(
+      '',
+      'Os dados foram alterados com sucesso.',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            setLoading(false);
+            navigation.goBack();
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm navigation={navigation} back />
+      <HeaderForm
+        navigation={navigation}
+        back
+        iconRight="save"
+        onPress={() => save()}
+      />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
           <FildInputForm
@@ -82,7 +129,7 @@ export default function DiscountsForm({ navigation }) {
             onPress={() => {
               setModalSearchShow(true);
             }}
-            value={beneficiary}
+            value={beneficiary.name}
           />
           <FildInputForm
             lable="Tipo do desconto"
@@ -146,8 +193,13 @@ export default function DiscountsForm({ navigation }) {
       <ModalSearch
         open={modalSearchShow}
         data={beneficiaries}
-        onSelect={item => setBeneficiaries(item)}
+        onSelect={item => {
+          setBeneficiary(item);
+          setModalSearchShow(false);
+        }}
+        onClose={() => setModalSearchShow(false)}
       />
+      <FullLoading loading={loading} />
       {visible ? (
         <SelectPiker
           list={selectPickerItens}

@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Modal, ActivityIndicator } from 'react-native';
 
-// import { Container } from './styles';
-
 export default function FullLoading({ loading }) {
   return (
     <Modal

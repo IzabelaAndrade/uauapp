@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,43 @@ import { AntDesign } from '@expo/vector-icons';
 function Item({ item, onSelectItem }) {
   return (
     <TouchableOpacity
-      style={{ marginVertical: 10, marginLeft: 10 }}
+      style={{
+        marginVertical: 10,
+        marginHorizontal: 10,
+        borderBottomWidth: 1,
+        borderColor: '#AAAAAA',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingBottom: 10,
+      }}
       onPress={() => onSelectItem(item)}
     >
-      <Text>{item}</Text>
+      <View
+        style={{
+          backgroundColor: '#f48024',
+          width: 30,
+          height: 30,
+          borderRadius: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginLeft: 10,
+        }}
+      >
+        <Text style={{ color: '#ffff', fontSize: 15, fontWeight: '700' }}>
+          {item.name.charAt(0).toUpperCase()}
+        </Text>
+      </View>
+      <Text
+        style={{
+          marginLeft: 10,
+          fontSize: 18,
+          fontWeight: '700',
+          color: '#606060',
+          // marginBottom: 10,
+        }}
+      >
+        {item.name}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -24,22 +57,24 @@ function Item({ item, onSelectItem }) {
 function filterList(text, list) {
   const re = new RegExp(`${text}.+$`, 'i');
   const filteredList = list.filter(element => {
-    return element.search(re) !== -1;
+    return element.name.search(re) !== -1;
   });
   return filteredList;
 }
 
-export default function ModalSearch({ open, data, onSelect }) {
-  const [showModal, setShowModal] = React.useState(open);
+export default function ModalSearch({ open, data, onSelect, onClose }) {
   const [value, setvalue] = React.useState('');
-  const [list, setList] = React.useState(data);
+  const [list, setList] = React.useState([]);
+  useEffect(() => {
+    setList(data);
+  }, [data]);
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent
-      visible={showModal}
+      visible={open}
       onRequestClose={() => {
-        console.log('close');
+        onClose();
       }}
     >
       <View style={styles.modal}>
@@ -77,7 +112,7 @@ export default function ModalSearch({ open, data, onSelect }) {
           </View>
           <FlatList
             data={list}
-            keyExtractor={item => item}
+            keyExtractor={item => item.name}
             renderItem={({ item }) => (
               <Item onSelectItem={selected => onSelect(selected)} item={item} />
             )}
@@ -90,7 +125,7 @@ export default function ModalSearch({ open, data, onSelect }) {
             }}
           >
             <TouchableOpacity
-              onPress={() => setShowModal(false)}
+              onPress={() => onClose()}
               style={{
                 borderRadius: 20,
                 paddingHorizontal: 20,
