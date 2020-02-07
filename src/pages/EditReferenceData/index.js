@@ -149,6 +149,11 @@ export default function EditReferenceData({ navigation }) {
             lable="Regime de Trabalho"
             placeholder="Selecione uma opção"
             list
+            androidList={typeJobList}
+            onValueChange={value => {
+              settypeJob(value);
+              setvisible(false);
+            }}
             onPress={() => setvisible(true)}
             value={typeJob}
           />

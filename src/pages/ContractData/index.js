@@ -233,6 +233,8 @@ export default function ContractData({ navigation }) {
             placeholder="Selecione uma opção"
             list
             disabled={button === 'edit'}
+            androidList={typeJobList}
+            onValueChange={value => onPressDone('typeJob', value)}
             onPress={() => {
               setlist(typeJobList);
               setvisible(true);
@@ -252,6 +254,8 @@ export default function ContractData({ navigation }) {
             placeholder="Selecione uma opção"
             disabled={button === 'edit'}
             list
+            androidList={paymentList}
+            onValueChange={value => onPressDone('payment', value)}
             onPress={() => {
               setlist(paymentList);
               setvisible(true);
@@ -272,6 +276,7 @@ export default function ContractData({ navigation }) {
             placeholder="Selecione uma ou mais opções"
             disabled={button === 'edit'}
             list
+            multiselector
             onPress={() => setvisiblebonus(true)}
             value={bonus.length < 1 ? '' : bonus.join(', ')}
           />

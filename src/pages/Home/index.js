@@ -6,6 +6,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -63,6 +64,9 @@ function RenderIcon(icon) {
     case 'addperson':
       return <MaterialIcons name="assignment-ind" size={25} color="#bcbcbc" />;
 
+    case 'profile':
+      return <AntDesign name="user" size={25} color="#bcbcbc" />;
+
     default:
       return <Feather name="chevron-right" size={25} color="#f48024" />;
   }
@@ -85,6 +89,7 @@ export default function Home({ navigation }) {
           shadowOffset: { width: 0, height: 5 },
           shadowOpacity: 0.5,
           marginBottom: 10,
+          elevation: 6,
           backgroundColor: '#fff',
         }}
       >
@@ -100,99 +105,116 @@ export default function Home({ navigation }) {
         source={require('../../assets/logoavanci.png')}
         style={{ width: '100%', height: '100%' }}
       > */}
-      <ScrollView>
-        <View style={{ flex: 1, marginHorizontal: 20 }}>
-          <Text style={{ fontSize: 23, fontWeight: '400', color: '#f48024' }}>
-            Recrutamento
-          </Text>
-          <BtnMenu
-            lable="Nova Entrevista"
-            icon="new"
-            onPress={() => navigation.navigate('PersonalDataForm')}
-          />
-          <BtnMenu
-            lable="Buscar Profissional"
-            icon="search"
-            onPress={() => navigation.navigate('Interviewed', { edit: false })}
-          />
-          <BtnMenu
-            lable="Completar Cadastro"
-            icon="complete"
-            onPress={() => navigation.navigate('Interviewed', { edit: true })}
-          />
-          <Text
-            style={{
-              fontSize: 23,
-              fontWeight: '400',
-              color: '#f48024',
-              marginTop: 20,
-              marginBottom: 10,
-            }}
-          >
-            Pendências RH
-          </Text>
-          <BtnMenu
-            lable="Validar Documentação"
-            icon="check"
-            onPress={() =>
-              navigation.navigate('Interviewed', {
-                edit: true,
-                origin: 'EditDocumentsData',
-              })
-            }
-          />
-          <BtnMenu
-            lable="Regime de Contrato"
-            icon="contract"
-            onPress={() =>
-              navigation.navigate('Interviewed', {
-                origin: 'ContractData',
-              })
-            }
-            // onPress={() => navigation.navigate('ContractData')}
-          />
-
-          <Text
-            style={{
-              fontSize: 23,
-              fontWeight: '400',
-              color: '#f48024',
-              marginTop: 20,
-              marginBottom: 10,
-            }}
-          >
-            Diretoria
-          </Text>
-          <BtnMenu lable="Aprovar Contratação" icon="addperson" />
-          <Text
-            style={{
-              fontSize: 23,
-              fontWeight: '400',
-              color: '#f48024',
-              marginTop: 20,
-              marginBottom: 10,
-            }}
-          >
-            Financeiro
-          </Text>
-          <BtnMenu
-            lable="Descontos"
-            icon="new"
-            onPress={() => navigation.navigate('DiscountsForm')}
-          />
-          <BtnMenu
-            lable="Recebimentos"
-            icon="new"
-            onPress={() => navigation.navigate('AdditionForm')}
-          />
-          <BtnMenu
-            lable="Fechamento"
-            icon="new"
-            onPress={() => navigation.navigate('FinancialClose')}
-          />
-        </View>
-        <TouchableOpacity
+      <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
+        {/* <View > */}
+        <Text style={{ fontSize: 23, fontWeight: '400', color: '#f48024' }}>
+          Recrutamento
+        </Text>
+        <BtnMenu
+          lable="Nova Entrevista"
+          icon="new"
+          onPress={() => navigation.navigate('PersonalDataForm')}
+        />
+        <BtnMenu
+          lable="Buscar Profissional"
+          icon="search"
+          onPress={() => navigation.navigate('Interviewed', { edit: false })}
+        />
+        <BtnMenu
+          lable="Completar Cadastro"
+          icon="complete"
+          onPress={() => navigation.navigate('Interviewed', { edit: true })}
+        />
+        <Text
           style={{
+            fontSize: 23,
+            fontWeight: '400',
+            color: '#f48024',
+            marginTop: 20,
+            marginBottom: 10,
+          }}
+        >
+          Pendências RH
+        </Text>
+        <BtnMenu
+          lable="Validar Documentação"
+          icon="check"
+          onPress={() =>
+            navigation.navigate('Interviewed', {
+              edit: true,
+              origin: 'EditDocumentsData',
+            })
+          }
+        />
+        <BtnMenu
+          lable="Regime de Contrato"
+          icon="contract"
+          onPress={() =>
+            navigation.navigate('Interviewed', {
+              origin: 'ContractData',
+            })
+          }
+          // onPress={() => navigation.navigate('ContractData')}
+        />
+
+        <Text
+          style={{
+            fontSize: 23,
+            fontWeight: '400',
+            color: '#f48024',
+            marginTop: 20,
+            marginBottom: 10,
+          }}
+        >
+          Diretoria
+        </Text>
+        <BtnMenu lable="Aprovar Contratação" icon="addperson" />
+        <Text
+          style={{
+            fontSize: 23,
+            fontWeight: '400',
+            color: '#f48024',
+            marginTop: 20,
+            marginBottom: 10,
+          }}
+        >
+          Financeiro
+        </Text>
+        <BtnMenu
+          lable="Descontos"
+          icon="new"
+          onPress={() => navigation.navigate('DiscountsForm')}
+        />
+        <BtnMenu
+          lable="Recebimentos"
+          icon="new"
+          onPress={() => navigation.navigate('AdditionForm')}
+        />
+        <BtnMenu
+          lable="Fechamento"
+          icon="new"
+          onPress={() => navigation.navigate('FinancialClose')}
+        />
+        <Text
+          style={{
+            fontSize: 23,
+            fontWeight: '400',
+            color: '#f48024',
+            marginTop: 20,
+            marginBottom: 10,
+          }}
+        >
+          Configurações
+        </Text>
+        <BtnMenu
+          lable="Perfil"
+          icon="profile"
+          onPress={() => navigation.navigate('Profile')}
+        />
+        {/* </View> */}
+        {/* <TouchableOpacity
+          style={{
+            borderTopWidth: Platform.OS === 'ios' ? 0 : 0.5,
             paddingVertical: 15,
             flexDirection: 'row',
             marginVertical: 30,
@@ -222,7 +244,7 @@ export default function Home({ navigation }) {
           >
             {user.name}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
       {/* </ImageBackground> */}
     </View>

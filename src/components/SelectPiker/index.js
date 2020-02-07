@@ -45,7 +45,7 @@ export default function SelectPiker({ list, onPress }) {
         {list.map((element, index) => (
           <Picker.Item
             key={index}
-            label={element}
+            label={!element ? 'Selecione uma opção' : element}
             value={element === 'Selecione uma opção' ? '' : element}
           />
         ))}

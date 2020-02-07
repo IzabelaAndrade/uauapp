@@ -62,6 +62,7 @@ const jobList = [
 function Info({ item, navigation, origin }) {
   const { edit } = navigation.state.params;
   const img = item.Files.find(element => element.type === 'photo');
+  console.log(img);
   return (
     <TouchableOpacity
       style={{
@@ -176,7 +177,6 @@ export default function Interviewed({ navigation }) {
         console.log(error);
         return error;
       }
-      // console.log(response.data);
       setinterviewed(response.data);
     }
     getAllInterviewed();
