@@ -436,7 +436,11 @@ export default function FinancialDetailed({ navigation }) {
   const [viewSelected, setViewSelected] = React.useState('Extrato');
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm navigation={navigation} back />
+      <HeaderForm
+        navigation={navigation}
+        back
+        onPressBack={() => navigation.goBack()}
+      />
       <FinancialHeader />
       <ViewSwitch onSelect={text => setViewSelected(text)} />
       <FinancialSelectDate onSelect={text => setDateFilterSelected(text)} />

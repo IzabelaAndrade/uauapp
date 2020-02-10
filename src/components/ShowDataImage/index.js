@@ -15,7 +15,6 @@ export default function ShowDataImage({
   del,
   disabled,
 }) {
-  console.log(url);
   const renderIcon = () => {
     switch (icon) {
       case 'photo':

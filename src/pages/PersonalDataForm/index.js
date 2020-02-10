@@ -92,7 +92,6 @@ export default function PersonalDataForm({ navigation }) {
       quality: 1,
     });
     if (!result.cancelled) {
-      console.log(result.uri);
       dispatch(modifyPhoto(result.uri));
       setimage(result.uri);
       setsaveImage(true);
@@ -118,6 +117,7 @@ export default function PersonalDataForm({ navigation }) {
         screen="SocioeconomicForm"
         back
         iconRight="next"
+        onPressBack={() => navigation.goBack()}
         onPress={() => navigation.navigate('SocioeconomicForm')}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>

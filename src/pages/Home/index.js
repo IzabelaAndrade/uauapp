@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import Constants from 'expo-constants';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Feather, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Feather, AntDesign, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { clearRegister } from '../../store/modules/register/actions';
 
 // import { Container } from './styles';
@@ -68,6 +68,15 @@ function RenderIcon(icon) {
     case 'profile':
       return <AntDesign name="user" size={25} color="#bcbcbc" />;
 
+    case 'plus':
+      return <AntDesign name="pluscircleo" size={22} color="#bcbcbc" />;
+
+    case 'minus':
+      return <AntDesign name="minuscircleo" size={22} color="#bcbcbc" />;
+
+    case 'calculator':
+      return <Entypo name="calculator" size={25} color="#bcbcbc" />;
+
     default:
       return <Feather name="chevron-right" size={25} color="#f48024" />;
   }
@@ -75,6 +84,12 @@ function RenderIcon(icon) {
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('entrou use');
+    dispatch(clearRegister());
+  });
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <StatusBar barStyle="default" backgroundColor="#f48024" />
@@ -123,7 +138,10 @@ export default function Home({ navigation }) {
         <BtnMenu
           lable="Completar Cadastro"
           icon="complete"
-          onPress={() => navigation.navigate('Interviewed', { edit: true })}
+          onPress={() => {
+            dispatch(clearRegister());
+            navigation.navigate('Interviewed', { edit: true });
+          }}
         />
         <Text
           style={{
@@ -139,12 +157,13 @@ export default function Home({ navigation }) {
         <BtnMenu
           lable="Validar Documentação"
           icon="check"
-          onPress={() =>
+          onPress={() => {
+            dispatch(clearRegister());
             navigation.navigate('Interviewed', {
               edit: true,
               origin: 'EditDocumentsData',
-            })
-          }
+            });
+          }}
         />
         <BtnMenu
           lable="Regime de Contrato"
@@ -182,17 +201,17 @@ export default function Home({ navigation }) {
         </Text>
         <BtnMenu
           lable="Descontos"
-          icon="new"
+          icon="minus"
           onPress={() => navigation.navigate('DiscountsForm')}
         />
         <BtnMenu
           lable="Recebimentos"
-          icon="new"
+          icon="plus"
           onPress={() => navigation.navigate('AdditionForm')}
         />
         <BtnMenu
           lable="Fechamento"
-          icon="new"
+          icon="calculator"
           onPress={() => navigation.navigate('FinancialClose')}
         />
         <Text

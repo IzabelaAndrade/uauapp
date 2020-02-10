@@ -72,6 +72,7 @@ export default function SocioeconomicForm({ navigation }) {
         back
         iconRight="next"
         onPress={() => navigation.navigate('ReferenceForm')}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

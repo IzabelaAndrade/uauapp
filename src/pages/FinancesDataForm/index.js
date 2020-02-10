@@ -68,6 +68,7 @@ export default function FinancesDataForm({ navigation }) {
         back
         iconRight="next"
         onPress={() => navigation.navigate('DocumentsForm')}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

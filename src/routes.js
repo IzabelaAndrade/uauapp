@@ -26,6 +26,7 @@ import AdditionForm from './pages/AdditionForm';
 import ContractData from './pages/ContractData';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import LayOff from './pages/LayOff';
 
 const AppStack = createStackNavigator(
   {
@@ -163,6 +164,12 @@ const AppStack = createStackNavigator(
     },
     Profile: {
       screen: Profile,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    LayOff: {
+      screen: LayOff,
       navigationOptions: () => ({
         headerShown: false,
       }),

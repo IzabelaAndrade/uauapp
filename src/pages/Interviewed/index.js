@@ -26,38 +26,7 @@ import MultiSelectPiker from '../../components/MultiSelectPiker';
 import api from '../../services/api';
 // import { Container } from './styles';
 
-const jobList = [
-  'Administrativo',
-  'Ajudante',
-  'Almoxarifado',
-  'Azulejista',
-  'Coringa',
-  'Cozinhiero(a)',
-  'Eletricista',
-  'Empreiteiro(a)',
-  'Encanador(a)',
-  'Encarregado(a) de Obra',
-  'Engenheiro(a)',
-  'Estagiario(a)',
-  'Financeiro',
-  'Gesseiro(a)',
-  'Guarda',
-  'Hidraulica',
-  'Instalador(a) de PVC',
-  'Marceneiro(a)',
-  'Meio Oficial',
-  'Montador(a)',
-  'Motorista',
-  'Moto Boy',
-  'Pedreiro(a)',
-  'Pintor(a)',
-  'Refrigeração',
-  'Segurança do Trabalho',
-  'Serralheiro(a)',
-  'Serviços Gerais',
-  'Tec Manutenção',
-  'Vidraceiro(a)',
-];
+import { jobList } from '../../utils/List';
 
 function Info({ item, navigation, origin }) {
   const { edit } = navigation.state.params;
@@ -148,6 +117,21 @@ function Header({ navigation, onPress }) {
   );
 }
 
+function filterList(text, list, filter) {
+  const re = new RegExp(`${text}.+$`, 'i');
+  const filteredList = list.filter(element => {
+    return element.name.search(re) !== -1;
+  });
+  if (filter.length === 0) {
+    return filteredList;
+  }
+  const filteredHability = filteredList.filter(element => {
+    return filter.some(r => element.hability.indexOf(r) >= 0);
+  });
+
+  return filteredHability;
+}
+
 export default function Interviewed({ navigation }) {
   const origin = navigation.state.params.origin
     ? navigation.state.params.origin
@@ -155,6 +139,7 @@ export default function Interviewed({ navigation }) {
   const user = useSelector(state => state.auth);
 
   const [interviewed, setinterviewed] = React.useState([]);
+  const [filteredList, setFilteredList] = React.useState([]);
   const [value, setvalue] = React.useState('');
   const [filter, setfilter] = React.useState([]);
   const [visiblehability, setvisiblehability] = React.useState(false);
@@ -177,6 +162,7 @@ export default function Interviewed({ navigation }) {
         return error;
       }
       setinterviewed(response.data);
+      setFilteredList(response.data);
     }
     getAllInterviewed();
   }, [user]);
@@ -215,7 +201,10 @@ export default function Interviewed({ navigation }) {
             placeholder="Ex: João da Silva"
             underlineColorAndroid="transparent"
             style={{ flex: 1, fontSize: 19, height: 50 }}
-            onChangeText={text => setvalue(text)}
+            onChangeText={text => {
+              setvalue(text);
+              setFilteredList(filterList(text, interviewed, filter));
+            }}
             value={value}
           />
           {value ? (
@@ -240,7 +229,7 @@ export default function Interviewed({ navigation }) {
       </View>
 
       <FlatList
-        data={interviewed}
+        data={filteredList}
         renderItem={({ item }) => (
           <Info item={item} navigation={navigation} origin={origin} />
         )}
@@ -253,6 +242,7 @@ export default function Interviewed({ navigation }) {
         onPressConfirm={selectedList => {
           setfilter(selectedList);
           setvisiblehability(false);
+          setFilteredList(filterList(value, interviewed, selectedList));
         }}
       />
     </View>

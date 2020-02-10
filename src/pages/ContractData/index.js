@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,6 +46,7 @@ export default function ContractData({ navigation }) {
   const [button, setbutton] = React.useState('edit');
   const [employee, setemployee] = React.useState(null);
   const [contractDate, setcontractDate] = React.useState('');
+  const [changeData, setChangeData] = React.useState('');
   const [bonus, setbonus] = React.useState([]);
   const [helpValue, sethelpValue] = React.useState(null);
   const [typeJob, settypeJob] = React.useState(null);
@@ -70,7 +72,7 @@ export default function ContractData({ navigation }) {
           // dispatch(signOut());
           // setRefresh(false);
         }
-        console.log(error);
+        console.log(error.response);
         return error;
       }
       console.log(response.data);
@@ -86,17 +88,37 @@ export default function ContractData({ navigation }) {
         setjobRules(response.data.job_role);
         setpayment(response.data.payment_type);
         setpaymentValue(response.data.payment_value);
+        setChangeData(response.data.cancel_date);
+      } else {
+        setbutton('save');
       }
     }
     getContractUser();
   }, [navigation.state.params, user]);
 
-  const onPressSave = async () => {
+  const onPressSave = async type => {
     if (button === 'edit') {
       setbutton('save');
       return;
     }
-    console.log(contractDate);
+    if (!contractDate || !typeJob || !jobRules || !payment || !paymentValue) {
+      if (type === 'new' && !changeData) {
+        Alert.alert(
+          'Ops!',
+          'Preencha todos os campos obrigatórios.',
+          [{ text: 'OK' }],
+          { cancelable: false }
+        );
+        return;
+      }
+      Alert.alert(
+        'Ops!',
+        'Preencha todos os campos obrigatórios.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      return;
+    }
     setloading(true);
     let response = null;
     try {
@@ -111,6 +133,7 @@ export default function ContractData({ navigation }) {
           bonus,
           bonusValue: helpValue,
           contractDate,
+          cancelDate: changeData,
         },
         {
           headers: {
@@ -179,8 +202,9 @@ export default function ContractData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight={button}
+        iconRight={!contractDate && !paymentValue ? '' : button}
         onPress={onPressSave}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
@@ -198,6 +222,7 @@ export default function ContractData({ navigation }) {
             lable="Regime de Trabalho"
             placeholder="Selecione uma opção"
             list
+            required
             disabled={button === 'edit'}
             androidList={typeJobList}
             onValueChange={value => onPressDone('typeJob', value)}
@@ -211,6 +236,7 @@ export default function ContractData({ navigation }) {
           <FildInputForm
             lable="Função"
             placeholder="Informe a função"
+            required
             disabled={button === 'edit'}
             onChangeText={text => setjobRules(text)}
             value={jobRules}
@@ -219,6 +245,7 @@ export default function ContractData({ navigation }) {
             lable="Remuneração"
             placeholder="Selecione uma opção"
             disabled={button === 'edit'}
+            required
             list
             androidList={paymentList}
             onValueChange={value => onPressDone('payment', value)}
@@ -229,10 +256,10 @@ export default function ContractData({ navigation }) {
             }}
             value={payment}
           />
-
           <FildInputForm
             lable="Valor"
             placeholder="Informe o valor do salário"
+            required
             disabled={button === 'edit'}
             onChangeText={text => setpaymentValue(text)}
             value={paymentValue}
@@ -256,12 +283,76 @@ export default function ContractData({ navigation }) {
           <FildInputForm
             lable="Data de Contratação"
             keyboardType="numeric"
+            required
             maxLength={10}
             placeholder="Informe a data de contratação"
             disabled={button === 'edit'}
             onChangeText={text => setcontractDate(text)}
             value={Date.format(contractDate)}
           />
+          {employee ? (
+            <FildInputForm
+              lable="Data de Alteração"
+              keyboardType="numeric"
+              required
+              maxLength={10}
+              placeholder="Informe a data"
+              disabled={button === 'edit'}
+              onChangeText={text => setChangeData(text)}
+              value={Date.format(changeData)}
+            />
+          ) : null}
+          <View
+            style={{
+              borderTopWidth: 0.5,
+              borderColor: '#bcbcbc',
+              borderBottomWidth: 0.5,
+            }}
+          >
+            {!employee ? (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'green',
+                  width: 150,
+                  height: 45,
+                  borderRadius: 25,
+                  marginVertical: 15,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => onPressSave('new')}
+              >
+                <Text
+                  style={{ color: '#fff', fontWeight: '400', fontSize: 19 }}
+                >
+                  Contratar
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'red',
+                  width: 150,
+                  height: 45,
+                  borderRadius: 25,
+                  marginVertical: 15,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  navigation.navigate('LayOff', { uuid });
+                }}
+              >
+                <Text
+                  style={{ color: '#fff', fontWeight: '400', fontSize: 19 }}
+                >
+                  Desligar
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>

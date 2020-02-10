@@ -228,7 +228,7 @@ export default function DocumentsForm({ navigation }) {
         back
         iconRight="save"
         onPress={() => makeRegister()}
-        // onPress={() => navigation.navigate('ReferenceForm')}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

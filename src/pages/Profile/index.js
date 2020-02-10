@@ -16,7 +16,11 @@ export default function Profile({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm navigation={navigation} back />
+      <HeaderForm
+        navigation={navigation}
+        back
+        onPressBack={() => navigation.goBack()}
+      />
       <View style={{ marginHorizontal: 20 }}>
         <Text style={{ color: '#bcbcbc' }}>Logado como:</Text>
         <Text style={{ fontSize: 20, fontWeight: '400', marginTop: 10 }}>

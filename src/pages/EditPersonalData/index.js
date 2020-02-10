@@ -173,6 +173,7 @@ export default function EditPersonalData({ navigation }) {
         back
         iconRight="save"
         onPress={onPressSave}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

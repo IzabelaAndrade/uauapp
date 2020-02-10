@@ -142,6 +142,7 @@ export default function DiscountsForm({ navigation }) {
         back
         iconRight="save"
         onPress={() => save()}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

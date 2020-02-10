@@ -65,7 +65,6 @@ export default function EditDocumentsData({ navigation }) {
   useEffect(() => {
     if (origin === 'EditDocumentsData') {
       const { person } = navigation.state.params;
-      console.log(person);
       dispatch(modifyUuid(person.uuid));
       if (person.Files && person.Files.length > 0) {
         const imgphoto = person.Files.find(element => element.type === 'photo');
@@ -220,13 +219,11 @@ export default function EditDocumentsData({ navigation }) {
     }
 
     if (register.photo !== photo) {
-      console.log('photo');
       requestType = register.photo ? 'put' : 'post';
       response = await sendImage(photo, 'photo', register.uuid, requestType);
       dispatch(modifyPhoto(response.data.url));
     }
     if (register.docFront !== imageDocFront) {
-      console.log('docFront');
       requestType = register.docFront ? 'put' : 'post';
       response = await sendImage(
         imageDocFront,
@@ -237,7 +234,6 @@ export default function EditDocumentsData({ navigation }) {
       dispatch(modifyDocFront(response.data.url));
     }
     if (register.docBack !== imageDocBack) {
-      console.log('docBack');
       requestType = register.docBack ? 'put' : 'post';
       response = await sendImage(
         imageDocBack,
@@ -249,7 +245,6 @@ export default function EditDocumentsData({ navigation }) {
       dispatch(modifyDocBack(response.data.url));
     }
     if (register.imgVoterTitle !== imageDocVoterTitle) {
-      console.log('imgVoterTitle');
       requestType = register.imgVoterTitle ? 'put' : 'post';
       response = await sendImage(
         imageDocVoterTitle,
@@ -261,7 +256,6 @@ export default function EditDocumentsData({ navigation }) {
       dispatch(modifyImgVoterTitle(response.data.url));
     }
     if (register.imgAddress !== imageDocAddress) {
-      console.log('imgAddress');
       requestType = register.imgAddress ? 'put' : 'post';
       response = await sendImage(
         imageDocAddress,
@@ -343,7 +337,7 @@ export default function EditDocumentsData({ navigation }) {
         back
         iconRight={button}
         onPress={onPressSave}
-        // onPress={() => navigation.navigate('ReferenceForm')}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>

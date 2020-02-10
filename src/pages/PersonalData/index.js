@@ -164,6 +164,7 @@ export default function PersonalData({ navigation }) {
         navigation={navigation}
         screen="SocioeconomicForm"
         back
+        onPressBack={() => navigation.goBack()}
         // iconRight="edit"
       />
       <View style={{ flex: 1 }}>

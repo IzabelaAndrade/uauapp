@@ -4,7 +4,13 @@ import Constants from 'expo-constants';
 
 import { Feather, AntDesign } from '@expo/vector-icons';
 
-export default function HeaderForm({ navigation, back, iconRight, onPress }) {
+export default function HeaderForm({
+  navigation,
+  back,
+  iconRight,
+  onPress,
+  onPressBack,
+}) {
   function renderIconRight(icon) {
     switch (icon) {
       case 'save':
@@ -41,6 +47,15 @@ export default function HeaderForm({ navigation, back, iconRight, onPress }) {
             <AntDesign name="edit" size={20} color="#f48024" />
           </>
         );
+      case 'cancel':
+        return (
+          <>
+            <Text style={{ color: '#f48024', fontWeight: '600', fontSize: 15 }}>
+              Cancelar
+            </Text>
+            {/* <AntDesign name="edit" size={20} color="#f48024" /> */}
+          </>
+        );
       default:
         return <View style={{ width: 60 }} />;
     }
@@ -66,7 +81,11 @@ export default function HeaderForm({ navigation, back, iconRight, onPress }) {
               alignItems: 'center',
               backgroundColor: '#fff',
             }}
-            onPress={() => navigation.goBack()}
+            onPress={onPressBack}
+            // onPress={() => {
+            //   onPressBack;
+            //   navigation.goBack();
+            // }}
           >
             <Feather name="chevron-left" size={28} color="#f48024" />
           </TouchableOpacity>

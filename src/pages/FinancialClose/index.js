@@ -127,7 +127,11 @@ export default function FinancialClose({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <HeaderForm navigation={navigation} back />
+      <HeaderForm
+        navigation={navigation}
+        back
+        onPressBack={() => navigation.goBack()}
+      />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
           <FinancialCloseItem navigation={navigation} />

@@ -194,6 +194,7 @@ export default function ShowData(props) {
         navigation={props.navigation}
         screen="SocioeconomicForm"
         back
+        onPressBack={() => props.navigation.goBack()}
       />
       {screeninfo === 'Docs' ? (
         <FlatList
@@ -202,7 +203,6 @@ export default function ShowData(props) {
             <ShowDataImage
               item={item}
               onPress={docUrl => {
-                console.log(docUrl);
                 setimageUrl(docUrl);
                 setModalVisible(true);
               }}

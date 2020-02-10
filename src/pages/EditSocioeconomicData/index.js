@@ -114,7 +114,6 @@ export default function EditSocioeconomicData({ navigation }) {
       );
       throw error;
     }
-    console.log(response.data);
 
     dispatch(modifyMaritalStatus(response.data.person.marital_status));
     dispatch(modifyHome(response.data.person.home));
@@ -151,6 +150,7 @@ export default function EditSocioeconomicData({ navigation }) {
         back
         iconRight="save"
         onPress={onPressSave}
+        onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
