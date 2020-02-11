@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, Alert } from 'react-native';
+import moment from 'moment';
 
 // import { Container } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,10 +32,7 @@ export default function LayOff({ navigation }) {
         }
       );
     } catch (error) {
-      if (error.response.status === 401) {
-        // dispatch(signOut());
-        // setRefresh(false);
-      }
+      console.log(error);
       setLoading(false);
       Alert.alert(
         'Ops!',
@@ -69,6 +67,12 @@ export default function LayOff({ navigation }) {
         [{ text: 'OK' }],
         { cancelable: false }
       );
+      return;
+    }
+    if (!moment(date, 'DD/MM/YYYY').isValid() || date.length < 10) {
+      Alert.alert('', 'A data informada é inválida.', [{ text: 'OK' }], {
+        cancelable: false,
+      });
       return;
     }
     Alert.alert(

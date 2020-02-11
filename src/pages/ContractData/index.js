@@ -119,6 +119,15 @@ export default function ContractData({ navigation }) {
       );
       return;
     }
+    if (
+      !moment(contractDate, 'DD/MM/YYYY').isValid() ||
+      contractDate.length < 10
+    ) {
+      Alert.alert('', 'A data informada é inválida.', [{ text: 'OK' }], {
+        cancelable: false,
+      });
+      return;
+    }
     setloading(true);
     let response = null;
     try {
@@ -165,7 +174,7 @@ export default function ContractData({ navigation }) {
 
     Alert.alert(
       '',
-      'Os dados foram alterados com sucesso.',
+      'Realizado com sucesso.',
       [
         {
           text: 'OK',
