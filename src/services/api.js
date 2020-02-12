@@ -1,13 +1,8 @@
 // import axios from 'axios';
-// import { APIKEY } from '../controller/constants';
 
 // const api = axios.create({
-//   baseURL: 'http://uauapi01.fwc.cloud:22900/uauapi/api/v1.0',
+//   baseURL: 'http://178.128.180.239/',
 //   timeout: 50000,
-//   headers: {
-//     'Content-Type': 'application/json',
-//     'X-INTEGRATION-Authorization': APIKEY,
-//   },
 // });
 
 // export default api;
