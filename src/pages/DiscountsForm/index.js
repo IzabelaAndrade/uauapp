@@ -4,6 +4,7 @@ import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import Date from '../../utils/Date';
+import Money from '../../utils/Money';
 
 import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
@@ -16,16 +17,21 @@ const formOfPayment = ['', 'Dinheiro', 'Transferência', 'Outros'];
 const Account = ['', 'Caixa', 'Banco do Brasil'];
 
 const discountType = [
-  'Selecione uma opção',
+  '',
   'Vale',
   'Vale Uniforme',
   'Vale Refeição',
   'Vale Transporte',
-  'Vale Gasolina',
+  'Vale Combustível',
   'Vale Ferramenta',
   'Plano de Saúde',
   'INSS',
   'Falta',
+  'Pagamento de Salário',
+  'Pagamento de Medição',
+  'Pagamento de Reembolso',
+  'Pagamento de Bônus',
+  'Pagamento de Comissão',
 ];
 
 export default function DiscountsForm({ navigation }) {
@@ -64,6 +70,24 @@ export default function DiscountsForm({ navigation }) {
   }, [user]);
 
   async function save() {
+    if (!beneficiary.uuid || !date || !type || !value || !formPayment) {
+      Alert.alert(
+        'Ops!',
+        'Todos os campos com * devem ser preenchidos.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      return;
+    }
+    if (formPayment === 'Transferência' && !account) {
+      Alert.alert(
+        'Ops!',
+        'Todos os campos com * devem ser preenchidos.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+      return;
+    }
     setLoading(true);
     try {
       await api.post(
@@ -72,7 +96,7 @@ export default function DiscountsForm({ navigation }) {
           user: beneficiary.uuid,
           date,
           description: note,
-          value,
+          value: Money.strip(value),
           type,
           transaction_type: formPayment,
           account,
@@ -88,7 +112,7 @@ export default function DiscountsForm({ navigation }) {
       setLoading(false);
       Alert.alert(
         'Ops!',
-        'Houve um erro ao tentar realizar o cadastro, verifique sua conexão com a internet e tente novamente.',
+        'Operação não realizada, verifique sua conexão com a internet e tente novamente.',
         [{ text: 'OK' }],
         { cancelable: false }
       );
@@ -96,7 +120,7 @@ export default function DiscountsForm({ navigation }) {
     }
     Alert.alert(
       '',
-      'Os dados foram alterados com sucesso.',
+      'Operação realizada com sucesso.',
       [
         {
           text: 'OK',
@@ -147,6 +171,7 @@ export default function DiscountsForm({ navigation }) {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <ScrollView>
           <FildInputForm
+            required
             lable="Beneficiário"
             placeholder="Selecione uma opção"
             list
@@ -158,6 +183,7 @@ export default function DiscountsForm({ navigation }) {
             value={beneficiary.name}
           />
           <FildInputForm
+            required
             lable="Tipo do desconto"
             placeholder="Selecione uma opção"
             list
@@ -171,6 +197,7 @@ export default function DiscountsForm({ navigation }) {
             value={type}
           />
           <FildInputForm
+            required
             lable="Forma de pagamento"
             placeholder="Selecione uma opção"
             list
@@ -185,6 +212,7 @@ export default function DiscountsForm({ navigation }) {
           />
           {formPayment === 'Transferência' ? (
             <FildInputForm
+              required={formPayment === 'Transferência'}
               lable="Conta"
               placeholder="Selecione uma opção"
               list
@@ -199,6 +227,7 @@ export default function DiscountsForm({ navigation }) {
             />
           ) : null}
           <FildInputForm
+            required
             lable="Data"
             keyboardType="numeric"
             maxLength={10}
@@ -207,18 +236,18 @@ export default function DiscountsForm({ navigation }) {
             value={Date.format(date)}
           />
           <FildInputForm
+            required
             lable="Valor"
             placeholder="Informe o Valor"
-            onChangeText={text => setValue(text)}
+            onChangeText={text => setValue(Money.format(text))}
             value={value}
-            keyboardType="number-pad"
+            keyboardType="numeric"
           />
           <FildInputForm
             lable="Observações"
             placeholder="Informe mais detalhes "
             onChangeText={text => setNote(text)}
             value={note}
-            multiline
           />
         </ScrollView>
       </KeyboardAvoidingView>

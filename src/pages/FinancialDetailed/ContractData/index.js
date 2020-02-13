@@ -13,7 +13,6 @@ import moment from 'moment';
 import api from '../../services/api';
 
 import Date from '../../utils/Date';
-import Money from '../../utils/Money';
 
 import {
   modifyContractType,
@@ -139,7 +138,7 @@ export default function ContractData({ navigation }) {
           contractType: typeJob,
           jobRules,
           payment,
-          paymentValue: Money.strip(paymentValue),
+          paymentValue,
           bonus,
           bonusValue: helpValue,
           contractDate,
@@ -271,9 +270,8 @@ export default function ContractData({ navigation }) {
             placeholder="Informe o valor do salário"
             required
             disabled={button === 'edit'}
-            onChangeText={text => setpaymentValue(Money.format(text))}
+            onChangeText={text => setpaymentValue(text)}
             value={paymentValue}
-            keyboardType="numeric"
           />
           <FildInputForm
             lable="Benefícios Salariais"

@@ -1,273 +1,137 @@
-import React from 'react';
-import {
-  View,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  SectionList,
-} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, SectionList } from 'react-native';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
-
+import { useSelector } from 'react-redux';
+import Cpf from '../../utils/Cpf';
+import Money from '../../utils/Money';
+import api from '../../services/api';
 import HeaderForm from '../../components/HeaderForm';
 
-const DATA = [
-  {
-    title: 'Janeiro - 2020',
-    data: [
-      {
-        signal: '-',
-        value: '300,00',
-        description: 'Vale - Emprestimo para compra de celular 3/5',
-        weekDay: 'qui',
-        monthDay: '30',
-        month: 'Jan',
-      },
-      {
-        signal: '-',
-        value: '50,00',
-        description: 'Vale - Transferência bancaria',
-        weekDay: 'sex',
-        monthDay: '03',
-        month: 'Jan',
-      },
-      {
-        signal: '-',
-        value: '150,00',
-        description: 'Vale Ferramenta - Furadeira',
-        weekDay: 'sab',
-        monthDay: '04',
-        month: 'Jan',
-      },
-      {
-        signal: '+',
-        value: '1.000,00',
-        description:
-          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
-        weekDay: 'seg',
-        monthDay: '27',
-        month: 'Jan',
-      },
-    ],
-  },
-  {
-    title: 'Dezembro - 2019',
-    data: [
-      {
-        signal: '-',
-        value: '300,00',
-        description: 'Vale - Emprestimo para compra de celular 2/5',
-        weekDay: 'sex',
-        monthDay: '03',
-        month: 'Dez',
-      },
-      {
-        signal: '-',
-        value: '100,00',
-        description: 'Vale - Para pagar aluguel',
-        weekDay: 'sab',
-        monthDay: '04',
-        month: 'Dez',
-      },
-      {
-        signal: '+',
-        value: '2.380,00',
-        description:
-          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
-        weekDay: 'seg',
-        monthDay: '19',
-        month: 'Dez',
-      },
-    ],
-  },
-];
-const Lanch = [
-  {
-    title: 'Janeiro - 2020',
-    data: [
-      {
-        value: '300,00',
-        description: 'Ajuda de custo - Gasolina',
-        weekDay: 'qui',
-        monthDay: '30',
-        month: 'Jan',
-      },
-      {
-        value: '700,00',
-        description: 'Ajuda de custo',
-        weekDay: 'sex',
-        monthDay: '03',
-        month: 'Jan',
-      },
-      {
-        value: '150,00',
-        description: 'Bonus',
-        weekDay: 'sab',
-        monthDay: '04',
-        month: 'Jan',
-      },
-      {
-        value: '1.000,00',
-        description:
-          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
-        weekDay: 'seg',
-        monthDay: '27',
-        month: 'Jan',
-      },
-    ],
-  },
-  {
-    title: 'Dezembro - 2019',
-    data: [
-      {
-        value: '300,00',
-        description: 'Reembolso',
-        weekDay: 'sex',
-        monthDay: '03',
-        month: 'Dez',
-      },
-      {
-        value: '700,00',
-        description: 'Ajuda de custo',
-        weekDay: 'sab',
-        monthDay: '04',
-        month: 'Dez',
-      },
-      {
-        value: '2.380,00',
-        description:
-          'Medição - Serviços realizados na SESP, SES e na Santa Casa',
-        weekDay: 'seg',
-        monthDay: '19',
-        month: 'Dez',
-      },
-    ],
-  },
-];
+const dbDateFormat = 'YYYY-MM-DD';
 
-const FinancialHeader = () => {
+const FinancialHeader = ({ data, financesData, loading }) => {
+  const img = data.Files.find(element => element.type === 'photo');
   return (
-    <View style={{ marginLeft: 20 }}>
+    <View style={{ marginHorizontal: 15 }}>
       <View style={{ flexDirection: 'row' }}>
         <Image
           style={{ width: 45, height: 45, borderRadius: 25 }}
-          source={{
-            uri:
-              'http://192.168.0.14:3333/files/fde6ae429c5c88fcba25abebcab38ff6.jpg',
-          }}
+          source={img ? { uri: img.url } : require('../../assets/avatar.png')}
         />
         <View style={{ marginLeft: 10 }}>
-          <Text style={{ fontWeight: '500', fontSize: 18 }}>
-            Cotton Rosa Silva Neto
+          <Text style={{ fontWeight: '500', fontSize: 18 }}>{data.name}</Text>
+          <Text style={{ color: 'grey', fontSize: 13 }}>
+            {Cpf.format(data.cpf)}
           </Text>
-          <Text style={{ color: 'grey', fontSize: 13 }}>054.126.547-65</Text>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', marginTop: 10 }}>
-        <View style={{ flex: 1, alignItems: 'flex-start' }}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '500', fontSize: 15 }}>Titular: </Text>
-            <Text style={{ color: 'grey', fontSize: 15 }}>
-              Mária Lucia Campos
+      {!data.BankAccount ? (
+        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontWeight: '500', fontSize: 15, color: '#bdbdbd' }}>
+              Titular:{' '}
+            </Text>
+            <Text style={{ fontWeight: '500', fontSize: 15, color: '#bdbdbd' }}>
+              CPF:{' '}
+            </Text>
+            <Text style={{ fontWeight: '500', fontSize: 15, color: '#bdbdbd' }}>
+              Banco:{' '}
+            </Text>
+            <Text style={{ fontWeight: '500', fontSize: 15, color: '#bdbdbd' }}>
+              Agência:{' '}
+            </Text>
+            <Text style={{ fontWeight: '500', fontSize: 15, color: '#bdbdbd' }}>
+              Conta:{' '}
             </Text>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '500', fontSize: 15 }}>CPF: </Text>
-            <Text style={{ color: 'grey', fontSize: 15 }}>023.256.599-98</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '500', fontSize: 15 }}>Banco: </Text>
-            <Text style={{ color: 'grey', fontSize: 15 }}>Banco do Brasil</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '500', fontSize: 15 }}>Ag: </Text>
-            <Text style={{ color: 'grey', fontSize: 15 }}>4521</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={{ fontWeight: '500', fontSize: 15 }}>Cc: </Text>
-            <Text style={{ color: 'grey', fontSize: 15 }}>1345-5</Text>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 5,
+            }}
+          >
+            <Text style={{ fontWeight: '500', fontSize: 20 }}>Saldo</Text>
+            <Text style={{ color: 'green', fontSize: 23, fontWeight: '700' }}>
+              {loading ? '' : Money.format(financesData.balance) || '0,00'}
+            </Text>
           </View>
         </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: 5,
-            flex: 1,
-          }}
-        >
-          <Text style={{ fontWeight: '500', fontSize: 20 }}>Saldo</Text>
-          <Text style={{ color: 'green', fontSize: 23, fontWeight: '900' }}>
-            1.000,00
-          </Text>
-        </View>
-      </View>
+      ) : (
+        <>
+          <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <View style={{ flex: 1 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '500', fontSize: 15 }}>
+                  Titular:{' '}
+                </Text>
+                <Text style={{ color: 'grey', fontSize: 15 }}>
+                  {data.BankAccount.name}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '500', fontSize: 15 }}>CPF: </Text>
+                <Text style={{ color: 'grey', fontSize: 15 }}>
+                  {Cpf.format(data.BankAccount.cpf)}
+                </Text>
+              </View>
+              <Text style={{ fontWeight: '500', fontSize: 15 }}>
+                Banco:{' '}
+                <Text
+                  style={{ color: 'grey', fontSize: 15, fontWeight: 'normal' }}
+                >
+                  {data.BankAccount.bank}
+                </Text>
+              </Text>
+
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '500', fontSize: 15 }}>Ag: </Text>
+                <Text style={{ color: 'grey', fontSize: 15 }}>
+                  {data.BankAccount.agency}
+                </Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontWeight: '500', fontSize: 15 }}>Cc: </Text>
+                <Text style={{ color: 'grey', fontSize: 15 }}>
+                  {data.BankAccount.account}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 5,
+              }}
+            >
+              <Text style={{ fontWeight: '500', fontSize: 20 }}>Saldo</Text>
+              {!loading ? (
+                <>
+                  <Text
+                    style={{
+                      color:
+                        financesData.balance.substring(0, 1) === '-'
+                          ? 'red'
+                          : 'green',
+                      fontSize: 23,
+                      fontWeight: '700',
+                    }}
+                  >
+                    {financesData.balance.substring(0, 1) === '-'
+                      ? `- ${Money.format(financesData.balance)}`
+                      : Money.format(financesData.balance) || '0,00'}
+                  </Text>
+                </>
+              ) : null}
+            </View>
+          </View>
+        </>
+      )}
     </View>
   );
 };
-
-function FinancialSelectDate({ onSelect }) {
-  const [dateFilterSelected, setDateFilterSelected] = React.useState('30 dias');
-  function Button({ text, selected, onPress }) {
-    return (
-      <TouchableOpacity
-        style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: selected ? '#B5B5B5' : '#e6e6e6',
-        }}
-        onPress={() => {
-          setDateFilterSelected(text);
-          onPress(text);
-        }}
-      >
-        <Text style={{ color: selected ? '#ffff' : '#898989' }}>{text}</Text>
-      </TouchableOpacity>
-    );
-  }
-
-  function handlePressButton(text) {
-    onSelect(text);
-  }
-
-  return (
-    <View
-      style={{
-        backgroundColor: '#e6e6e6',
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: 10,
-        flexDirection: 'row',
-      }}
-    >
-      <Button
-        text="30 dias"
-        selected={dateFilterSelected === '30 dias'}
-        onPress={text => handlePressButton(text)}
-      />
-      <Button
-        text="60 dias"
-        selected={dateFilterSelected === '60 dias'}
-        onPress={text => handlePressButton(text)}
-      />
-      <Button
-        text="90 dias"
-        selected={dateFilterSelected === '90 dias'}
-        onPress={text => handlePressButton(text)}
-      />
-      <Button
-        text="Início"
-        selected={dateFilterSelected === 'Início'}
-        onPress={text => handlePressButton(text)}
-      />
-    </View>
-  );
-}
 
 function Item({ data }) {
   return (
@@ -281,11 +145,15 @@ function Item({ data }) {
           marginTop: 10,
         }}
       >
-        <Text style={{ fontSize: 12, color: '#898989' }}>{data.weekDay}</Text>
-        <Text style={{ fontSize: 17, fontWeight: '700', color: '#898989' }}>
-          {data.monthDay}
+        <Text style={{ fontSize: 12, color: '#898989' }}>
+          {moment(data.date, dbDateFormat).format('ddd')}
         </Text>
-        <Text style={{ fontSize: 12, color: '#898989' }}>{data.month}</Text>
+        <Text style={{ fontSize: 17, fontWeight: '700', color: '#898989' }}>
+          {moment(data.date, dbDateFormat).format('DD')}
+        </Text>
+        <Text style={{ fontSize: 12, color: '#898989' }}>
+          {moment(data.date, dbDateFormat).format('MMM')}
+        </Text>
       </View>
       <View
         style={{
@@ -304,22 +172,23 @@ function Item({ data }) {
         >
           <Text
             style={{
-              color: data.signal === '+' ? 'green' : 'red',
+              // color: 'green',
+              color: data.transaction_type ? 'red' : 'green',
               fontSize: 25,
-              fontWeight: data.signal === '-' ? '700' : null,
+              fontWeight: '700',
             }}
           >
-            {data.signal}
+            {data.transaction_type ? '-' : '+'}
           </Text>
           <Text
             style={{
-              marginTop: data.signal === '+' ? 0 : 2,
+              marginTop: 2,
               marginLeft: 5,
               color: 'gray',
               fontSize: 13,
             }}
           >
-            {data.value}
+            {Money.format(data.value)}
           </Text>
         </View>
         <View
@@ -330,7 +199,7 @@ function Item({ data }) {
           }}
         >
           <Text style={{ marginLeft: 5, color: 'gray', fontSize: 13 }}>
-            {data.description}
+            {data.type} {data.description ? ` - ${data.description}` : null}
           </Text>
         </View>
       </View>
@@ -338,102 +207,92 @@ function Item({ data }) {
   );
 }
 
-const FinancialItem = () => {
-  return (
-    <SectionList
-      stickySectionHeadersEnabled
-      sections={DATA}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item data={item} />}
-      renderSectionHeader={({ section: { title } }) => (
-        <View
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 3,
-            backgroundColor: '#e6e6e6',
-          }}
-        >
-          <Text sstyle={{ color: '#898989' }}>{title}</Text>
-        </View>
-      )}
-    />
-  );
-};
-
-const FinancialRelease = () => {
-  return (
-    <SectionList
-      stickySectionHeadersEnabled
-      sections={Lanch}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item data={item} />}
-      renderSectionHeader={({ section: { title } }) => (
-        <View
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 3,
-            backgroundColor: '#e6e6e6',
-          }}
-        >
-          <Text sstyle={{ color: '#898989' }}>{title}</Text>
-        </View>
-      )}
-    />
-  );
-};
-
-const ViewSwitch = ({ onSelect }) => {
-  const [viewSelected, setViewSelected] = React.useState('Extrato');
-  function Button({ text, selected, onPress }) {
+const FinancialItem = ({ statement }) => {
+  if (statement.length < 1) {
     return (
-      <TouchableOpacity
+      <View
         style={{
-          paddingHorizontal: 10,
-          paddingVertical: 3,
-          borderRadius: 20,
-          backgroundColor: selected ? '#B5B5B5' : '#e6e6e6',
-        }}
-        onPress={() => {
-          setViewSelected(text);
-          onPress(text);
+          flex: 1,
+          backgroundColor: '#fff',
         }}
       >
-        <Text style={{ color: selected ? '#ffff' : '#898989' }}>{text}</Text>
-      </TouchableOpacity>
+        <View
+          style={{
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            backgroundColor: '#e6e6e6',
+          }}
+        >
+          <Text style={{ color: '#898989', fontSize: 18 }}>
+            Não há histórico
+          </Text>
+        </View>
+        <View
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
+        >
+          <Image
+            style={{ width: 130, height: 130, borderRadius: 25 }}
+            source={require('../../assets/emptyC.png')}
+          />
+        </View>
+      </View>
     );
   }
-  function handlePressButton(text) {
-    onSelect(text);
-  }
-
   return (
-    <View
-      style={{
-        backgroundColor: '#e6e6e6',
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: 10,
-        flexDirection: 'row',
-      }}
-    >
-      <Button
-        text="Extrato"
-        selected={viewSelected === 'Extrato'}
-        onPress={text => handlePressButton(text)}
-      />
-      <Button
-        text="Lançamentos"
-        selected={viewSelected === 'Lançamentos'}
-        onPress={text => handlePressButton(text)}
-      />
-    </View>
+    <SectionList
+      stickySectionHeadersEnabled
+      sections={statement}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({ item }) => <Item data={item} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View
+          style={{
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+            backgroundColor: '#e6e6e6',
+          }}
+        >
+          <Text style={{ color: '#898989', fontSize: 18 }}>
+            {moment(title, dbDateFormat).format('MMMM')} -{' '}
+            {moment(title, dbDateFormat).format('YYYY')}
+          </Text>
+        </View>
+      )}
+    />
   );
 };
 
 export default function FinancialDetailed({ navigation }) {
-  const [dateFilterSelected, setDateFilterSelected] = React.useState('30 dias');
-  const [viewSelected, setViewSelected] = React.useState('Extrato');
+  const [bankStatement, setBankStatement] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const { person } = navigation.state.params;
+  const user = useSelector(state => state.auth);
+
+  useEffect(() => {
+    setLoading(true);
+    async function getFinancialData() {
+      let response = null;
+      try {
+        response = await api.get(`/finacialprofile?user=${person.uuid}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+      } catch (error) {
+        if (error.response.status === 401) {
+          // dispatch(signOut());
+          // setRefresh(false);
+        }
+        console.log(error.response);
+        return error;
+      }
+      // console.log(response.data);
+      setBankStatement(response.data);
+      setLoading(false);
+    }
+    getFinancialData();
+  }, [person, user]);
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <HeaderForm
@@ -441,29 +300,18 @@ export default function FinancialDetailed({ navigation }) {
         back
         onPressBack={() => navigation.goBack()}
       />
-      <FinancialHeader />
-      <ViewSwitch onSelect={text => setViewSelected(text)} />
-      <FinancialSelectDate onSelect={text => setDateFilterSelected(text)} />
-      {viewSelected === 'Extrato' ? <FinancialItem /> : <FinancialRelease />}
+      <FinancialHeader
+        data={person}
+        financesData={bankStatement}
+        loading={loading}
+      />
+      {/* <ViewSwitch onSelect={text => setViewSelected(text)} /> */}
+      {/* <FinancialSelectDate onSelect={text => setDateFilterSelected(text)} /> */}
+      {loading ? null : <FinancialItem statement={bankStatement.statement} />}
+      {/* {viewSelected === 'Extrato' ? (
+      ) : (
+        <FinancialRelease />
+      )} */}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 24,
-    marginHorizontal: 16,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-  },
-  header: {
-    fontSize: 32,
-  },
-  title: {
-    fontSize: 24,
-  },
-});

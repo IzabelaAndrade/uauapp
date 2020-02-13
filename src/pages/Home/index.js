@@ -77,6 +77,9 @@ function RenderIcon(icon) {
     case 'calculator':
       return <Entypo name="calculator" size={25} color="#bcbcbc" />;
 
+    case 'history':
+      return <Feather name="list" size={25} color="#bcbcbc" />;
+
     default:
       return <Feather name="chevron-right" size={25} color="#f48024" />;
   }
@@ -86,7 +89,6 @@ export default function Home({ navigation }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('entrou use');
     dispatch(clearRegister());
   });
 
@@ -213,6 +215,17 @@ export default function Home({ navigation }) {
           lable="Fechamento"
           icon="calculator"
           onPress={() => navigation.navigate('FinancialClose')}
+        />
+        <BtnMenu
+          lable="Histórico Financeiro"
+          icon="history"
+          onPress={() => {
+            dispatch(clearRegister());
+            navigation.navigate('Interviewed', {
+              edit: false,
+              origin: 'FinancialDetailed',
+            });
+          }}
         />
         <Text
           style={{

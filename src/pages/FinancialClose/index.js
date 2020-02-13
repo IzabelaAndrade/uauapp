@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
@@ -139,6 +140,11 @@ export default function FinancialClose({ navigation }) {
           <FinancialCloseItem navigation={navigation} />
           <FinancialCloseItem navigation={navigation} />
         </ScrollView>
+        {/* <FlatList
+        data={DATA}
+        renderItem={({ item }) => <Item title={item.title} />}
+        keyExtractor={item => item.id}
+      /> */}
       </KeyboardAvoidingView>
     </View>
   );
