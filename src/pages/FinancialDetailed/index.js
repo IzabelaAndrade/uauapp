@@ -13,6 +13,7 @@ const dbDateFormat = 'YYYY-MM-DD';
 
 const FinancialHeader = ({ data, financesData, loading }) => {
   const img = data.Files.find(element => element.type === 'photo');
+  console.log(financesData);
   return (
     <View style={{ marginHorizontal: 15 }}>
       <View style={{ flexDirection: 'row' }}>
@@ -53,10 +54,46 @@ const FinancialHeader = ({ data, financesData, loading }) => {
               marginLeft: 5,
             }}
           >
-            <Text style={{ fontWeight: '500', fontSize: 20 }}>Saldo</Text>
-            <Text style={{ color: 'green', fontSize: 23, fontWeight: '700' }}>
-              {loading ? '' : Money.format(financesData.balance) || '0,00'}
-            </Text>
+            {!loading ? (
+              <>
+                <Text style={{ fontWeight: '300', fontSize: 12 }}>
+                  Saldo Real
+                </Text>
+                <Text
+                  style={{
+                    color:
+                      financesData.balance.substring(0, 1) === '-'
+                        ? 'red'
+                        : 'green',
+                    fontSize: 15,
+                    fontWeight: '500',
+                    marginBottom: 10,
+                  }}
+                >
+                  {financesData.balance.substring(0, 1) === '-'
+                    ? `- ${Money.format(financesData.balance)}`
+                    : Money.format(financesData.balance) || '0,00'}
+                </Text>
+
+                <Text style={{ fontWeight: '500', fontSize: 20 }}>
+                  Saldo no Mês
+                </Text>
+                <Text
+                  style={{
+                    color:
+                      financesData.balance_month.substring(0, 1) === '-'
+                        ? 'red'
+                        : 'green',
+                    fontSize: 23,
+                    fontWeight: '700',
+                  }}
+                >
+                  {financesData.balance_month.substring(0, 1) === '-'
+                    ? `- ${Money.format(financesData.balance_month)}`
+                    : Money.format(financesData.balance_month) || '0,00'}
+                </Text>
+              </>
+            ) : null}
           </View>
         </View>
       ) : (
@@ -106,22 +143,48 @@ const FinancialHeader = ({ data, financesData, loading }) => {
                 marginLeft: 5,
               }}
             >
-              <Text style={{ fontWeight: '500', fontSize: 20 }}>Saldo</Text>
               {!loading ? (
                 <>
+                  <Text
+                    style={{
+                      fontWeight: '300',
+                      fontSize: 12,
+                    }}
+                  >
+                    Saldo Real
+                  </Text>
                   <Text
                     style={{
                       color:
                         financesData.balance.substring(0, 1) === '-'
                           ? 'red'
                           : 'green',
-                      fontSize: 23,
-                      fontWeight: '700',
+                      fontSize: 15,
+                      fontWeight: '500',
+                      marginBottom: 10,
                     }}
                   >
                     {financesData.balance.substring(0, 1) === '-'
                       ? `- ${Money.format(financesData.balance)}`
                       : Money.format(financesData.balance) || '0,00'}
+                  </Text>
+
+                  <Text style={{ fontWeight: '500', fontSize: 20 }}>
+                    Saldo no Mês
+                  </Text>
+                  <Text
+                    style={{
+                      color:
+                        financesData.balance_month.substring(0, 1) === '-'
+                          ? 'red'
+                          : 'green',
+                      fontSize: 23,
+                      fontWeight: '700',
+                    }}
+                  >
+                    {financesData.balance_month.substring(0, 1) === '-'
+                      ? `- ${Money.format(financesData.balance_month)}`
+                      : Money.format(financesData.balance_month) || '0,00'}
                   </Text>
                 </>
               ) : null}

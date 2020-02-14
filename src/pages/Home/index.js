@@ -80,6 +80,9 @@ function RenderIcon(icon) {
     case 'history':
       return <Feather name="list" size={25} color="#bcbcbc" />;
 
+    case 'lock':
+      return <Feather name="lock" size={25} color="#bcbcbc" />;
+
     default:
       return <Feather name="chevron-right" size={25} color="#f48024" />;
   }
@@ -87,6 +90,16 @@ function RenderIcon(icon) {
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
+
+  const user = useSelector(state => state.auth);
+
+  // 'Cadastro',
+  // 'Gestão de Pessoas',
+  // 'Financeiro Descontos',
+  // 'Financeiro Lançamentos',
+  // 'Financeiro Fechamento',
+  // 'Financeiro Extrato Funcionário',
+  // 'Permissões de Usuário',
 
   useEffect(() => {
     dispatch(clearRegister());
@@ -120,65 +133,72 @@ export default function Home({ navigation }) {
         />
       </View>
       <ScrollView style={{ flex: 1, marginHorizontal: 20 }}>
-        {/* <View > */}
-        <Text style={{ fontSize: 23, fontWeight: '400', color: '#f48024' }}>
-          Recrutamento
-        </Text>
-        <BtnMenu
-          lable="Nova Entrevista"
-          icon="new"
-          onPress={() => {
-            dispatch(clearRegister());
-            navigation.navigate('PersonalDataForm');
-          }}
-        />
-        <BtnMenu
-          lable="Buscar Profissional"
-          icon="search"
-          onPress={() => navigation.navigate('Interviewed', { edit: false })}
-        />
-        <BtnMenu
-          lable="Completar Cadastro"
-          icon="complete"
-          onPress={() => {
-            dispatch(clearRegister());
-            navigation.navigate('Interviewed', { edit: true });
-          }}
-        />
-        <Text
-          style={{
-            fontSize: 23,
-            fontWeight: '400',
-            color: '#f48024',
-            marginTop: 20,
-            marginBottom: 10,
-          }}
-        >
-          Pendências RH
-        </Text>
-        <BtnMenu
-          lable="Validar Documentação"
-          icon="check"
-          onPress={() => {
-            dispatch(clearRegister());
-            navigation.navigate('Interviewed', {
-              edit: true,
-              origin: 'EditDocumentsData',
-            });
-          }}
-        />
-        <BtnMenu
-          lable="Regime de Contrato"
-          icon="contract"
-          onPress={() =>
-            navigation.navigate('Interviewed', {
-              origin: 'ContractData',
-            })
-          }
-          // onPress={() => navigation.navigate('ContractData')}
-        />
-
-        <Text
+        {user.permission.includes('Cadastro') ? (
+          <>
+            <Text style={{ fontSize: 23, fontWeight: '400', color: '#f48024' }}>
+              Recrutamento
+            </Text>
+            <BtnMenu
+              lable="Nova Entrevista"
+              icon="new"
+              onPress={() => {
+                dispatch(clearRegister());
+                navigation.navigate('PersonalDataForm');
+              }}
+            />
+            <BtnMenu
+              lable="Buscar Profissional"
+              icon="search"
+              onPress={() =>
+                navigation.navigate('Interviewed', { edit: false })
+              }
+            />
+            <BtnMenu
+              lable="Completar Cadastro"
+              icon="complete"
+              onPress={() => {
+                dispatch(clearRegister());
+                navigation.navigate('Interviewed', { edit: true });
+              }}
+            />
+          </>
+        ) : null}
+        {user.permission.includes('Gestão de Pessoas') ? (
+          <>
+            <Text
+              style={{
+                fontSize: 23,
+                fontWeight: '400',
+                color: '#f48024',
+                marginTop: 20,
+                marginBottom: 10,
+              }}
+            >
+              Gestão Pessoal
+            </Text>
+            <BtnMenu
+              lable="Validar Documentação"
+              icon="check"
+              onPress={() => {
+                dispatch(clearRegister());
+                navigation.navigate('Interviewed', {
+                  edit: true,
+                  origin: 'EditDocumentsData',
+                });
+              }}
+            />
+            <BtnMenu
+              lable="Regime de Contrato"
+              icon="contract"
+              onPress={() =>
+                navigation.navigate('Interviewed', {
+                  origin: 'ContractData',
+                })
+              }
+            />
+          </>
+        ) : null}
+        {/* <Text
           style={{
             fontSize: 23,
             fontWeight: '400',
@@ -189,44 +209,57 @@ export default function Home({ navigation }) {
         >
           Diretoria
         </Text>
-        <BtnMenu lable="Aprovar Contratação" icon="addperson" />
-        <Text
-          style={{
-            fontSize: 23,
-            fontWeight: '400',
-            color: '#f48024',
-            marginTop: 20,
-            marginBottom: 10,
-          }}
-        >
-          Financeiro
-        </Text>
-        <BtnMenu
-          lable="Descontos"
-          icon="minus"
-          onPress={() => navigation.navigate('DiscountsForm')}
-        />
-        <BtnMenu
-          lable="Recebimentos"
-          icon="plus"
-          onPress={() => navigation.navigate('AdditionForm')}
-        />
-        <BtnMenu
-          lable="Fechamento"
-          icon="calculator"
-          onPress={() => navigation.navigate('FinancialClose')}
-        />
-        <BtnMenu
-          lable="Histórico Financeiro"
-          icon="history"
-          onPress={() => {
-            dispatch(clearRegister());
-            navigation.navigate('Interviewed', {
-              edit: false,
-              origin: 'FinancialDetailed',
-            });
-          }}
-        />
+        <BtnMenu lable="Aprovar Contratação" icon="addperson" /> */}
+        {user.permission.includes('Financeiro Descontos') ||
+        user.permission.includes('Financeiro Lançamentos') ||
+        user.permission.includes('Financeiro Fechamento') ||
+        user.permission.includes('Financeiro Extrato Funcionário') ? (
+          <Text
+            style={{
+              fontSize: 23,
+              fontWeight: '400',
+              color: '#f48024',
+              marginTop: 20,
+              marginBottom: 10,
+            }}
+          >
+            Financeiro
+          </Text>
+        ) : null}
+        {user.permission.includes('Financeiro Descontos') ? (
+          <BtnMenu
+            lable="Descontos"
+            icon="minus"
+            onPress={() => navigation.navigate('DiscountsForm')}
+          />
+        ) : null}
+        {user.permission.includes('Financeiro Lançamentos') ? (
+          <BtnMenu
+            lable="Recebimentos"
+            icon="plus"
+            onPress={() => navigation.navigate('AdditionForm')}
+          />
+        ) : null}
+        {user.permission.includes('Financeiro Fechamento') ? (
+          <BtnMenu
+            lable="Fechamento"
+            icon="calculator"
+            onPress={() => navigation.navigate('FinancialClose')}
+          />
+        ) : null}
+        {user.permission.includes('Financeiro Extrato Funcionário') ? (
+          <BtnMenu
+            lable="Histórico Financeiro"
+            icon="history"
+            onPress={() => {
+              dispatch(clearRegister());
+              navigation.navigate('Interviewed', {
+                edit: false,
+                origin: 'FinancialDetailed',
+              });
+            }}
+          />
+        ) : null}
         <Text
           style={{
             fontSize: 23,
@@ -238,47 +271,25 @@ export default function Home({ navigation }) {
         >
           Configurações
         </Text>
+        {user.permission.includes('Permissões de Usuário') ? (
+          <BtnMenu
+            lable="Parâmetros"
+            icon="lock"
+            onPress={() => {
+              dispatch(clearRegister());
+              navigation.navigate('UserList', {
+                edit: false,
+                origin: 'Settings',
+              });
+            }}
+          />
+        ) : null}
         <BtnMenu
           lable="Perfil"
           icon="profile"
           onPress={() => navigation.navigate('Profile')}
         />
-        {/* </View> */}
-        {/* <TouchableOpacity
-          style={{
-            borderTopWidth: Platform.OS === 'ios' ? 0 : 0.5,
-            paddingVertical: 15,
-            flexDirection: 'row',
-            marginVertical: 30,
-            alignItems: 'center',
-            // borderTopWidth: 0.5,
-            shadowColor: '#e1e1e1e1',
-            shadowOffset: { width: 0, height: -5 },
-            shadowOpacity: 0.5,
-            backgroundColor: '#fff',
-          }}
-          onPress={() => navigation.navigate('Profile')}
-        >
-          <AntDesign
-            name="user"
-            size={20}
-            color="#222426"
-            style={{ marginLeft: 10 }}
-          />
-          <Text
-            style={{
-              marginLeft: 10,
-              fontSize: 14,
-              fontWeight: '700',
-              color: '#222426',
-              flex: 1,
-            }}
-          >
-            {user.name}
-          </Text>
-        </TouchableOpacity> */}
       </ScrollView>
-      {/* </ImageBackground> */}
     </View>
   );
 }

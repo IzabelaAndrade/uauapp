@@ -5,10 +5,10 @@ export function signInRequest(login, password) {
   };
 }
 
-export function signInSuccess(token, name, cpf, uuid) {
+export function signInSuccess(token, name, cpf, uuid, permission) {
   return {
     type: '@auth/SIGN_IN_SUCCESS',
-    payload: { token, name, cpf, uuid },
+    payload: { token, name, cpf, uuid, permission },
   };
 }
 

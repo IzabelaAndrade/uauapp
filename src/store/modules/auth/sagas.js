@@ -14,19 +14,19 @@ export function* signIn({ payload }) {
       password,
     });
 
-    // console.log(response.data);
+    console.log(response.data);
 
-    const { uuid, name, cpf } = response.data.user;
+    const { uuid, name, cpf, permission } = response.data.user;
     const { token } = response.data;
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
-    yield put(signInSuccess(token, name, cpf, uuid));
+    yield put(signInSuccess(token, name, cpf, uuid, permission));
   } catch (error) {
     console.log(error);
 
-    // Alert.alert('Falha na autenticação, verifique seus dados');
-    // yield put(signFailure());
+    Alert.alert('Falha na autenticação, verifique seus dados');
+    yield put(signFailure());
   }
 }
 

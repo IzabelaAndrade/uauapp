@@ -14,7 +14,13 @@ import FullLoading from '../../components/FullLoading';
 import api from '../../services/api';
 
 const formOfPayment = ['', 'Dinheiro', 'Transferência', 'Outros'];
-const Account = ['', 'Caixa', 'Banco do Brasil'];
+const Account = [
+  '',
+  'Banco do Brasil',
+  'Caixa Econômica',
+  'Caixa Econômica - Motorista',
+  'Outros',
+];
 
 const discountType = [
   '',

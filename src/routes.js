@@ -25,6 +25,8 @@ import DiscountsForm from './pages/DiscountsForm';
 import AdditionForm from './pages/AdditionForm';
 import ContractData from './pages/ContractData';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import UserList from './pages/UserList';
 import Home from './pages/Home';
 import LayOff from './pages/LayOff';
 
@@ -170,6 +172,18 @@ const AppStack = createStackNavigator(
     },
     LayOff: {
       screen: LayOff,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    Settings: {
+      screen: Settings,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    UserList: {
+      screen: UserList,
       navigationOptions: () => ({
         headerShown: false,
       }),

@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   name: null,
   signed: false,
   loading: false,
+  permission: [],
 };
 
 export default function auth(state = INITIAL_STATE, action) {
@@ -21,6 +22,7 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.uuid = action.payload.uuid;
         draft.cpf = action.payload.cpf;
         draft.name = action.payload.name;
+        draft.permission = action.payload.permission;
         draft.signed = true;
         draft.loading = false;
         break;
@@ -36,6 +38,7 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.name = null;
         draft.loading = false;
         draft.signed = false;
+        draft.permission = [];
         break;
       }
       default:

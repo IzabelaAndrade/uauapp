@@ -1,6 +1,7 @@
 export default class Cpf {
   static format(str) {
     if (str === '') return '';
+    if (str === null) return '';
     const mD = str.match(/\d/g);
     if (!mD) return '';
     if (mD.length === 1) return `${mD[0]}`;
