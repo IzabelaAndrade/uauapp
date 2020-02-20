@@ -31,6 +31,7 @@ import { jobList } from '../../utils/List';
 function Info({ item, navigation, origin }) {
   const { edit } = navigation.state.params;
   const img = item.Files.find(element => element.type === 'photo');
+  console.log(img);
   return (
     <TouchableOpacity
       style={{
@@ -45,6 +46,7 @@ function Info({ item, navigation, origin }) {
               origin,
               uuid: item.uuid,
               person: item,
+              edit,
             })
           : navigation.navigate('PersonalData', {
               person: item,
@@ -53,26 +55,39 @@ function Info({ item, navigation, origin }) {
             })
       }
     >
-      <View style={{}}>
+      <View
+        style={{
+          width: 55,
+          height: 55,
+          borderRadius: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+          borderColor: item.status_avanci === 'ap-c' ? '#f48024' : '#fff',
+          borderWidth: 3,
+        }}
+      >
         <Image
           style={{ width: 45, height: 45, borderRadius: 25 }}
           source={img ? { uri: img.url } : require('../../assets/avatar.png')}
         />
-        {/* <View
-          style={{
-            width: 18,
-            height: 18,
-            borderRadius: 9,
-            backgroundColor: '#00a73a',
-            marginTop: -10,
-            marginRight: -5,
-            alignSelf: 'flex-end',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Entypo name="check" size={15} color="#fff" />
-        </View> */}
+      </View>
+      <View
+        style={{
+          width: 15,
+          height: 15,
+          borderRadius: 9,
+          backgroundColor: getStatus(item.status_avanci),
+          marginTop: -12,
+          marginLeft: item.status_avanci === 'ap-c' ? -17 : -20,
+          alignSelf: 'flex-end',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {item.status_avanci === 'ap-c' ? (
+          <Entypo name="check" size={12} color="#fff" />
+        ) : null}
       </View>
       <View style={{ marginLeft: 10, flex: 1 }}>
         <Text style={{ fontWeight: '500', fontSize: 18 }}>{item.name}</Text>
@@ -84,6 +99,18 @@ function Info({ item, navigation, origin }) {
       </View>
     </TouchableOpacity>
   );
+}
+
+function getStatus(status) {
+  switch (status) {
+    case 'ap-c':
+      return '#f48024';
+    case 'ap':
+      return '#05ac24';
+
+    default:
+      return '#f4e424';
+  }
 }
 
 function Header({ navigation, onPress }) {
@@ -136,6 +163,9 @@ export default function Interviewed({ navigation }) {
   const origin = navigation.state.params.origin
     ? navigation.state.params.origin
     : null;
+  const type = navigation.state.params.type
+    ? navigation.state.params.type
+    : null;
   const user = useSelector(state => state.auth);
 
   const [interviewed, setinterviewed] = React.useState([]);
@@ -161,11 +191,22 @@ export default function Interviewed({ navigation }) {
         console.log(error);
         return error;
       }
-      setinterviewed(response.data);
-      setFilteredList(response.data);
+      let list = null;
+      if (type === 'search') {
+        list = response.data.filter(element => element.status_avanci !== 'rm');
+        setinterviewed(list);
+        setFilteredList(list);
+      } else if (type === 'complete') {
+        list = response.data.filter(element => !element.status_avanci);
+        setinterviewed(list);
+        setFilteredList(list);
+      } else {
+        setinterviewed(response.data);
+        setFilteredList(response.data);
+      }
     }
     getAllInterviewed();
-  }, [user]);
+  }, [type, user]);
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <StatusBar barStyle="default" />

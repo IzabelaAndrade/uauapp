@@ -22,6 +22,10 @@ const permissionList = [
 
 export default function Settings({ navigation }) {
   const { person } = navigation.state.params;
+  // const [permission, setPermission] = React.useState(() => {
+  //   return [];
+  // });
+  console.log(person);
   const [permission, setPermission] = React.useState(() => {
     if (!person.permission || person.permission.permission.length < 1) {
       return [];

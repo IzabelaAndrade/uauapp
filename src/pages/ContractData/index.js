@@ -36,6 +36,7 @@ import { paymentList, bonusList, typeJobList } from '../../utils/List';
 export default function ContractData({ navigation }) {
   const register = useSelector(state => state.register);
   const user = useSelector(state => state.auth);
+  const status = navigation.state.params.person.status_avanci;
   const { uuid } = navigation.state.params;
 
   const [visible, setvisible] = React.useState(false);
@@ -102,7 +103,7 @@ export default function ContractData({ navigation }) {
       setbutton('save');
       return;
     }
-    if (!contractDate || !typeJob || !jobRules || !payment || !paymentValue) {
+    if (!contractDate || !typeJob || !jobRules || !payment) {
       if (type === 'new' && !changeData) {
         Alert.alert(
           'Ops!',
@@ -164,6 +165,8 @@ export default function ContractData({ navigation }) {
       // throw error;
     }
 
+    await updatePerson();
+
     // dispatch(modifyContractType(text));
     // dispatch(modifyJobRules(text));
     // dispatch(modifyPayment(text));
@@ -191,6 +194,32 @@ export default function ContractData({ navigation }) {
     );
   };
 
+  const updatePerson = async () => {
+    try {
+      await api.put(
+        `/person`,
+        {
+          uuid,
+          statusAvanci: 'ap-c',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+    }
+  };
+
   const onPressDone = (type, value) => {
     switch (type) {
       case 'typeJob':
@@ -212,7 +241,7 @@ export default function ContractData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight={!contractDate && !paymentValue ? '' : button}
+        iconRight={!status ? '' : button}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -268,8 +297,7 @@ export default function ContractData({ navigation }) {
           />
           <FildInputForm
             lable="Valor"
-            placeholder="Informe o valor do salário"
-            required
+            placeholder="Informe o valor do adiantamento"
             disabled={button === 'edit'}
             onChangeText={text => setpaymentValue(Money.format(text))}
             value={paymentValue}

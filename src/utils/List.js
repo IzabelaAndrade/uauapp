@@ -105,7 +105,12 @@ export const listbank = [
   'Banco Intermedium',
 ];
 
-export const paymentList = ['', 'Salário', 'Salário + Comissão', 'Medição'];
+export const paymentList = [
+  '',
+  'Adiantamento',
+  'Adiantamento + Comissão',
+  'Medição',
+];
 
 export const listAccount = ['', 'Corrente', 'Poupança'];
 

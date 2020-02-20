@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, Alert } from 'react-native';
 import moment from 'moment';
+import { AntDesign } from '@expo/vector-icons';
 
 // import { Container } from './styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +19,7 @@ export default function LayOff({ navigation }) {
   const [date, setDate] = React.useState(null);
   const [reason, setReason] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [check, setCheck] = React.useState(false);
 
   async function onpressDelete() {
     setLoading(true);
@@ -42,7 +44,11 @@ export default function LayOff({ navigation }) {
       );
       return error;
     }
-    console.log(response.data);
+
+    if (check) {
+      await updatePerson();
+    }
+
     Alert.alert(
       '',
       'Colaborador desligado com sucesso!',
@@ -58,6 +64,31 @@ export default function LayOff({ navigation }) {
       { cancelable: false }
     );
   }
+
+  const updatePerson = async () => {
+    try {
+      await api.put(
+        `/person`,
+        {
+          uuid,
+          statusAvanci: 'rm',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      setLoading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+    }
+  };
 
   function confirmation() {
     if (!date || !reason) {
@@ -107,6 +138,26 @@ export default function LayOff({ navigation }) {
         onChangeText={text => setReason(text)}
         value={reason}
       />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity
+          style={{
+            width: 60,
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => setCheck(!check)}
+        >
+          <AntDesign
+            name={check ? 'checkcircle' : 'checkcircleo'}
+            size={25}
+            color={check ? '#f48024' : '#ececec'}
+          />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 16, fontWeight: '500', flex: 1 }}>
+          Desligar colaborador permanentemente.
+        </Text>
+      </View>
       <TouchableOpacity
         style={{
           alignSelf: 'center',

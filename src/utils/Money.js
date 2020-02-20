@@ -1,5 +1,6 @@
 export default class Money {
   static format(value) {
+    if (!value) return '';
     const l = value.replace(/^[0|\D]*/g, '');
     const d = l.match(/\d/g);
     if (!d) return '';
@@ -23,6 +24,7 @@ export default class Money {
   }
 
   static strip(value) {
+    if (!value || value === '') return null;
     const l1 = value.replace(/\./g, '');
     const l2 = l1.replace(',', '.');
     return parseFloat(l2);

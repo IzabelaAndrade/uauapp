@@ -5,7 +5,10 @@ import {
   ScrollView,
   Text,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
+
+import { AntDesign } from '@expo/vector-icons';
 
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -61,6 +64,7 @@ export default function EditDocumentsData({ navigation }) {
     register.imgVoterTitle
   );
   const [imageCPF, setimageCPF] = React.useState(null);
+  const [check, setCheck] = React.useState(null);
 
   useEffect(() => {
     if (origin === 'EditDocumentsData') {
@@ -201,6 +205,9 @@ export default function EditDocumentsData({ navigation }) {
       return;
     }
     setloading(true);
+    if (check) {
+      await updatePerson();
+    }
     let response = null;
     let requestType = null;
 
@@ -295,6 +302,31 @@ export default function EditDocumentsData({ navigation }) {
         cancelable: false,
       }
     );
+  };
+
+  const updatePerson = async () => {
+    try {
+      await api.put(
+        `/person`,
+        {
+          uuid: register.uuid,
+          statusAvanci: 'ap',
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+    } catch (error) {
+      setloading(false);
+      Alert.alert(
+        'Ops!',
+        'Houve um erro ao salvar os dados, verifique sua conexão com a internet e tente novamente.',
+        [{ text: 'OK' }],
+        { cancelable: false }
+      );
+    }
   };
 
   function onPressSeeImage(type) {
@@ -432,6 +464,27 @@ export default function EditDocumentsData({ navigation }) {
               onPressDelete={() => setimageCPF(null)}
             />
           ) : null}
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity
+              style={{
+                width: 60,
+                height: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              disabled={button === 'edit'}
+              onPress={() => setCheck(!check)}
+            >
+              <AntDesign
+                name={check ? 'checkcircle' : 'checkcircleo'}
+                size={25}
+                color={check ? '#f48024' : '#ececec'}
+              />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 16, fontWeight: '500', flex: 1 }}>
+              Colaborador apto para contratação.
+            </Text>
+          </View>
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>

@@ -93,16 +93,11 @@ export default function Home({ navigation }) {
 
   const user = useSelector(state => state.auth);
 
-  // 'Cadastro',
-  // 'Gestão de Pessoas',
-  // 'Financeiro Descontos',
-  // 'Financeiro Lançamentos',
-  // 'Financeiro Fechamento',
-  // 'Financeiro Extrato Funcionário',
-  // 'Permissões de Usuário',
-
   useEffect(() => {
     dispatch(clearRegister());
+    // if (user.permission || user.permission.length > 1) {
+    //   navigation.navigate('Signin');
+    // }
   });
 
   return (
@@ -150,7 +145,10 @@ export default function Home({ navigation }) {
               lable="Buscar Profissional"
               icon="search"
               onPress={() =>
-                navigation.navigate('Interviewed', { edit: false })
+                navigation.navigate('Interviewed', {
+                  edit: false,
+                  type: 'search',
+                })
               }
             />
             <BtnMenu
@@ -158,7 +156,10 @@ export default function Home({ navigation }) {
               icon="complete"
               onPress={() => {
                 dispatch(clearRegister());
-                navigation.navigate('Interviewed', { edit: true });
+                navigation.navigate('Interviewed', {
+                  edit: true,
+                  type: 'complete',
+                });
               }}
             />
           </>
