@@ -46,6 +46,7 @@ export default function FildInputForm({
   required,
   disabled,
   multiselector,
+  secureTextEntry,
 }) {
   function renderPiker() {
     return (
@@ -107,6 +108,7 @@ export default function FildInputForm({
           keyboardType={keyboardType}
           returnKeyType="done"
           maxLength={maxLength}
+          secureTextEntry={secureTextEntry}
           editable={!disabled}
           placeholder={placeholder}
           underlineColorAndroid="transparent"

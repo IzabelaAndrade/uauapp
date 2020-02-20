@@ -42,6 +42,7 @@ export default function FildInputForm({
   multiline,
   required,
   disabled,
+  secureTextEntry,
 }) {
   return (
     <View style={stylesInputForm.container}>
@@ -71,6 +72,7 @@ export default function FildInputForm({
           returnKeyType="done"
           maxLength={maxLength}
           editable={!disabled}
+          secureTextEntry={secureTextEntry}
           placeholder={placeholder}
           underlineColorAndroid="transparent"
           onChangeText={text => onChangeText(text)}

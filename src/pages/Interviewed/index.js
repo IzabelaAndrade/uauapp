@@ -31,7 +31,7 @@ import { jobList } from '../../utils/List';
 function Info({ item, navigation, origin }) {
   const { edit } = navigation.state.params;
   const img = item.Files.find(element => element.type === 'photo');
-  console.log(img);
+  console.log(item);
   return (
     <TouchableOpacity
       style={{
@@ -92,7 +92,9 @@ function Info({ item, navigation, origin }) {
       <View style={{ marginLeft: 10, flex: 1 }}>
         <Text style={{ fontWeight: '500', fontSize: 18 }}>{item.name}</Text>
         <Text style={{ color: '#afafaf' }}>
-          {item.hability.length < 1 ? '' : item.hability.join(', ')}
+          {!item.hability || item.hability.length < 1
+            ? ''
+            : item.hability.join(', ')}
         </Text>
         <Text style={{}}>{item.phone}</Text>
         {/* <ScoreStatus score={item.score} /> */}
