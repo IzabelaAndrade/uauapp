@@ -47,6 +47,7 @@ import {
   modifyDocBack,
   modifyImgVoterTitle,
   modifyImgAddress,
+  modifyStatusAvanci,
 } from '../../store/modules/register/actions';
 
 function BtnData({ onPress, caption, icon, disabled }) {
@@ -156,6 +157,7 @@ export default function PersonalData({ navigation }) {
     dispatch(modifyShirt(person.shirt_size));
     dispatch(modifyPants(person.pants_size));
     dispatch(modifyShoes(person.boot_size));
+    dispatch(modifyStatusAvanci(person.status_avanci));
   }, [dispatch, edit, person]);
 
   return (

@@ -312,6 +312,13 @@ export function modifyCotractDate(cotractDate) {
   };
 }
 
+export function modifyStatusAvanci(statusAvanci) {
+  return {
+    type: '@register/MODIFY_STATUS_AVANCI',
+    payload: { statusAvanci },
+  };
+}
+
 export function clearRegister() {
   return {
     type: '@register/CLEAR_REGISTER',

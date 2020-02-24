@@ -52,6 +52,8 @@ const INITIAL_STATE = {
   paymentValue: null,
   bonus: [],
   cotractDate: '',
+
+  statusAvanci: null,
 };
 
 export default function auth(state = INITIAL_STATE, action) {
@@ -237,6 +239,10 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.cotractDate = action.payload.cotractDate;
         break;
       }
+      case '@register/MODIFY_STATUS_AVANCI': {
+        draft.statusAvanci = action.payload.statusAvanci;
+        break;
+      }
       case '@register/CLEAR_REGISTER': {
         draft.uuid = null;
         draft.name = null;
@@ -284,6 +290,7 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.paymentValue = null;
         draft.bonus = [];
         draft.cotractDate = '';
+        draft.statusAvanci = null;
         break;
       }
       default:

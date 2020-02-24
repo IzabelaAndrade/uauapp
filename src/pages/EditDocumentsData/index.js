@@ -35,6 +35,7 @@ import {
   modifyUuid,
   modifyImgCpf,
   clearRegister,
+  modifyStatusAvanci,
 } from '../../store/modules/register/actions';
 
 export default function EditDocumentsData({ navigation }) {
@@ -45,14 +46,16 @@ export default function EditDocumentsData({ navigation }) {
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
   const user = useSelector(state => state.auth);
-
+  console.log(register.statusAvanci);
   const [visible, setvisible] = React.useState(false);
   const [button, setbutton] = React.useState('edit');
   const [imgVisible, setimgVisible] = React.useState(false);
   const [imageUrl, setimageUrl] = React.useState('');
   const [loading, setloading] = React.useState(false);
   const [list, setlist] = React.useState([]);
-  const [pikerType, setpikerType] = React.useState([]);
+  const [statusAvanci, setStatusAvanci] = React.useState(
+    !!register.statusAvanci
+  );
   const [saveImage, setsaveImage] = React.useState(false);
   const [photo, setphoto] = React.useState(register.photo);
   const [imageDocFront, setimageDocFront] = React.useState(register.docFront);
@@ -64,10 +67,11 @@ export default function EditDocumentsData({ navigation }) {
     register.imgVoterTitle
   );
   const [imageCPF, setimageCPF] = React.useState(null);
-  const [check, setCheck] = React.useState(null);
 
   useEffect(() => {
+    console.log('use');
     if (origin === 'EditDocumentsData') {
+      console.log('entrou if');
       const { person } = navigation.state.params;
       dispatch(modifyUuid(person.uuid));
       if (person.Files && person.Files.length > 0) {
@@ -88,7 +92,7 @@ export default function EditDocumentsData({ navigation }) {
         const imgCpf = person.Files.find(
           element => element.type === 'validator'
         );
-
+        console.log('get photos');
         setphoto(imgphoto ? imgphoto.url : null);
         setimageDocFront(docFront ? docFront.url : null);
         setimageDocBack(docBack ? docBack.url : null);
@@ -101,6 +105,9 @@ export default function EditDocumentsData({ navigation }) {
         dispatch(modifyImgVoterTitle(vTitle ? vTitle.url : null));
         dispatch(modifyImgAddress(address ? address.url : null));
         dispatch(modifyImgCpf(imgCpf ? imgCpf.url : null));
+        dispatch(modifyStatusAvanci(person.status_avanci));
+        console.log('set photos');
+        console.log(imgphoto.url);
       }
     }
   }, [dispatch, navigation.state.params, origin]);
@@ -205,7 +212,7 @@ export default function EditDocumentsData({ navigation }) {
       return;
     }
     setloading(true);
-    if (check) {
+    if (statusAvanci !== register.statusAvanci) {
       await updatePerson();
     }
     let response = null;
@@ -219,9 +226,31 @@ export default function EditDocumentsData({ navigation }) {
       register.imgAddress === imageDocAddress &&
       register.imgCpf === imageCPF
     ) {
+      if (register.statusAvanci !== statusAvanci) {
+        Alert.alert(
+          '',
+          'Alteração realizada com sucesso.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                setloading(false);
+                navigation.navigate('Home');
+                dispatch(clearRegister());
+              },
+            },
+          ],
+          {
+            cancelable: false,
+          }
+        );
+        return;
+      }
+      console.log('if para sair');
       setloading(false);
       navigation.navigate('Home');
       dispatch(clearRegister());
+      console.log('limpou info');
       return;
     }
 
@@ -229,6 +258,7 @@ export default function EditDocumentsData({ navigation }) {
       requestType = register.photo ? 'put' : 'post';
       response = await sendImage(photo, 'photo', register.uuid, requestType);
       dispatch(modifyPhoto(response.data.url));
+      console.log('photo');
     }
     if (register.docFront !== imageDocFront) {
       requestType = register.docFront ? 'put' : 'post';
@@ -239,6 +269,7 @@ export default function EditDocumentsData({ navigation }) {
         requestType
       );
       dispatch(modifyDocFront(response.data.url));
+      console.log('doc f');
     }
     if (register.docBack !== imageDocBack) {
       requestType = register.docBack ? 'put' : 'post';
@@ -248,8 +279,8 @@ export default function EditDocumentsData({ navigation }) {
         register.uuid,
         requestType
       );
-
       dispatch(modifyDocBack(response.data.url));
+      console.log('doc v');
     }
     if (register.imgVoterTitle !== imageDocVoterTitle) {
       requestType = register.imgVoterTitle ? 'put' : 'post';
@@ -259,8 +290,8 @@ export default function EditDocumentsData({ navigation }) {
         register.uuid,
         requestType
       );
-
       dispatch(modifyImgVoterTitle(response.data.url));
+      console.log('vt');
     }
     if (register.imgAddress !== imageDocAddress) {
       requestType = register.imgAddress ? 'put' : 'post';
@@ -270,8 +301,8 @@ export default function EditDocumentsData({ navigation }) {
         register.uuid,
         requestType
       );
-
       dispatch(modifyImgAddress(response.data.url));
+      console.log('address');
     }
     if (register.imgCpf !== imageCPF) {
       requestType = register.imgCpf ? 'put' : 'post';
@@ -281,13 +312,13 @@ export default function EditDocumentsData({ navigation }) {
         register.uuid,
         requestType
       );
-
       dispatch(modifyImgCpf(response.data.url));
+      console.log('cpf');
     }
-
+    console.log('tudo ok');
     Alert.alert(
       '',
-      'Os documentos foram alterados com sucesso.',
+      'Alteração realizada com sucesso.',
       [
         {
           text: 'OK',
@@ -305,12 +336,14 @@ export default function EditDocumentsData({ navigation }) {
   };
 
   const updatePerson = async () => {
+    let response = null;
     try {
-      await api.put(
+      console.log('try update');
+      response = await api.put(
         `/person`,
         {
           uuid: register.uuid,
-          statusAvanci: 'ap',
+          statusAvanci: statusAvanci ? 'ap' : null,
         },
         {
           headers: {
@@ -319,6 +352,7 @@ export default function EditDocumentsData({ navigation }) {
         }
       );
     } catch (error) {
+      console.log(error);
       setloading(false);
       Alert.alert(
         'Ops!',
@@ -327,6 +361,8 @@ export default function EditDocumentsData({ navigation }) {
         { cancelable: false }
       );
     }
+    dispatch(modifyStatusAvanci(response.data.status_avanci));
+    console.log('update');
   };
 
   function onPressSeeImage(type) {
@@ -450,41 +486,43 @@ export default function EditDocumentsData({ navigation }) {
             onPressDelete={() => setimageDocAddress(null)}
           />
           {origin ? (
-            <ShowDataImage
-              caption="Validação de CPF"
-              icon="docBack"
-              url={imageCPF}
-              del={button === 'save' && !!imageCPF}
-              disabled={!!(button === 'edit' && !imageCPF)}
-              onPress={() =>
-                button === 'edit'
-                  ? onPressSeeImage('docCPF')
-                  : _pickImage('docCPF')
-              }
-              onPressDelete={() => setimageCPF(null)}
-            />
-          ) : null}
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity
-              style={{
-                width: 60,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              disabled={button === 'edit'}
-              onPress={() => setCheck(!check)}
-            >
-              <AntDesign
-                name={check ? 'checkcircle' : 'checkcircleo'}
-                size={25}
-                color={check ? '#f48024' : '#ececec'}
+            <>
+              <ShowDataImage
+                caption="Validação de CPF"
+                icon="docBack"
+                url={imageCPF}
+                del={button === 'save' && !!imageCPF}
+                disabled={!!(button === 'edit' && !imageCPF)}
+                onPress={() =>
+                  button === 'edit'
+                    ? onPressSeeImage('docCPF')
+                    : _pickImage('docCPF')
+                }
+                onPressDelete={() => setimageCPF(null)}
               />
-            </TouchableOpacity>
-            <Text style={{ fontSize: 16, fontWeight: '500', flex: 1 }}>
-              Colaborador apto para contratação.
-            </Text>
-          </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity
+                  style={{
+                    width: 60,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  disabled={button === 'edit'}
+                  onPress={() => setStatusAvanci(!statusAvanci)}
+                >
+                  <AntDesign
+                    name={statusAvanci ? 'checkcircle' : 'checkcircleo'}
+                    size={25}
+                    color={statusAvanci ? '#f48024' : '#ececec'}
+                  />
+                </TouchableOpacity>
+                <Text style={{ fontSize: 16, fontWeight: '500', flex: 1 }}>
+                  Colaborador apto para contratação.
+                </Text>
+              </View>
+            </>
+          ) : null}
           <BtnCancel onPress={() => navigation.goBack()} />
         </ScrollView>
       </KeyboardAvoidingView>

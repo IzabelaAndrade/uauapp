@@ -27,9 +27,8 @@
     ],
     "ios": {
       "bundleIdentifier": "com.avanci.avanci",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.4",
       "icon": "./src/assets/iconios.png",
-      "supportsTablet": true,
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "As imagens serão armazenadas nos documentos de colaboradores da Avanci."
       }
