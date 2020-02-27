@@ -145,9 +145,9 @@ export default function Home({ navigation }) {
               lable="Buscar Profissional"
               icon="search"
               onPress={() =>
-                navigation.navigate('Interviewed', {
-                  edit: false,
-                  type: 'search',
+                navigation.navigate('InterviewedList', {
+                  goTo: 'PersonalData',
+                  filter: 'search',
                 })
               }
             />
@@ -156,9 +156,9 @@ export default function Home({ navigation }) {
               icon="complete"
               onPress={() => {
                 dispatch(clearRegister());
-                navigation.navigate('Interviewed', {
-                  edit: true,
-                  type: 'complete',
+                navigation.navigate('InterviewedList', {
+                  goTo: 'PersonalData',
+                  filter: 'complete',
                 });
               }}
             />
@@ -177,6 +177,17 @@ export default function Home({ navigation }) {
             >
               Gestão Pessoal
             </Text>
+            <BtnMenu
+              lable="Editar Cadastro"
+              icon="complete"
+              onPress={() => {
+                dispatch(clearRegister());
+                navigation.navigate('InterviewedList', {
+                  goTo: 'PersonalData',
+                  filter: 'editable',
+                });
+              }}
+            />
             <BtnMenu
               lable="Validar Documentação"
               icon="check"

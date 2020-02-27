@@ -43,6 +43,7 @@ import api from '../../services/api';
 
 export default function EditPersonalData({ navigation }) {
   const register = useSelector(state => state.register);
+  const { edit } = navigation.state.params;
   const user = useSelector(state => state.auth);
 
   const [visible, setvisible] = React.useState(false);
@@ -171,7 +172,8 @@ export default function EditPersonalData({ navigation }) {
       <HeaderForm
         navigation={navigation}
         back
-        iconRight="save"
+        iconRight={edit ? 'save' : null}
+        disabled={!edit}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -188,18 +190,21 @@ export default function EditPersonalData({ navigation }) {
             Dados Pessoais
           </Text>
           <FildInputForm
+            disabled={!edit}
             lable="Nome Completo"
             placeholder="Informe o nome"
             onChangeText={text => setname(text)}
             value={name}
           />
           <FildInputForm
+            disabled={!edit}
             lable="RG"
             placeholder="Informe o nº da identidade"
             onChangeText={text => setrg(text)}
             value={rg}
           />
           <FildInputForm
+            disabled={!edit}
             lable="CPF"
             placeholder="Informe o nº do CPF"
             keyboardType="numeric"
@@ -208,6 +213,7 @@ export default function EditPersonalData({ navigation }) {
             value={Cpf.format(cpf)}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Título de Eleitor"
             placeholder="Informe o nº do titulo"
             keyboardType="numeric"
@@ -217,6 +223,7 @@ export default function EditPersonalData({ navigation }) {
           />
 
           <FildInputForm
+            disabled={!edit}
             lable="E-mail"
             placeholder="Informe o email"
             keyboardType="email-address"
@@ -224,6 +231,7 @@ export default function EditPersonalData({ navigation }) {
             value={email}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Data de Nascimento"
             keyboardType="numeric"
             maxLength={10}
@@ -232,6 +240,7 @@ export default function EditPersonalData({ navigation }) {
             value={Date.format(birthday)}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Telefone"
             placeholder="Informe o nº de telefone"
             keyboardType="numeric"
@@ -240,6 +249,7 @@ export default function EditPersonalData({ navigation }) {
             value={Phone.format(phone)}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
@@ -253,6 +263,7 @@ export default function EditPersonalData({ navigation }) {
             value={education}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Habilidades"
             placeholder="Selecione uma ou mais opções"
             list
@@ -261,12 +272,14 @@ export default function EditPersonalData({ navigation }) {
             value={hability.length < 1 ? '' : hability.join(', ')}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Contato de Referencia"
             placeholder="Informe um contato"
             onChangeText={text => setreference(text)}
             value={reference}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tamanho Camisa"
             placeholder="Selecione uma opção"
             list
@@ -280,6 +293,7 @@ export default function EditPersonalData({ navigation }) {
             value={shirt}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tamanho Calça"
             placeholder="Selecione uma opção"
             list
@@ -293,6 +307,7 @@ export default function EditPersonalData({ navigation }) {
             value={pants}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tamanho Sapato"
             placeholder="Selecione uma opção"
             list
@@ -305,7 +320,7 @@ export default function EditPersonalData({ navigation }) {
             }}
             value={shoes}
           />
-          <BtnCancel onPress={() => navigation.goBack()} />
+          {edit ? <BtnCancel onPress={() => navigation.goBack()} /> : null}
         </ScrollView>
       </KeyboardAvoidingView>
 

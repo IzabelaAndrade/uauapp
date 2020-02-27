@@ -29,6 +29,7 @@ import {
 import { listbank, listAccount } from '../../utils/List';
 
 export default function EditFinancesData({ navigation }) {
+  const { edit } = navigation.state.params;
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
   const user = useSelector(state => state.auth);
@@ -129,7 +130,8 @@ export default function EditFinancesData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight="save"
+        iconRight={edit ? 'save' : null}
+        disabled={!edit}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -146,6 +148,7 @@ export default function EditFinancesData({ navigation }) {
             Dados Bancários
           </Text>
           <FildInputForm
+            disabled={!edit}
             lable="Banco"
             placeholder="Selecione uma opção"
             list
@@ -159,6 +162,7 @@ export default function EditFinancesData({ navigation }) {
             value={bank}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tipo de Conta"
             placeholder="Selecione uma opção"
             list
@@ -172,30 +176,35 @@ export default function EditFinancesData({ navigation }) {
             value={account}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Agência"
             placeholder="Informe o Nº da agência"
             onChangeText={text => setagency(text)}
             value={agency}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Operação"
             placeholder="Informe a operação"
             onChangeText={text => setoperation(text)}
             value={operation}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Conta"
             placeholder="Informe o Nº da conta"
             onChangeText={text => setaccountNumber(text)}
             value={accountNumber}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Nome do Titular"
             placeholder="Informe o nome do titular"
             onChangeText={text => setholder(text)}
             value={holder}
           />
           <FildInputForm
+            disabled={!edit}
             lable="CPF do Titular"
             placeholder="Informe o Nº do CPF do titular"
             keyboardType="numeric"
@@ -203,7 +212,7 @@ export default function EditFinancesData({ navigation }) {
             onChangeText={text => setholderCPF(text)}
             value={Cpf.format(holderCPF)}
           />
-          <BtnCancel onPress={() => navigation.goBack()} />
+          {edit ? <BtnCancel onPress={() => navigation.goBack()} /> : null}
         </ScrollView>
       </KeyboardAvoidingView>
       <SelectPiker

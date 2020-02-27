@@ -1,0 +1,322 @@
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  StatusBar,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import Constants from 'expo-constants';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  Feather,
+  MaterialCommunityIcons,
+  Ionicons,
+  FontAwesome,
+  Entypo,
+  MaterialIcons,
+  AntDesign,
+} from '@expo/vector-icons';
+import MultiSelectPiker from '../../components/MultiSelectPiker';
+
+import api from '../../services/api';
+// import { Container } from './styles';
+
+import { jobList } from '../../utils/List';
+
+function Info({ item, navigation, goTo, navigationFilter }) {
+  const img = item.Files.find(element => element.type === 'photo');
+  return (
+    <TouchableOpacity
+      style={{
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      onPress={() =>
+        navigation.navigate(goTo, {
+          goTo,
+          uuid: item.uuid,
+          person: item,
+          edit:
+            navigationFilter === 'complete' || navigationFilter === 'editable',
+        })
+      }
+      // onPress={() =>
+      //   origin
+      //     ? navigation.navigate(origin, {
+      //         origin,
+      //         uuid: item.uuid,
+      //         person: item,
+      //         edit,
+      //       })
+      //     : navigation.navigate('PersonalData', {
+      //         person: item,
+      //         edit,
+      //         mode: '',
+      //       })
+      // }
+    >
+      <View
+        style={{
+          width: 55,
+          height: 55,
+          borderRadius: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#fff',
+          borderColor: item.status_avanci === 'ap-c' ? '#f48024' : '#fff',
+          borderWidth: 3,
+        }}
+      >
+        <Image
+          style={{ width: 45, height: 45, borderRadius: 25 }}
+          source={img ? { uri: img.url } : require('../../assets/avatar.png')}
+        />
+      </View>
+      <View
+        style={{
+          width: 15,
+          height: 15,
+          borderRadius: 9,
+          backgroundColor: getStatus(item.status_avanci),
+          marginTop: -12,
+          marginLeft: item.status_avanci === 'ap-c' ? -17 : -20,
+          alignSelf: 'flex-end',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {item.status_avanci === 'ap-c' ? (
+          <Entypo name="check" size={12} color="#fff" />
+        ) : null}
+      </View>
+      <View style={{ marginLeft: 10, flex: 1 }}>
+        <Text style={{ fontWeight: '500', fontSize: 18 }}>{item.name}</Text>
+        <Text style={{ color: '#afafaf' }}>
+          {!item.hability || item.hability.length < 1
+            ? ''
+            : item.hability.join(', ')}
+        </Text>
+        <Text style={{}}>{item.phone}</Text>
+        {/* <ScoreStatus score={item.score} /> */}
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+function getStatus(status) {
+  switch (status) {
+    case 'ap-c':
+      return '#f48024';
+    case 'ap':
+      return '#05ac24';
+
+    default:
+      return '#f4e424';
+  }
+}
+
+function Header({ navigation, onPress }) {
+  return (
+    <View
+      style={{
+        marginTop: Constants.statusBarHeight,
+        backgroundColor: '#FFF',
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+      }}
+    >
+      <TouchableOpacity
+        style={{ width: 35, alignItems: 'flex-end' }}
+        onPress={() => navigation.goBack()}
+      >
+        <Feather name="chevron-left" size={28} color="#f48024" />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 22, fontWeight: '600' }}>
+        Lista de Entrevistados
+      </Text>
+      <TouchableOpacity
+        style={{ width: 35, alignItems: 'flex-end' }}
+        onPress={onPress}
+      >
+        <AntDesign name="filter" size={28} color="#f48024" />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function filterList(text, list, filter) {
+  const re = new RegExp(`${text}.+$`, 'ig');
+  const filteredList = list.filter(element => {
+    return element.name.search(re) !== -1;
+  });
+  if (filter.length === 0) {
+    return filteredList;
+  }
+  console.log(filteredList);
+  const filteredHability = filteredList.filter(element => {
+    console.log(element);
+    return filter.some(r => element.hability.indexOf(r) >= 0);
+  });
+
+  return filteredHability;
+}
+
+export default function InterviewedList({ navigation }) {
+  const origin = navigation.state.params.origin
+    ? navigation.state.params.origin
+    : null;
+  const type = navigation.state.params.type
+    ? navigation.state.params.type
+    : null;
+
+  const user = useSelector(state => state.auth);
+  const { goTo } = navigation.state.params;
+  const navigationFilter = navigation.state.params.filter;
+
+  const [interviewed, setinterviewed] = React.useState([]);
+  const [filteredList, setFilteredList] = React.useState([]);
+  const [value, setvalue] = React.useState('');
+  const [filter, setfilter] = React.useState([]);
+  const [visiblehability, setvisiblehability] = React.useState(false);
+
+  useEffect(() => {
+    async function getAllInterviewed() {
+      let response = null;
+      try {
+        response = await api.get('/person', {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+      } catch (error) {
+        if (error.response.status === 401) {
+          // dispatch(signOut());
+          // setRefresh(false);
+        }
+        console.log(error);
+        return error;
+      }
+      let list = null;
+      if (navigationFilter === 'search') {
+        list = response.data.filter(element => element.status_avanci !== 'rm');
+        setinterviewed(list);
+        setFilteredList(list);
+      } else if (navigationFilter === 'complete') {
+        list = response.data.filter(element => !element.status_avanci);
+        setinterviewed(list);
+        setFilteredList(list);
+      } else {
+        setinterviewed(response.data);
+        setFilteredList(response.data);
+      }
+      // if (type === 'search') {
+      //   list = response.data.filter(element => element.status_avanci !== 'rm');
+      //   setinterviewed(list);
+      //   setFilteredList(list);
+      // } else if (type === 'complete') {
+      //   list = response.data.filter(element => !element.status_avanci);
+      //   setinterviewed(list);
+      //   setFilteredList(list);
+      // } else {
+      //   setinterviewed(response.data);
+      //   setFilteredList(response.data);
+      // }
+    }
+    getAllInterviewed();
+  }, [navigationFilter, type, user]);
+  return (
+    <View style={{ backgroundColor: '#fff', flex: 1 }}>
+      <StatusBar barStyle="default" />
+
+      <Header
+        navigation={navigation}
+        onPress={() => setvisiblehability(true)}
+      />
+
+      <View style={{}}>
+        <Text
+          style={{ marginHorizontal: 15, color: '#f48024', fontWeight: '500' }}
+        >
+          {filter.length < 1 ? '' : filter.join(', ')}
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            margin: 10,
+            paddingHorizontal: 10,
+            backgroundColor: 'rgba(0,0,0,.06)',
+            borderRadius: 8,
+            alignItems: 'center',
+          }}
+        >
+          <AntDesign
+            name="search1"
+            size={25}
+            color="#8b8b8b"
+            style={{ marginHorizontal: 10 }}
+          />
+          <TextInput
+            placeholder="Ex: João da Silva"
+            underlineColorAndroid="transparent"
+            style={{ flex: 1, fontSize: 19, height: 50 }}
+            onChangeText={text => {
+              setvalue(text);
+              setFilteredList(filterList(text, interviewed, filter));
+            }}
+            value={value}
+          />
+          {value ? (
+            <TouchableOpacity
+              style={{
+                height: 50,
+                width: 50,
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+              onPress={() => setvalue('')}
+            >
+              <AntDesign
+                name="closecircleo"
+                size={15}
+                color="#8b8b8b"
+                style={{ paddingRight: 10 }}
+              />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+
+      <FlatList
+        data={filteredList}
+        renderItem={({ item }) => (
+          <Info
+            item={item}
+            navigation={navigation}
+            goTo={goTo}
+            navigationFilter={navigationFilter}
+          />
+        )}
+        keyExtractor={item => item.uuid}
+      />
+      <MultiSelectPiker
+        show={visiblehability}
+        dataList={jobList}
+        selectedList={filter}
+        onPressConfirm={selectedList => {
+          setfilter(selectedList);
+          setvisiblehability(false);
+          setFilteredList(filterList(value, interviewed, selectedList));
+        }}
+      />
+    </View>
+  );
+}

@@ -10,6 +10,7 @@ export default function HeaderForm({
   iconRight,
   onPress,
   onPressBack,
+  disabled,
 }) {
   function renderIconRight(icon) {
     switch (icon) {
@@ -106,6 +107,7 @@ export default function HeaderForm({
             backgroundColor: '#fff',
             flexDirection: 'row',
           }}
+          disabled={disabled}
           onPress={onPress}
         >
           {renderIconRight(iconRight)}

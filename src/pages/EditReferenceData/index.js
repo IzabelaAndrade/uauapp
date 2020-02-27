@@ -27,6 +27,7 @@ import BtnCancel from '../../components/BtnCancel';
 import { typeJobList } from '../../utils/List';
 
 export default function EditReferenceData({ navigation }) {
+  const { edit } = navigation.state.params;
   const [visible, setvisible] = React.useState('');
 
   const dispatch = useDispatch();
@@ -112,7 +113,8 @@ export default function EditReferenceData({ navigation }) {
         navigation={navigation}
         screen="Main"
         back
-        iconRight="save"
+        iconRight={edit ? 'save' : null}
+        disabled={!edit}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -129,24 +131,28 @@ export default function EditReferenceData({ navigation }) {
             Experiência Profissional
           </Text>
           <FildInputForm
+            disabled={!edit}
             lable="Último emprego"
             placeholder="Informe o nome da empresa"
             onChangeText={text => setlastJob(text)}
             value={lastJob}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tempo de Permanência"
             placeholder="Informe o periodo de tempo"
             onChangeText={text => settimeJob(text)}
             value={timeJob}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Função que atuava"
             placeholder="Descrição da função"
             onChangeText={text => setdescriptionJob(text)}
             value={descriptionJob}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Regime de Trabalho"
             placeholder="Selecione uma opção"
             list
@@ -160,7 +166,7 @@ export default function EditReferenceData({ navigation }) {
           />
         </ScrollView>
       </KeyboardAvoidingView>
-      <BtnCancel onPress={() => navigation.goBack()} />
+      {edit ? <BtnCancel onPress={() => navigation.goBack()} /> : null}
       <SelectPiker
         visible={visible}
         list={typeJobList}

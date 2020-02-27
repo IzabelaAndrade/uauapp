@@ -92,7 +92,6 @@ export default function PersonalData({ navigation }) {
 
   const [disabledBanck, setdisabled] = React.useState(false);
   const [disabledDocs, setdisabledDocs] = React.useState(!person.Files);
-  const user = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
   // const register = useSelector(state => state.register);
@@ -209,68 +208,85 @@ export default function PersonalData({ navigation }) {
             caption="Dados Pessoais"
             icon="user"
             onPress={() =>
-              navigation.navigate('EditPersonalData', {
-                edit,
-                data: person,
-              })
+              edit
+                ? navigation.navigate('EditPersonalData', {
+                    screen: 'PersonalData',
+                    data: person,
+                  })
+                : navigation.navigate('ShowData', {
+                    screen: 'PersonalData',
+                    data: person,
+                  })
             }
           />
           <BtnData
             caption="Socio Econômicos"
             icon="profile"
             onPress={() =>
-              navigation.navigate('EditSocioeconomicData', {
-                edit,
-                data: person,
-              })
+              edit
+                ? navigation.navigate('EditSocioeconomicData', {
+                    data: person,
+                  })
+                : navigation.navigate('ShowData', {
+                    screen: 'Socioeconomic',
+                    data: person,
+                  })
             }
           />
           <BtnData
             caption="Experiências Profissionais"
             icon="tool"
             onPress={() =>
-              navigation.navigate('EditReferenceData', {
-                edit,
-                data: person,
-              })
-            }
-          />
-          {user.permission.includes('Gestão de Pessoas') ? (
-            <>
-              <BtnData
-                caption="Dados Bancários"
-                icon="wallet"
-                disabled={disabledBanck}
-                onPress={() =>
-                  navigation.navigate('EditFinancesData', {
-                    edit,
+              edit
+                ? navigation.navigate('EditReferenceData', {
                     data: person,
                   })
-                }
-              />
-              <BtnData
-                caption="Documentos"
-                icon="folderopen"
-                disabled={disabledDocs}
-                onPress={() =>
-                  navigation.navigate('EditDocumentsData', {
-                    edit,
+                : navigation.navigate('ShowData', {
+                    screen: 'Reference',
+                    data: person.professional_experience,
+                  })
+            }
+          />
+          <BtnData
+            caption="Dados Bancários"
+            icon="wallet"
+            disabled={disabledBanck}
+            onPress={() =>
+              edit
+                ? navigation.navigate('EditFinancesData')
+                : navigation.navigate('ShowData', {
+                    screen: 'FinancesData',
+                    data: person.BankAccount,
+                  })
+            }
+          />
+          <BtnData
+            caption="Documentos"
+            icon="folderopen"
+            disabled={disabledDocs}
+            onPress={() =>
+              edit
+                ? navigation.navigate('EditDocumentsData', {
                     origim: 'EditDocumentsData',
                   })
-                }
-              />
-              {/* <BtnData
-                caption="Regime de Contrato"
-                icon="copy1"
-                disabled={disabledDocs}
-                onPress={() =>
-                  navigation.navigate('ShowData', {
+                : navigation.navigate('ShowData', {
                     screen: 'Docs',
                     data: person.Files,
                   })
-                }
-              /> */}
-            </>
+            }
+          />
+          {mode === 'edit' ? (
+            <BtnData
+              caption="Regime de Contrato"
+              icon="copy1"
+              disabled={disabledDocs}
+              onPress={() =>
+                navigation.navigate('ShowData', {
+                  screen: 'Docs',
+                  data: person.Files,
+                })
+              }
+            />
           ) : null}
         </View>
       </View>

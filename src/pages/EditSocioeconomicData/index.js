@@ -36,6 +36,7 @@ import {
 } from '../../utils/List';
 
 export default function EditSocioeconomicData({ navigation }) {
+  const { edit } = navigation.state.params;
   const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState('');
   const [visible, setvisible] = React.useState(false);
@@ -148,7 +149,8 @@ export default function EditSocioeconomicData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight="save"
+        iconRight={edit ? 'save' : null}
+        disabled={!edit}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -165,6 +167,7 @@ export default function EditSocioeconomicData({ navigation }) {
             Dados Socio-econômicos
           </Text>
           <FildInputForm
+            disabled={!edit}
             lable="Estado Civil"
             placeholder="Selecione uma opção"
             list
@@ -178,6 +181,7 @@ export default function EditSocioeconomicData({ navigation }) {
             value={maritalStatus}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Número de Dependentes"
             keyboardType="numeric"
             maxLength={2}
@@ -186,6 +190,7 @@ export default function EditSocioeconomicData({ navigation }) {
             value={dependents}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Tipo de Moradia"
             placeholder="Selecione uma opção"
             list
@@ -199,6 +204,7 @@ export default function EditSocioeconomicData({ navigation }) {
             value={home}
           />
           <FildInputForm
+            disabled={!edit}
             lable="CEP"
             placeholder="Informe o CEP"
             keyboardType="numeric"
@@ -207,18 +213,21 @@ export default function EditSocioeconomicData({ navigation }) {
             value={postalCode}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Bairro"
             placeholder="Informe o bairro"
             onChangeText={text => setneighborhood(text)}
             value={neighborhood}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Logradouro"
             placeholder="Informe o logradouro"
             onChangeText={text => setaddress(text)}
             value={address}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Meio de Transporte"
             placeholder="Selecione uma opção"
             list
@@ -232,6 +241,7 @@ export default function EditSocioeconomicData({ navigation }) {
             value={transport}
           />
           <FildInputForm
+            disabled={!edit}
             lable="Habilitação"
             placeholder="Selecione uma opção"
             list
@@ -244,7 +254,7 @@ export default function EditSocioeconomicData({ navigation }) {
             }}
             value={habilitation}
           />
-          <BtnCancel onPress={() => navigation.goBack()} />
+          {edit ? <BtnCancel onPress={() => navigation.goBack()} /> : null}
         </ScrollView>
       </KeyboardAvoidingView>
       <SelectPiker

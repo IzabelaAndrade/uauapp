@@ -29,6 +29,7 @@ import Settings from './pages/Settings';
 import UserList from './pages/UserList';
 import Home from './pages/Home';
 import LayOff from './pages/LayOff';
+import InterviewedList from './pages/InterviewedList';
 
 const AppStack = createStackNavigator(
   {
@@ -184,6 +185,12 @@ const AppStack = createStackNavigator(
     },
     UserList: {
       screen: UserList,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    InterviewedList: {
+      screen: InterviewedList,
       navigationOptions: () => ({
         headerShown: false,
       }),

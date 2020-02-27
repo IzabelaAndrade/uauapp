@@ -43,6 +43,8 @@ export default function EditDocumentsData({ navigation }) {
     ? navigation.state.params.origin
     : null;
 
+  const { edit } = navigation.state.params;
+
   const dispatch = useDispatch();
   const register = useSelector(state => state.register);
   const user = useSelector(state => state.auth);
@@ -403,7 +405,8 @@ export default function EditDocumentsData({ navigation }) {
         navigation={navigation}
         screen="ReferenceForm"
         back
-        iconRight={button}
+        iconRight={edit ? button : null}
+        disabled={!edit}
         onPress={onPressSave}
         onPressBack={() => navigation.goBack()}
       />
@@ -523,7 +526,7 @@ export default function EditDocumentsData({ navigation }) {
               </View>
             </>
           ) : null}
-          <BtnCancel onPress={() => navigation.goBack()} />
+          {edit ? <BtnCancel onPress={() => navigation.goBack()} /> : null}
         </ScrollView>
       </KeyboardAvoidingView>
       <FullLoading loading={loading} />
