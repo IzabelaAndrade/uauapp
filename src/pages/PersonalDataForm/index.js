@@ -187,7 +187,6 @@ export default function PersonalDataForm({ navigation }) {
             value={register.email}
           />
           <FildInputForm
-            required
             lable="Data de Nascimento"
             keyboardType="numeric"
             maxLength={10}
@@ -198,7 +197,6 @@ export default function PersonalDataForm({ navigation }) {
             // value={Date.format(birthday)}
           />
           <FildInputForm
-            required
             lable="Telefone"
             placeholder="Informe o nº de telefone"
             keyboardType="numeric"
@@ -209,7 +207,6 @@ export default function PersonalDataForm({ navigation }) {
             // value={Phone.format(phone)}
           />
           <FildInputForm
-            required
             lable="Escolaridade"
             placeholder="Selecione uma opção"
             list
@@ -225,7 +222,6 @@ export default function PersonalDataForm({ navigation }) {
             value={register.education}
           />
           <FildInputForm
-            required
             lable="Habilidades"
             placeholder="Selecione uma ou mais opções"
             list
@@ -236,7 +232,6 @@ export default function PersonalDataForm({ navigation }) {
             }
           />
           <FildInputForm
-            required
             lable="Contato de Referencia"
             placeholder="Informe um contato"
             onChangeText={text => dispatch(modifyReference(text))}

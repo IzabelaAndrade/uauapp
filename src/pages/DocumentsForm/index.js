@@ -144,14 +144,14 @@ export default function DocumentsForm({ navigation }) {
     setloading(true);
 
     if (
-      !register.photo ||
+      // !register.photo ||
       !register.name ||
-      !register.cpf ||
-      !register.birthday ||
-      !register.phone ||
-      !register.education ||
-      !register.hability ||
-      !register.reference
+      !register.cpf
+      // !register.birthday ||
+      // !register.phone ||
+      // !register.education ||
+      // !register.hability ||
+      // !register.reference
     ) {
       return Alert.alert(
         'Ops!',
