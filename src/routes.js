@@ -30,6 +30,7 @@ import UserList from './pages/UserList';
 import Home from './pages/Home';
 import LayOff from './pages/LayOff';
 import InterviewedList from './pages/InterviewedList';
+import Company from './pages/Company';
 
 const AppStack = createStackNavigator(
   {
@@ -211,6 +212,12 @@ const AppStack = createStackNavigator(
   }
 );
 const AuthStack = createStackNavigator({
+  Company: {
+    screen: Company,
+    navigationOptions: () => ({
+      headerShown: false,
+    }),
+  },
   Signin: {
     screen: Signin,
     navigationOptions: () => ({

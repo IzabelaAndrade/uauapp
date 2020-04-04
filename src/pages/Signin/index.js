@@ -14,6 +14,7 @@ import {
 import Constants from 'expo-constants';
 
 import { Feather } from '@expo/vector-icons';
+import HeaderForm from '../../components/HeaderForm';
 import Cpf from '../../utils/Cpf';
 
 import { signInRequest } from '../../store/modules/auth/actions';
@@ -32,7 +33,6 @@ const stylesSignIn = StyleSheet.create({
   headerText: {
     color: '#222426',
     marginLeft: 30,
-    marginTop: 30,
     fontSize: 19,
     fontWeight: '400',
   },
@@ -88,7 +88,7 @@ const stylesSignIn = StyleSheet.create({
   btnSubmitText: { color: '#fff', fontSize: 16, fontWeight: '500' },
 });
 
-function Signin() {
+function Signin({ navigation }) {
   const loading = useSelector(state => state.auth.loading);
   const dispatch = useDispatch();
   const [cpf, setcpf] = React.useState('');
@@ -113,6 +113,12 @@ function Signin() {
   return (
     <View style={stylesSignIn.container}>
       <View style={stylesSignIn.statusBar} />
+      <HeaderForm
+        navigation={navigation}
+        back
+        onPressBack={() => navigation.goBack()}
+        // iconRight="edit"
+      />
       <Text style={stylesSignIn.headerText}>Login</Text>
       <KeyboardAvoidingView
         style={stylesSignIn.containerForm}

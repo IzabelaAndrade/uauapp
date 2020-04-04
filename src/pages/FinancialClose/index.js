@@ -292,7 +292,7 @@ export default function FinancialClose({ navigation }) {
         console.log(error.response);
         return error;
       }
-      // console.log(response.data);
+      console.log(response.data);
       setFinancialList(response.data);
       setLoading(false);
     }

@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import {
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 
 import { useSelector } from 'react-redux';
 
@@ -181,6 +187,7 @@ export default function DiscountsForm({ navigation }) {
             lable="Beneficiário"
             placeholder="Selecione uma opção"
             list
+            multiselector
             androidList={beneficiaries}
             onValueChange={data => onPressDone('setBeneficiary', data)}
             onPress={() => {

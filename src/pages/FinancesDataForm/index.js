@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   KeyboardAvoidingView,
@@ -28,6 +28,8 @@ import {
 import { listbank, listAccount } from '../../utils/List';
 
 export default function FinancesDataForm({ navigation }) {
+  const register = useSelector(state => state.register);
+
   const [visible, setvisible] = React.useState(false);
   const [list, setlist] = React.useState([]);
   const [pikerType, setpikerType] = React.useState('');
@@ -36,11 +38,19 @@ export default function FinancesDataForm({ navigation }) {
   const [agency, setagency] = React.useState('');
   const [operation, setoperation] = React.useState('');
   const [accountNumber, setaccountNumber] = React.useState('');
-  const [holder, setholder] = React.useState('');
-  const [holderCPF, setholderCPF] = React.useState('');
+  const [holder, setholder] = React.useState(register.name);
+  const [holderCPF, setholderCPF] = React.useState(register.cpf);
 
   const dispatch = useDispatch();
-  const register = useSelector(state => state.register);
+
+  useEffect(() => {
+    // if (!register.holderCPF) {
+    //   dispatch(modifyHolder(register.cpf));
+    // }
+    // if (user.permission || user.permission.length > 1) {
+    //   navigation.navigate('Signin');
+    // }
+  });
 
   const onPressDone = (type, value) => {
     switch (type) {
@@ -132,17 +142,22 @@ export default function FinancesDataForm({ navigation }) {
           <FildInputForm
             lable="Nome do Titular"
             placeholder="Informe o nome do titular"
-            // onChangeText={text => setholder(text)}
-            onChangeText={text => dispatch(modifyHolder(text))}
-            value={register.holder}
+            onChangeText={text => setholder(text)}
+            // onChangeText={text => dispatch(modifyHolder(text))}
+            // value={register.holder}
+            value={holder}
+            onEndEditing={() => dispatch(modifyHolder(holder))}
           />
           <FildInputForm
             lable="CPF do Titular"
             placeholder="Informe o Nº do CPF do titular"
             keyboardType="numeric"
             maxLength={14}
-            onChangeText={text => dispatch(modifyHolderCPF(text))}
-            value={Cpf.format(register.holderCPF)}
+            onChangeText={text => setholderCPF(text)}
+            value={Cpf.format(holderCPF)}
+            onEndEditing={() => dispatch(modifyHolderCPF(holderCPF))}
+            // onChangeText={text => dispatch(modifyHolderCPF(text))}
+            // value={Cpf.format(register.holderCPF)}
           />
           <TouchableOpacity
             style={{

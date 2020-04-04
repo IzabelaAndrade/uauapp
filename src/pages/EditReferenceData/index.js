@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
-import FullLoading from '../../components/FullLoading';
 
 import api from '../../services/api';
 
@@ -19,6 +18,7 @@ import {
   modifyDescriptionJob,
 } from '../../store/modules/register/actions';
 
+import FullLoading from '../../components/FullLoading';
 import HeaderForm from '../../components/HeaderForm';
 import FildInputForm from '../../components/FildInputForm';
 import SelectPiker from '../../components/SelectPiker';

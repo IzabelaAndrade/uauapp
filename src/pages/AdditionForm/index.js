@@ -155,6 +155,7 @@ export default function AdditionForm({ navigation }) {
             required
             lable="Beneficiário"
             placeholder="Selecione uma opção"
+            multiselector
             list
             androidList={beneficiaries}
             onValueChange={data => onPressDone('setBeneficiary', data)}

@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -22,6 +23,7 @@ import {
   AntDesign,
 } from '@expo/vector-icons';
 import MultiSelectPiker from '../../components/MultiSelectPiker';
+import FullLoading from '../../components/FullLoading';
 
 import api from '../../services/api';
 // import { Container } from './styles';
@@ -186,9 +188,11 @@ export default function InterviewedList({ navigation }) {
   const [filteredList, setFilteredList] = React.useState([]);
   const [value, setvalue] = React.useState('');
   const [filter, setfilter] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
   const [visiblehability, setvisiblehability] = React.useState(false);
 
   useEffect(() => {
+    setLoading(true);
     async function getAllInterviewed() {
       let response = null;
       try {
@@ -203,6 +207,7 @@ export default function InterviewedList({ navigation }) {
           // setRefresh(false);
         }
         console.log(error);
+        setLoading(false);
         return error;
       }
       let list = null;
@@ -218,6 +223,7 @@ export default function InterviewedList({ navigation }) {
         setinterviewed(response.data);
         setFilteredList(response.data);
       }
+      setLoading(false);
       // if (type === 'search') {
       //   list = response.data.filter(element => element.status_avanci !== 'rm');
       //   setinterviewed(list);
@@ -296,6 +302,24 @@ export default function InterviewedList({ navigation }) {
       </View>
 
       <FlatList
+        ListEmptyComponent={
+          !loading ? (
+            <View
+              style={{
+                height: 200,
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+              }}
+            >
+              <Image
+                source={require('../../assets/emptyE.png')}
+                style={{ width: 80, height: 80 }}
+              />
+              {/* <ActivityIndicator size="large" color="#f48024" /> */}
+            </View>
+          ) : null
+        }
+        // onRefresh={() => ()}
         data={filteredList}
         renderItem={({ item }) => (
           <Info
@@ -317,6 +341,7 @@ export default function InterviewedList({ navigation }) {
           setFilteredList(filterList(value, interviewed, selectedList));
         }}
       />
+      <FullLoading loading={loading} />
     </View>
   );
 }
