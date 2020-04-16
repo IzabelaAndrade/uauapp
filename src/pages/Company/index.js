@@ -86,8 +86,8 @@ export default function Company({ navigation }) {
           <Text style={{ fontFamily: 'Lato-Regular', color: '#334d5c' }}>
             Somos uma construtora consolidada no mercado, valorizamos as pessoas
             e por isso o serviço que prestamos é totalmente voltado para o bem
-            social, nossa missão é construir, por meio do nosso trabalho, não
-            apenas edificações melhores, mas também uma sociedade melhor.
+            estar social, nossa missão é construir não apenas edificações
+            melhores, mas também uma sociedade melhor.
           </Text>
         </View>
         <View
@@ -155,7 +155,7 @@ export default function Company({ navigation }) {
                   color: '#b8b89f',
                 }}
               >
-                " Manutenções e Reformas em instações Jurídicas "
+                " Manutenções e Reformas em instalações Jurídicas "
               </Text>
             </View>
           </View>
@@ -193,7 +193,7 @@ export default function Company({ navigation }) {
                   color: '#b8b89f',
                 }}
               >
-                " Manutenções e Reformas em instações Educacionais "
+                " Manutenções e Reformas em instalações Educacionais "
               </Text>
             </View>
           </View>
@@ -231,7 +231,7 @@ export default function Company({ navigation }) {
                   color: '#b8b89f',
                 }}
               >
-                " Manutenções e Reformas em instações Hospitalares "
+                " Manutenções e Reformas em instalações Hospitalares "
               </Text>
             </View>
           </View>

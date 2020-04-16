@@ -7,8 +7,10 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import Cpf from '../../utils/Cpf';
 import api from '../../services/api';
@@ -16,8 +18,8 @@ import Money from '../../utils/Money';
 
 import HeaderForm from '../../components/HeaderForm';
 
-const FinancialCloseItem = ({ navigation, data }) => {
-  console.log(data);
+const { width } = Dimensions.get('window');
+const FinancialCloseItem = ({ navigation, data, onPressPay }) => {
   return (
     <View
       style={{
@@ -34,7 +36,7 @@ const FinancialCloseItem = ({ navigation, data }) => {
         shadowOffset: { width: 0, height: 1 },
       }}
     >
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', overflow: 'hidden' }}>
         <Image
           style={{ width: 45, height: 45, borderRadius: 25 }}
           source={{
@@ -106,13 +108,14 @@ const FinancialCloseItem = ({ navigation, data }) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
+            onPress={onPressPay}
           >
             <MaterialCommunityIcons
               name="account-check"
               size={25}
               color="green"
             />
-            <Text style={{ marginLeft: 5, color: 'green' }}>Pago</Text>
+            <Text style={{ marginLeft: 5, color: 'green' }}>Pagar</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -292,12 +295,18 @@ export default function FinancialClose({ navigation }) {
         console.log(error.response);
         return error;
       }
-      console.log(response.data);
       setFinancialList(response.data);
       setLoading(false);
     }
     getFinancialClose();
   }, [user]);
+
+  async function onPressPay(item) {
+    console.log(item);
+    navigation.navigate('PaymentForm', {
+      data: item,
+    });
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -307,13 +316,63 @@ export default function FinancialClose({ navigation }) {
         onPressBack={() => navigation.goBack()}
       />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
-        <FlatList
-          data={financialList}
-          renderItem={({ item }) => (
-            <FinancialCloseItem navigation={navigation} data={item} />
-          )}
-          keyExtractor={item => item.uuid}
-        />
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 10,
+            }}
+          >
+            <ContentLoader
+              speed={2}
+              width={width - 40}
+              height={800}
+              viewBox="0 0 400 950"
+              backgroundColor="#f3f3f3"
+              foregroundColor="#ecebeb"
+            >
+              <Circle cx="30" cy="30" r="30" />
+              <Rect x="80" y="15" rx="4" ry="4" width="300" height="13" />
+              <Rect x="80" y="40" rx="3" ry="3" width="270" height="10" />
+              <Rect x="10" y="85" rx="3" ry="3" width="250" height="15" />
+              <Rect x="10" y="110" rx="3" ry="3" width="200" height="13" />
+              <Rect x="10" y="135" rx="3" ry="3" width="200" height="13" />
+
+              <Circle cx="30" cy="230" r="30" />
+              <Rect x="80" y="215" rx="4" ry="4" width="300" height="13" />
+              <Rect x="80" y="240" rx="3" ry="3" width="270" height="10" />
+              <Rect x="10" y="265" rx="3" ry="3" width="250" height="15" />
+              <Rect x="10" y="290" rx="3" ry="3" width="200" height="13" />
+              <Rect x="10" y="315" rx="3" ry="3" width="200" height="13" />
+
+              <Circle cx="30" cy="430" r="30" />
+              <Rect x="80" y="415" rx="4" ry="4" width="300" height="13" />
+              <Rect x="80" y="440" rx="3" ry="3" width="270" height="10" />
+              <Rect x="10" y="465" rx="3" ry="3" width="250" height="15" />
+              <Rect x="10" y="490" rx="3" ry="3" width="200" height="13" />
+              <Rect x="10" y="515" rx="3" ry="3" width="200" height="13" />
+
+              <Circle cx="30" cy="630" r="30" />
+              <Rect x="80" y="615" rx="4" ry="4" width="300" height="13" />
+              <Rect x="80" y="640" rx="3" ry="3" width="270" height="10" />
+              <Rect x="10" y="665" rx="3" ry="3" width="250" height="15" />
+              <Rect x="10" y="690" rx="3" ry="3" width="200" height="13" />
+              <Rect x="10" y="715" rx="3" ry="3" width="200" height="13" />
+            </ContentLoader>
+          </View>
+        ) : (
+          <FlatList
+            data={financialList}
+            renderItem={({ item }) => (
+              <FinancialCloseItem
+                navigation={navigation}
+                data={item}
+                onPressPay={() => onPressPay(item)}
+              />
+            )}
+            keyExtractor={item => item.user_uuid}
+          />
+        )}
       </KeyboardAvoidingView>
     </View>
   );

@@ -193,7 +193,9 @@ export default function PersonalData({ navigation }) {
               fontSize: 24,
               fontWeight: '400',
               alignSelf: 'center',
+              textAlign: 'center',
               marginTop: 10,
+              marginHorizontal: 10,
             }}
           >
             {person.name}

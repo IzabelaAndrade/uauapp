@@ -18,6 +18,7 @@ const permissionList = [
   'Financeiro Fechamento',
   'Financeiro Extrato Funcionário',
   'Permissões de Usuário',
+  'Relatório de Lançamentos',
 ];
 
 export default function Settings({ navigation }) {

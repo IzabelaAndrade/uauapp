@@ -12,6 +12,8 @@ import ReferenceForm from './pages/ReferenceForm';
 import FinancesDataForm from './pages/FinancesDataForm';
 import FinancialClose from './pages/FinancialClose';
 import FinancialDetailed from './pages/FinancialDetailed';
+import FinancialRecord from './pages/FinancialRecord';
+import PaymentForm from './pages/PaymentForm';
 import DocumentsForm from './pages/DocumentsForm';
 import Interviewed from './pages/Interviewed';
 import ShowData from './pages/ShowData';
@@ -94,6 +96,12 @@ const AppStack = createStackNavigator(
         headerShown: false,
       }),
     },
+    PaymentForm: {
+      screen: PaymentForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
     ShowData: {
       screen: ShowData,
       navigationOptions: () => ({
@@ -156,6 +164,12 @@ const AppStack = createStackNavigator(
     },
     FinancesDataForm: {
       screen: FinancesDataForm,
+      navigationOptions: () => ({
+        headerShown: false,
+      }),
+    },
+    FinancialRecord: {
+      screen: FinancialRecord,
       navigationOptions: () => ({
         headerShown: false,
       }),

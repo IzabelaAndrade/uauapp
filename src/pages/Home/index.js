@@ -83,6 +83,9 @@ function RenderIcon(icon) {
     case 'lock':
       return <Feather name="lock" size={25} color="#bcbcbc" />;
 
+    case 'report':
+      return <AntDesign name="filetext1" size={25} color="#bcbcbc" />;
+
     default:
       return <Feather name="chevron-right" size={25} color="#f48024" />;
   }
@@ -269,6 +272,16 @@ export default function Home({ navigation }) {
                 edit: false,
                 origin: 'FinancialDetailed',
               });
+            }}
+          />
+        ) : null}
+        {user.permission.includes('Relatório de Lançamentos') ? (
+          <BtnMenu
+            lable="Relatório de Lançamentos"
+            icon="report"
+            onPress={() => {
+              dispatch(clearRegister());
+              navigation.navigate('FinancialRecord');
             }}
           />
         ) : null}
