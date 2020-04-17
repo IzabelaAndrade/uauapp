@@ -1,13 +1,16 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, SectionList } from 'react-native';
+import { View, Text, Image, SectionList, Dimensions } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
 import { useSelector } from 'react-redux';
+import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
 import Cpf from '../../utils/Cpf';
 import Money from '../../utils/Money';
 import api from '../../services/api';
 import HeaderForm from '../../components/HeaderForm';
+
+const { width } = Dimensions.get('window');
 
 const dbDateFormat = 'YYYY-MM-DD';
 
@@ -370,7 +373,60 @@ export default function FinancialDetailed({ navigation }) {
       />
       {/* <ViewSwitch onSelect={text => setViewSelected(text)} /> */}
       {/* <FinancialSelectDate onSelect={text => setDateFilterSelected(text)} /> */}
-      {loading ? null : <FinancialItem statement={bankStatement.statement} />}
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            // paddingHorizontal: 10,
+          }}
+        >
+          <ContentLoader
+            speed={2}
+            width={width}
+            height={800}
+            viewBox="10 0 400 900"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          >
+            {/* <Circle cx="0" cy="30" r="30" /> */}
+            <Rect x="0" y="15" rx="4" ry="4" width="800" height="50" />
+            <Rect x="10" y="80" rx="4" ry="4" width="30" height="55" />
+            <Rect x="90" y="90" rx="3" ry="3" width="190" height="10" />
+            <Rect x="90" y="110" rx="3" ry="3" width="190" height="10" />
+
+            <Rect x="0" y="150" rx="4" ry="4" width="800" height="50" />
+            <Rect x="10" y="215" rx="4" ry="4" width="30" height="55" />
+            <Rect x="90" y="225" rx="3" ry="3" width="190" height="10" />
+            <Rect x="90" y="245" rx="3" ry="3" width="190" height="10" />
+
+            <Rect x="10" y="300" rx="4" ry="4" width="30" height="55" />
+            <Rect x="90" y="315" rx="3" ry="3" width="190" height="10" />
+            <Rect x="90" y="335" rx="3" ry="3" width="190" height="10" />
+
+            {/* <Circle cx="30" cy="120" r="30" />
+            <Rect x="80" y="105" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="130" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="210" r="30" />
+            <Rect x="80" y="195" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="220" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="300" r="30" />
+            <Rect x="80" y="285" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="310" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="390" r="30" />
+            <Rect x="80" y="375" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="400" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="480" r="30" />
+            <Rect x="80" y="465" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="490" rx="3" ry="3" width="270" height="10" /> */}
+          </ContentLoader>
+        </View>
+      ) : (
+        <FinancialItem statement={bankStatement.statement} />
+      )}
       {/* {viewSelected === 'Extrato' ? (
       ) : (
         <FinancialRelease />

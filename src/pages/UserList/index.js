@@ -7,9 +7,10 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import Constants from 'expo-constants';
-
+import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -28,6 +29,7 @@ import api from '../../services/api';
 
 import { jobList } from '../../utils/List';
 
+const { width } = Dimensions.get('window');
 function Info({ item, navigation, origin }) {
   const { edit } = navigation.state.params;
   const img = item.Files.find(element => element.type === 'photo');
@@ -139,7 +141,7 @@ export default function UserList({ navigation }) {
     ? navigation.state.params.origin
     : null;
   const user = useSelector(state => state.auth);
-
+  const [loading, setLoading] = React.useState(false);
   const [interviewed, setinterviewed] = React.useState([]);
   const [filteredList, setFilteredList] = React.useState([]);
   const [value, setvalue] = React.useState('');
@@ -147,6 +149,7 @@ export default function UserList({ navigation }) {
   const [visiblehability, setvisiblehability] = React.useState(false);
 
   useEffect(() => {
+    setLoading(true);
     async function getAllUsers() {
       let response = null;
       try {
@@ -161,10 +164,12 @@ export default function UserList({ navigation }) {
           // setRefresh(false);
         }
         console.log(error);
+        setLoading(false);
         return error;
       }
       setinterviewed(response.data);
       setFilteredList(response.data);
+      setLoading(false);
     }
     getAllUsers();
   }, [user]);
@@ -230,13 +235,55 @@ export default function UserList({ navigation }) {
         </View>
       </View>
 
-      <FlatList
-        data={filteredList}
-        renderItem={({ item }) => (
-          <Info item={item} navigation={navigation} origin={origin} />
-        )}
-        keyExtractor={item => item.uuid}
-      />
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 10,
+          }}
+        >
+          <ContentLoader
+            speed={2}
+            width={width - 40}
+            height={800}
+            viewBox="0 0 400 950"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          >
+            <Circle cx="30" cy="30" r="30" />
+            <Rect x="80" y="15" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="40" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="120" r="30" />
+            <Rect x="80" y="105" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="130" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="210" r="30" />
+            <Rect x="80" y="195" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="220" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="300" r="30" />
+            <Rect x="80" y="285" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="310" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="390" r="30" />
+            <Rect x="80" y="375" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="400" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="30" cy="480" r="30" />
+            <Rect x="80" y="465" rx="4" ry="4" width="300" height="13" />
+            <Rect x="80" y="490" rx="3" ry="3" width="270" height="10" />
+          </ContentLoader>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredList}
+          renderItem={({ item }) => (
+            <Info item={item} navigation={navigation} origin={origin} />
+          )}
+          keyExtractor={item => item.uuid}
+        />
+      )}
       <MultiSelectPiker
         show={visiblehability}
         dataList={jobList}

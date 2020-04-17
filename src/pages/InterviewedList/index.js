@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import Constants from 'expo-constants';
-
+import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -30,8 +31,10 @@ import api from '../../services/api';
 
 import { jobList } from '../../utils/List';
 
+const { width } = Dimensions.get('window');
 function Info({ item, navigation, goTo, navigationFilter }) {
   const img = item.Files.find(element => element.type === 'photo');
+  const [loadImage, setLoadImage] = React.useState(false);
   return (
     <TouchableOpacity
       style={{
@@ -77,7 +80,14 @@ function Info({ item, navigation, goTo, navigationFilter }) {
         }}
       >
         <Image
-          style={{ width: 45, height: 45, borderRadius: 25 }}
+          style={{
+            width: 45,
+            height: 45,
+            borderRadius: 25,
+          }}
+          // onLoadStart={() => setLoadImage(true)}
+          // onLoadEnd={() => setLoadImage(false)}
+          // defaultSource={require('../../assets/loadeAvatar.png')}
           source={img ? { uri: img.url } : require('../../assets/avatar.png')}
         />
       </View>
@@ -301,36 +311,78 @@ export default function InterviewedList({ navigation }) {
         </View>
       </View>
 
-      <FlatList
-        ListEmptyComponent={
-          !loading ? (
-            <View
-              style={{
-                height: 200,
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-              }}
-            >
-              <Image
-                source={require('../../assets/emptyE.png')}
-                style={{ width: 80, height: 80 }}
-              />
-              {/* <ActivityIndicator size="large" color="#f48024" /> */}
-            </View>
-          ) : null
-        }
-        // onRefresh={() => ()}
-        data={filteredList}
-        renderItem={({ item }) => (
-          <Info
-            item={item}
-            navigation={navigation}
-            goTo={goTo}
-            navigationFilter={navigationFilter}
-          />
-        )}
-        keyExtractor={item => item.uuid}
-      />
+      {loading ? (
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 10,
+          }}
+        >
+          <ContentLoader
+            speed={2}
+            width={width - 40}
+            height={800}
+            viewBox="0 -20 400 950"
+            backgroundColor="#f3f3f3"
+            foregroundColor="#ecebeb"
+          >
+            <Circle cx="50" cy="30" r="30" />
+            <Rect x="100" y="15" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="40" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="50" cy="120" r="30" />
+            <Rect x="100" y="105" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="130" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="50" cy="210" r="30" />
+            <Rect x="100" y="195" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="220" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="50" cy="300" r="30" />
+            <Rect x="100" y="285" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="310" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="50" cy="390" r="30" />
+            <Rect x="100" y="375" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="400" rx="3" ry="3" width="270" height="10" />
+
+            <Circle cx="50" cy="480" r="30" />
+            <Rect x="100" y="465" rx="4" ry="4" width="300" height="13" />
+            <Rect x="100" y="490" rx="3" ry="3" width="270" height="10" />
+          </ContentLoader>
+        </View>
+      ) : (
+        <FlatList
+          ListEmptyComponent={
+            !loading ? (
+              <View
+                style={{
+                  height: 200,
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}
+              >
+                <Image
+                  source={require('../../assets/emptyE.png')}
+                  style={{ width: 80, height: 80 }}
+                />
+                {/* <ActivityIndicator size="large" color="#f48024" /> */}
+              </View>
+            ) : null
+          }
+          // onRefresh={() => ()}
+          data={filteredList}
+          renderItem={({ item }) => (
+            <Info
+              item={item}
+              navigation={navigation}
+              goTo={goTo}
+              navigationFilter={navigationFilter}
+            />
+          )}
+          keyExtractor={item => item.uuid}
+        />
+      )}
       <MultiSelectPiker
         show={visiblehability}
         dataList={jobList}
@@ -341,7 +393,7 @@ export default function InterviewedList({ navigation }) {
           setFilteredList(filterList(value, interviewed, selectedList));
         }}
       />
-      <FullLoading loading={loading} />
+      {/* <FullLoading loading={loading} /> */}
     </View>
   );
 }

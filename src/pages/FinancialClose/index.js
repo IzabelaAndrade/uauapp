@@ -128,7 +128,7 @@ const FinancialCloseItem = ({ navigation, data, onPressPay }) => {
           onPress={() =>
             navigation.navigate('FinancialDetailed', {
               person: {
-                uuid: data.uuid,
+                uuid: data.user_uuid,
                 name: data.user_name,
                 cpf: data.user_cpf,
                 BankAccount: {
@@ -293,6 +293,7 @@ export default function FinancialClose({ navigation }) {
           // setRefresh(false);
         }
         console.log(error.response);
+        setLoading(false);
         return error;
       }
       setFinancialList(response.data);
